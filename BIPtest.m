@@ -32,8 +32,6 @@ A(vulnerableN,:) = -1*full(affectedN(vulnerableN,:));
 % C = -1*C;
 % d = -1*ones(4,1);
 
-
-
 %% Calling bintprog solver
 options=optimset('Display','iter','NodeDisplayInterval','1','Diagnostics','on');
 [xn,fval,exitflag,output] = bintprog(f,A,b,[],[],[],options);
