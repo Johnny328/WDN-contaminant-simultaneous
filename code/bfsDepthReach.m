@@ -3,11 +3,11 @@ function [reach] = bfsDepthReach( A, depth, startNode )
 %startNode
 reach(1,:) = find(A(startNode,:));
 for j = 2:depth
-    tmp = [];
+    nextLayer = [];
     for i = reach(j-1,:)
-        tmp = [tmp find(A(i,:))];
+        nextLayer = [nextLayer find(A(i,:))];
     end
-    reach(j,:) = unique(tmp);
+    reach(j,:) = unique(nextLayer);
 end
 end
 
