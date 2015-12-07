@@ -1,14 +1,20 @@
-%% Given adjacency matrix
-adjGraph = sparse([1 1 2 2 2 3 3 4 5],[2 3 4 5 3 4 5 6 6],[2 2 1 1 1 1 1 2 2],6,6);
-incGraph = adj2inc(adjGraph,0);
+%% Get adjacency matrix from pipes
+% Extracts struct from given file
+model = epanet_reader4_extract('bangalore_expanded221.inp');
+% cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') outputs a proper
+% numeric matrix. The vectors of similar expressions make up the
+% corresponding entries (with opposite sign) in the other triangle.
+adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).')],[cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).') cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).')],[ones(1,model.pipes.npipes) -1.*ones(1,model.pipes.npipes)]);
 
+% Set diagonal to 1
+% adjGraph(1 : model.nodes.ntot+1 : model.nodes.ntot*model.nodes.ntot) = 1; 
+
+% Given incidence matrix
+incGraph = adj2inc(adjGraph,0);
 % Total number of nodes
-nodesNum = 6;
-edgesNum = 9;
+nodesNum = model.nodes.ntot;
 % Vulnerable nodes
-vulnerableN = [1,2];
-demandNodes=[6];
-sourceNodes=[1 2];
+vulnerableN = 1:model.nodes.no;
 
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
