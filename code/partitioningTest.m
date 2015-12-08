@@ -9,12 +9,14 @@ edgesNum = 9;
 vulnerableN = [1,2];
 demandNodes=[6];
 sourceNodes=[1 2];
+%Weights/lengths of pipes
+edgeWeights = eye(edgesNum);
 %% Actuator placement
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
 % Inequality constraint
-A2 = [-incGraph -eye(size(incGraph,1))];
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
 b2 = zeros(size(incGraph,1),1);
 
 % Set the partitions of source to 0 and demands to 1

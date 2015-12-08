@@ -10,6 +10,8 @@ vulnerableN = [1,2];
 demandNodes=[6];
 sourceNodes=[1 2];
 
+%Weights/lengths of pipes
+edgeWeights = eye(edgesNum);
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -34,7 +36,7 @@ beq1 = [];
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
 % Inequality constraint
-A2 = [-incGraph -eye(size(incGraph,1))];
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
 b2 = zeros(size(incGraph,1),1);
 
 % Set the partitions of source to 0 and demands to 1
@@ -59,7 +61,7 @@ upperBound=ones(1,nodesNum*2+edgesNum);
 %Integer constraint
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 A = [A1 zeros(size(A1,1),size(f2,1)); zeros(size(A2,1),size(f1,1)) A2];
-b = [b1;b2]
+b = [b1;b2];
 Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)); zeros(size(Aeq2,1),size(f1,1)) Aeq2];
 beq = [beq1 beq2];
 f = [f1;f2];

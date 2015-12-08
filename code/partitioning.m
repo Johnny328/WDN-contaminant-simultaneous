@@ -14,17 +14,18 @@ nodesNum = model.nodes.ntot;
 vulnerableN = 1:model.nodes.no;
 edgesNum = model.pipes.npipes;
 
-%demandNodes=find(model.nodes.demand>0);
+demandNodes=find(model.nodes.demand>0);
 % type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
-%sourceNodes=find(strcmp(model.nodes.type,'R'));
-demandNodes=[9 10 17 21 29 31 73 74 75 76 77 78 79 80 41 61 63 68 70 72 82 83 84 85 86];
-sourceNodes=[1 2 3 19 32 37 39 53 66 54 40 67 4 34 57 67 20 47 55 33];
+sourceNodes=find(strcmp(model.nodes.type,'R'));
+
+%Weights/lengths of pipes
+edgeWeights = eye(edgesNum);
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
 % Inequality constraint
-A2 = [-incGraph -eye(size(incGraph,1))];
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
 b2 = zeros(size(incGraph,1),1);
 
 % Set the partitions of source to 0 and demands to 1

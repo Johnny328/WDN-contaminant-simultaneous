@@ -5,16 +5,21 @@ model = epanet_reader4_extract('bangalore_expanded221.inp');
 % numeric matrix. The vectors of similar expressions make up the
 % corresponding entries (with opposite sign) in the other triangle.
 adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).')],[cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).') cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).')],[ones(1,model.pipes.npipes) -1.*ones(1,model.pipes.npipes)]);
-
-% Set diagonal to 1
-% adjGraph(1 : model.nodes.ntot+1 : model.nodes.ntot*model.nodes.ntot) = 1; 
-
-% Given incidence matrix
+% Get incidence matrix
 incGraph = adj2inc(adjGraph,0);
+
 % Total number of nodes
 nodesNum = model.nodes.ntot;
 % Vulnerable nodes
 vulnerableN = 1:model.nodes.no;
+edgesNum = model.pipes.npipes;
+
+demandNodes=find(model.nodes.demand>0);
+% type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
+sourceNodes=find(strcmp(model.nodes.type,'R'));
+
+%Weights/lengths of pipes
+edgeWeights = eye(edgesNum);
 
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
