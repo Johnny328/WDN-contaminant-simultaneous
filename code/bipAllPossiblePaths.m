@@ -14,7 +14,7 @@ incGraph = adj2inc(adjGraph,0);
 % Total number of nodes
 nodesNum = model.nodes.ntot;
 % Vulnerable nodes
-vulnerableN = 1:model.nodes.no;
+vulnerableN = find(strcmp(model.nodes.type,'R'));
 
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable

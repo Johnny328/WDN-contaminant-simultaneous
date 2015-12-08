@@ -11,7 +11,7 @@ incGraph = adj2inc(adjGraph,0);
 % Total number of nodes
 nodesNum = model.nodes.ntot;
 % Vulnerable nodes
-vulnerableN = 1:model.nodes.no;
+vulnerableN = find(strcmp(model.nodes.type,'R'));
 edgesNum = model.pipes.npipes;
 
 demandNodes=find(model.nodes.demand>0);

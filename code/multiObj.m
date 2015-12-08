@@ -11,7 +11,7 @@ incGraph = adj2inc(adjGraph,0);
 % Total number of nodes
 nodesNum = model.nodes.ntot;
 % Vulnerable nodes
-vulnerableN = 1:model.nodes.no;
+vulnerableN = find(strcmp(model.nodes.type,'R'));
 edgesNum = model.pipes.npipes;
 
 demandNodes=find(model.nodes.demand>0);
@@ -26,9 +26,9 @@ edgeWeights = eye(edgesNum);
 % 1 step away affected nodes
 % affectedN = adjGraph(vulnerableN,:)>=1;
 % Find all affected nodes per vulnerable node, each vulnerable node has a row in the A matrix
-A1 = zeros(nodesNum,nodesNum);
-for i=1:nodesNum
-    A1(i,graphtraverse(adjGraph,i)) = -1;
+A1 = zeros(length(vulnerableN),nodesNum);
+for i=1:length(vulnerableN)
+    A1(i,graphtraverse(adjGraph,vulnerableN(i))) = -1;
 end
 %Decision variable coefficient vector -- f
 f1 = ones(nodesNum,1);
