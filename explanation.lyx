@@ -1,0 +1,259 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Abstract
+Simultaneous sensor and actuator placement for identification and containment
+ of contaminants in a water distribution network.
+\end_layout
+
+\begin_layout Section
+Scenario
+\end_layout
+
+\begin_layout Subsection
+Given
+\end_layout
+
+\begin_layout Standard
+Specification of water distribution network -- vulnerable nodes, demand
+ nodes, the adjacency matrix.
+\end_layout
+
+\begin_layout Standard
+Time-delay in sensors of contaminant sensing, 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+identification of which vulnerable node was affected, 
+\end_layout
+
+\end_inset
+
+etc.
+ can be added onto this work without much hassle, and are ignored.
+\end_layout
+
+\begin_layout Subsection
+Requirements to be satisfied
+\end_layout
+
+\begin_layout Standard
+To find distribution of sensors on nodes and actuators on edges such that
+ the vulnerable node can be identified and the contaminant can be prevented
+ from reaching the demands.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+In addition, we look for a way of 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Previous work
+\end_layout
+
+\begin_layout Standard
+Sensor placement using the principle that there must exist a unique non-zero
+ set of sensors for each set of vulnerable nodes that can be affected.
+\end_layout
+
+\begin_layout Standard
+Actuator placement on edges to achieve a balanced min-cut, between the sensor
+ nodes and demands.
+\end_layout
+
+\begin_layout Section
+Hypotheses
+\end_layout
+
+\begin_layout Standard
+Simultaneous sensor and actuator distribution can be achieved and is more
+ efficient -- these are dependant problems.
+\end_layout
+
+\begin_layout Section
+Method
+\end_layout
+
+\begin_layout Standard
+We first develop an algorithm and formulation for each case, implement in
+ MATLAB, compare with results from previous work.
+\end_layout
+
+\begin_layout Section
+Implementation
+\end_layout
+
+\begin_layout Subsection*
+Case 1: Shutting the network effectively stops the contaminant beyond the
+ actuator too.
+\end_layout
+
+\begin_layout Standard
+In this simpler case, there are no additional constraints on the actuator
+ placement problem beyond the (balanced) min-cut of the entire graph.
+\end_layout
+
+\begin_layout Standard
+As long as the sensor network can detect the contaminant before it reaches
+ the demands and the actuation can happen simultaneously, the requirements
+ are satisfied.
+\end_layout
+
+\begin_layout Subsection*
+Case 2: The contaminant contained only in the vulnerable side of actuator
+ network
+\end_layout
+
+\begin_layout Standard
+This case is not trivial as the positions of the sensors must be used as
+ input, i.e ensuring they are on the vulnerable side.
+\end_layout
+
+\begin_layout Standard
+Formalism as binary integer optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+min & (\sum x_{i}+\sum y_{i}+\sum z_{i})\\
+sub\\
+\mathbf{A}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}
+\end{array}\right] & \geq & \mathbf{b}\\
+\mathbf{A_{eq}}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}
+\end{array}\right] & = & \mathbf{b_{eq}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is 1 if there exists a sensor at 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node, 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ is 1 if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node is in the demands side of the actuators, 0 otherwise.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $z_{i}$
+\end_inset
+
+ is 1 if there exists an actuator at 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+edge, 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+The structure of the 
+\begin_inset Formula $A$
+\end_inset
+
+ matrix is thus:
+\end_layout
+
+\end_body
+\end_document
