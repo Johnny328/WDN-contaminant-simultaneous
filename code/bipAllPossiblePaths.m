@@ -10,7 +10,7 @@ adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') cell2mat(
 % adjGraph(1 : model.nodes.ntot+1 : model.nodes.ntot*model.nodes.ntot) = 1; 
 
 % Given incidence matrix
-incGraph = adj2inc(adjGraph,0);
+incGraph = adj2inc(adjGraph);
 % Total number of nodes
 nodesNum = model.nodes.ntot;
 % Vulnerable nodes

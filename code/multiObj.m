@@ -6,17 +6,18 @@ model = epanet_reader4_extract('bangalore_expanded221.inp');
 % corresponding entries (with opposite sign) in the other triangle.
 adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).')],[cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).') cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).')],[ones(1,model.pipes.npipes) -1.*ones(1,model.pipes.npipes)]);
 % Get incidence matrix
-incGraph = adj2inc(adjGraph,0);
+incGraph = adj2inc(adjGraph);
 
 % Total number of nodes
 nodesNum = model.nodes.ntot;
-% Vulnerable nodes
-vulnerableN = find(strcmp(model.nodes.type,'R'));
+% Number of edges
 edgesNum = model.pipes.npipes;
 
-demandNodes=find(model.nodes.demand>0);
+% Vulnerable nodes are the ones of type 'R'
 % type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
-sourceNodes=find(strcmp(model.nodes.type,'R'));
+vulnerableN = find(strcmp(model.nodes.type,'R'));
+sourceNodes = vulnerableN;
+demandNodes = find(model.nodes.demand>0);
 
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
@@ -45,7 +46,7 @@ beq1 = [];
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
 % Inequality constraint
-A2 = [-incGraph -eye(size(incGraph,1))];
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
 b2 = zeros(size(incGraph,1),1);
 
 % Set the partitions of source to 0 and demands to 1
@@ -70,11 +71,11 @@ upperBound=ones(1,nodesNum*2+edgesNum);
 %Integer constraint
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 A = [A1 zeros(size(A1,1),size(f2,1)); zeros(size(A2,1),size(f1,1)) A2];
-b = [b1;b2]
+b = [b1;b2];
 Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)); zeros(size(Aeq2,1),size(f1,1)) Aeq2];
 beq = [beq1 beq2];
 f = [f1;f2];
 intcon = [intcon1 intcon2];
 [x,fval,exitflag,info] = intlinprog(f,intcon, A,b,Aeq,beq,lowerBound,upperBound);
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
-partitionSource=setdiff(nodesNum+1:nodesNum*2,partitionDemand);
+partitionSource=setdiff(1:nodesNum,partitionDemand);

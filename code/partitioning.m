@@ -6,7 +6,7 @@ model = epanet_reader4_extract('bangalore_expanded221.inp');
 % corresponding entries (with opposite sign) in the other triangle.
 adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).')],[cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).') cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).')],[ones(1,model.pipes.npipes) -1.*ones(1,model.pipes.npipes)]);
 % Get incidence matrix
-incGraph = adj2inc(adjGraph,0);
+incGraph = adj2inc(full(adjGraph));
 
 % Total number of nodes
 nodesNum = model.nodes.ntot;
@@ -25,7 +25,7 @@ edgeWeights = eye(edgesNum);
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
 % Inequality constraint
-A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
+A2 = [-incGraph -edgeWeights*eye(size(incGraph,1))];
 b2 = zeros(size(incGraph,1),1);
 
 % Set the partitions of source to 0 and demands to 1

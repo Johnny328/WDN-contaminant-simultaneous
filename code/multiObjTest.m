@@ -7,7 +7,7 @@ nodesNum = 6;
 edgesNum = 9;
 % Vulnerable nodes
 vulnerableN = [1,2];
-demandNodes=[6];
+demandNodes=6;
 sourceNodes=[1 2];
 
 %Weights/lengths of pipes
@@ -68,4 +68,4 @@ f = [f1;f2];
 intcon = [intcon1 intcon2];
 [x,fval,exitflag,info] = intlinprog(f,intcon, A,b,Aeq,beq,lowerBound,upperBound);
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
-partitionSource=setdiff(nodesNum+1:nodesNum*2,partitionDemand);
+partitionSource=setdiff(1:nodesNum,partitionDemand);
