@@ -10,9 +10,11 @@ edgesNum = model.pipes.npipes;
 
 % Vulnerable nodes are the ones of type 'R'
 % type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
-vulnerableN = find(strcmp(model.nodes.type,'R'));
-sourceNodes = vulnerableN;
+vulnerableNodes = find(strcmp(model.nodes.type,'R'));
 demandNodes = find(model.nodes.demand>0);
+ids = cell2mat(cellfun(@str2num,model.nodes.id,'un',0).');
+vulnerableNodes =  ids(vulnerableNodes)';
+demandNodes = ids(demandNodes)';
 
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
@@ -23,15 +25,15 @@ edgeWeights = eye(edgesNum);
 adjGraph = sparse(cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'), cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'), ones(1,model.pipes.npipes));
 adjGraph(nodesNum,nodesNum) = 0;
 % Get incidence matrix
-incGraph = adj2inc(adjGraph);
+incGraph = adj2inc(adjGraph,1);
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
 % affectedN = adjGraph(vulnerableN,:)>=1;
 % Find all affected nodes per vulnerable node, each vulnerable node has a row in the A matrix
-A1 = zeros(length(vulnerableN),nodesNum);
-for i=1:length(vulnerableN)
-    tmp1 = graphtraverse(adjGraph,vulnerableN(i));
+A1 = zeros(length(vulnerableNodes),nodesNum);
+for i=1:length(vulnerableNodes)
+    tmp1 = graphtraverse(adjGraph,vulnerableNodes(i));
     A1(i,tmp1) = -1;
 end
 %Decision variable coefficient vector -- f
@@ -56,11 +58,11 @@ b2 = zeros(size(incGraph,1),1);
 % Equality constraint
 tmp = 0;
 Aeq2=zeros(0,size(f2,1));
-for i=sourceNodes
+for i=vulnerableNodes
     tmp = tmp+1;
     Aeq2(tmp,i) = 1;
 end
-beq2 = zeros(length(sourceNodes),1);
+beq2 = zeros(length(vulnerableNodes),1);
 for i=demandNodes
     tmp = tmp+1;
     Aeq2(tmp,i) = 1;
@@ -70,7 +72,7 @@ beq2 = [beq2; ones(length(demandNodes),1)];
 % Use inequality constraints to force sensor nodes to be in the source
 % partition
 [dist] = graphallshortestpaths(adjGraph);
-shortestPathsFromVulnerableNodes = min(dist(vulnerableN,:));
+shortestPathsFromVulnerableNodes = min(dist(vulnerableNodes,:));
 assert(length(shortestPathsFromVulnerableNodes) == nodesNum);
 
 %% Solving combined MILP
