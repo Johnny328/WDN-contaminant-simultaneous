@@ -3,4 +3,4 @@ Research files dealing with simultaneous sensor and actuator placement for conta
 *.inp are genrally best viewed with a local EPANET installation, here is a web version: http://epanet.de/js/index.html
 
 ### License
-CC-BY license, unless otherwise overridden.
+CC-BY 4.0 license, unless otherwise overridden.
