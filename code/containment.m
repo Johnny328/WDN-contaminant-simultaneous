@@ -1,31 +1,5 @@
-%% Get adjacency matrix from pipes
-% Extracts struct from given file
-model = epanet_reader4_extract('bangalore_expanded221.inp');
-
-
-% Total number of nodes
-nodesNum = model.nodes.ntot;
-% Number of edges
-edgesNum = model.pipes.npipes;
-
-% Vulnerable nodes are the ones of type 'R'
-% type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
-vulnerableNodes = find(strcmp(model.nodes.type,'R'));
-demandNodes = find(model.nodes.demand>0);
-ids = cell2mat(cellfun(@str2num,model.nodes.id,'un',0).');
-vulnerableNodes =  ids(vulnerableNodes)';
-demandNodes = ids(demandNodes)';
-
-%Weights/lengths of pipes
-edgeWeights = eye(edgesNum);
-
-% cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).') outputs a proper
-% numeric matrix. The vectors of similar expressions make up the
-% corresponding entries (with opposite sign) in the other triangle.
-adjGraph = sparse(cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'), cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'), ones(1,model.pipes.npipes));
-adjGraph(nodesNum,nodesNum) = 0;
-% Get incidence matrix
-incGraph = adj2inc(adjGraph,1);
+% Get data from .inp file
+[adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getData('bangalore_expanded221.inp');
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -46,7 +20,7 @@ intcon1 = 1:nodesNum;
 Aeq1 = [];
 beq1 = [];
 
-%% Actuator placement
+%% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 

@@ -11,7 +11,7 @@ incGraph = adj2inc(adjGraph);
 % Total number of nodes
 nodesNum = model.nodes.ntot;
 % Number of edges
-edgesNum = model.pipes.npipes;
+edgesNum = model.pipes.npipes + model.valves.nv + model.pumps.npumps;
 
 % Vulnerable nodes are the ones of type 'R'
 % type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
@@ -46,6 +46,33 @@ beq1 = [];
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
 % Inequality constraint
+% Get data from .inp file
+[adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getData('bangalore_expanded221.inp');
+%% Sensor placement
+% Given vulnerable, find affected for each vulnerable
+% 1 step away affected nodes
+% affectedN = adjGraph(vulnerableN,:)>=1;
+% Find all affected nodes per vulnerable node, each vulnerable node has a row in the A matrix
+A1 = zeros(length(vulnerableNodes),nodesNum);
+for i=1:length(vulnerableNodes)
+    tmp1 = graphtraverse(adjGraph,vulnerableNodes(i));
+    A1(i,tmp1) = -1;
+end
+%Decision variable coefficient vector -- f
+f1 = ones(nodesNum,1);
+%Constraints -Ax >= -b; where (-b)=1
+b1 = -1.*ones(size(A1,1),1);
+%Integer variables
+intcon1 = 1:nodesNum;
+%Equality constraints
+Aeq1 = [];
+beq1 = [];
+
+%% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
+%Objective
+f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
+
+% Inequality constraint
 A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
 b2 = zeros(size(incGraph,1),1);
 
@@ -53,11 +80,11 @@ b2 = zeros(size(incGraph,1),1);
 % Equality constraint
 tmp = 0;
 Aeq2=zeros(0,size(f2,1));
-for i=sourceNodes
+for i=vulnerableNodes
     tmp = tmp+1;
     Aeq2(tmp,i) = 1;
 end
-beq2 = zeros(length(sourceNodes),1);
+beq2 = zeros(length(vulnerableNodes),1);
 for i=demandNodes
     tmp = tmp+1;
     Aeq2(tmp,i) = 1;
