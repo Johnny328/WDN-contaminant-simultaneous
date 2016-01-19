@@ -70,14 +70,28 @@
 
 \begin_body
 
-\begin_layout Abstract
+\begin_layout Title
 Simultaneous sensor and actuator placement for identification and containment
- of contaminants in a water distribution network.
+ of contaminants in a water distribution network
 \end_layout
 
 \begin_layout Abstract
 A multi objective integer linear optimization strategy assuming perfect
- sensors and actuators.
+ sensors and actuators is developed and implemented.
+\end_layout
+
+\begin_layout Author
+Suhas Gundimeda, Indian Institute of technology Madras
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+CH12B026
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -425,11 +439,11 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $A_{eq}$
+\begin_inset Formula $A_{eq2}$
 \end_inset
 
 , 
-\begin_inset Formula $b_{eq}$
+\begin_inset Formula $b_{eq2}$
 \end_inset
 
  provide bounds to force the decision variables to reality, i.e.
@@ -450,10 +464,6 @@ key "key-1"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \begin_layout Subsection*
@@ -659,11 +669,11 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $A_{eq}$
+\begin_inset Formula $A_{eq2}$
 \end_inset
 
 , 
-\begin_inset Formula $b_{eq}$
+\begin_inset Formula $b_{eq2}$
 \end_inset
 
  provide bounds to force the decision variables to reality, i.e.
@@ -731,7 +741,251 @@ The test graph
 \end_layout
 
 \begin_layout Standard
-I'm currently working on implementing this in MATLAB.
+Node 1,2 are vulnerable and node 6 is demand node.
+\end_layout
+
+\begin_layout Standard
+Formulating as binary integer optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+min & (\sum x_{i}+\sum z_{i})\\
+sub\\
+\mathbf{A}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}
+\end{array}\right] & \leq & \mathbf{b}\\
+\mathbf{A_{eq}}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}
+\end{array}\right] & = & \mathbf{b_{eq}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $\mathbf{x}\equiv[x_{i}]$
+\end_inset
+
+ is 1 if there exists a sensor at 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node, 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{y}\equiv[y_{i}]$
+\end_inset
+
+ is 1 if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node is in the demands side of the actuators, 0 otherwise.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{z}\equiv[z_{i}]$
+\end_inset
+
+ is 1 if there exists an actuator at 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+edge, 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+Hence the vector 
+\begin_inset Formula $\left[\mathbf{\begin{array}{ccc}
+\mathbf{x} & y & z\end{array}}\right]$
+\end_inset
+
+ is of length 
+\begin_inset Formula $2*N+E=21$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A=\left[\begin{array}{cc}
+A_{1} & \mathbf{0}\\
+\mathbf{0} & A_{2}
+\end{array}\right]$
+\end_inset
+
+, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $A=\left[\begin{array}{cc}
+A_{eq1} & \mathbf{0}\\
+\mathbf{0} & A_{eq2}
+\end{array}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $b=\left[\begin{array}{c}
+b_{1}\\
+b_{2}
+\end{array}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $b_{eq}=\left[\begin{array}{c}
+b_{eq1}\\
+b_{eq2}
+\end{array}\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{1}$
+\end_inset
+
+ is a matrix of vulnerable nodes vs.
+ affected nodes, with 
+\begin_inset Formula $A_{1ij}=-1$
+\end_inset
+
+ if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ vulnerable node affects the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ node in graph.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
+-1 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $b_{1}=\left[\begin{array}{c}
+-1\\
+-1
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq1}=b_{eq1}=\mathbf{O}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{2}=\left[\begin{array}{cc}
+J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
+-1 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+-1 & 0 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0\\
+0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0\\
+0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0\\
+0 & 0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0\\
+0 & 0 & 0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1
+\end{array}\right]$
+\end_inset
+
+ where 
+\begin_inset Formula $J$
+\end_inset
+
+ is the incidence matrix.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $b_{2}=\left[\mathbf{O}\right]$
+\end_inset
+
+.
+ This links the partitioning variables 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
+
+ to the variables in the cost function, 
+\begin_inset Formula $\mathbf{z}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq2}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{eq2}$
+\end_inset
+
+ provide bounds to force the decision variables to reality, i.e.
+ the demand nodes being in the second partition and the vulnerable nodes
+ being in the first.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq2}=\begin{array}{ccccccccccccccc}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\end{array}$
+\end_inset
+
+; 
+\begin_inset Formula $b_{eq2}=\begin{array}{c}
+0\\
+0\\
+1
+\end{array}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Bibliography
