@@ -1,5 +1,5 @@
 [TITLE]
-Bangalore Water DIstribution Network
+Bangalore Water Distribution Network
 
 [JUNCTIONS]
 ;ID              	Elev        	Demand      	Pattern         
@@ -269,7 +269,7 @@ Bangalore Water DIstribution Network
  116             	24              	50              	5           	600         	127.5       	0           	Open  	;
  50              	117             	74              	2600        	600         	103.6       	0           	Open  	;
  109             	67              	69              	1000        	400         	103.5       	0           	Open  	;
- .74             	58              	59              	200         	600         	103.6       	0           	Open  	;
+ 74              	58              	59              	200         	600         	103.6       	0           	Open  	;
  156             	27              	26              	2100        	600         	106.9       	0           	Open  	;
  101             	23              	22              	570         	750         	106.9       	0           	Open  	;
  100             	24              	23              	400         	600         	106.9       	0           	Open  	;
@@ -375,31 +375,31 @@ Bangalore Water DIstribution Network
 
 [CURVES]
 ;ID              	X-Value     	Y-Value
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  1               	0           	85.88       
  1               	180.81      	62.05       
  1               	361.62      	0           
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  2               	0           	38.4        
  2               	90.92       	27.75       
  2               	181.84      	0           
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  3               	0           	18          
  3               	194.755     	15.70       
  3               	600         	0           
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  4               	0           	55          
  4               	136.43      	27.74       
  4               	225         	0           
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  5               	0           	57.6        
  5               	79.5885     	41.622      
  5               	159.177     	0           
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  6               	0           	45          
  6               	443.42      	27.74       
  6               	886.84      	0           
-;PUMP: PUMP: 
+;PUMP: PUMP: PUMP: 
  7               	0           	29.44       
  7               	129.615     	21.27       
  7               	259.23      	0           
@@ -407,7 +407,9 @@ Bangalore Water DIstribution Network
 [CONTROLS]
 
 
+
 [RULES]
+
 
 
 [ENERGY]
@@ -446,15 +448,21 @@ Bangalore Water DIstribution Network
  Quality Timestep   	0:05 
  Pattern Timestep   	1:00 
  Pattern Start      	0:00 
- Report Timestep    	1:00
+ Report Timestep    	1:00 
  Report Start       	0:00 
  Start ClockTime    	12 am
  Statistic          	NONE
 
 [REPORT]
- Status             	Yes
+ Status             	No
  Summary            	No
  Page               	0
+ Links                  All
+ Flow below 0
+ Flow                   No
+ Headloss               No
+ Head                   No
+ Velocity               No
 
 [OPTIONS]
  Units              	LPS
