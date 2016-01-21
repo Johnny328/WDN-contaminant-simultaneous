@@ -246,6 +246,12 @@ As long as the sensor network can detect the contaminant before it reaches
  are satisfied.
 \end_layout
 
+\begin_layout Standard
+The network is assumed to be static, the hydraulic results from 00:00 hours
+ are taken.
+ 
+\end_layout
+
 \begin_layout Subsubsection*
 Formulation
 \end_layout
@@ -456,7 +462,49 @@ Results and verification
 \end_layout
 
 \begin_layout Standard
-This was verified to produce the same results as 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/netowrkSensorsOnly.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Graph abstraction with vulnerable nodes in red and blue are sensors 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It takes three sensors to detect contaminant with no other requirments.
+\end_layout
+
+\begin_layout Standard
+Vulnerable nodes: 1, 2, 3, 19, 32, 37, 39, 53, 66.
+\end_layout
+
+\begin_layout Standard
+Sensor nodes for this run are 3, 10, 148.
+ Three sensor nodes are needed for this basic formulation.
+\end_layout
+
+\begin_layout Standard
+This is the same as 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"

@@ -1,7 +1,7 @@
 function [adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getData(fileName)
 
 % Extracts struct from given file
-model = epanet_reader4_extract('bangalore_expanded221.inp');
+model = epanet_reader4_extract(fileName);
 
 % Total number of nodes
 nodesNum = model.nodes.ntot;
