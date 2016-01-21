@@ -12,9 +12,9 @@ edgesNum = model.pipes.npipes + model.valves.nv + model.pumps.npumps;
 % type='D' => Demands, type='T' => Tanks, type='R' => Reservoirs
 vulnerableNodes = find(strcmp(model.nodes.type,'R'));
 demandNodes = find(model.nodes.demand>0);
-ids = cell2mat(cellfun(@str2num,model.nodes.id,'un',0).');
-vulnerableNodes =  ids(vulnerableNodes)';
-demandNodes = ids(demandNodes)';
+nodeIDs = cell2mat(cellfun(@str2num,model.nodes.id,'un',0).');
+vulnerableNodes =  nodeIDs(vulnerableNodes)';
+demandNodes = nodeIDs(demandNodes)';
 
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
@@ -31,6 +31,15 @@ edgeWeights = eye(edgesNum);
 % Or something. This is clearly worng.
 adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'); cell2mat(cellfun(@str2num,model.valves.ni,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.ni,'un',0).')], [cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'); cell2mat(cellfun(@str2num,model.valves.nj,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.nj,'un',0).')], ones(1,model.pipes.npipes + model.valves.nv + model.pumps.npumps));
 adjGraph(nodesNum,nodesNum) = 0;
+negativeEdges = readNegativeFlows('report.out');
+pipeIDs = [cell2mat(cellfun(@str2num,model.pipes.id,'un',0).'); cell2mat(cellfun(@str2num,model.valves.id,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.id,'un',0).')];
+startNodes = [cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'); cell2mat(cellfun(@str2num,model.valves.ni,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.ni,'un',0).')];
+endNodes = [cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'); cell2mat(cellfun(@str2num,model.valves.nj,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.nj,'un',0).')];
+idxs = arrayfun(@(x)find(pipeIDs==x,1),negativeEdges);
+changeToNegativeStartNodes = startNodes(idxs);
+changeToNegativeEndNodes = endNodes(idxs);
+idx = sub2ind(size(adjGraph), changeToNegativeStartNodes, changeToNegativeEndNodes);
+adjGraph(idx) = -1; %Change to negative of the existing value
 % Get incidence matrix
 incGraph = adj2inc(adjGraph);
 
