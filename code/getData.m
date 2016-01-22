@@ -38,8 +38,10 @@ endNodes = [cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'); cell2mat(cellfu
 idxs = arrayfun(@(x)find(pipeIDs==x,1),negativeEdges);
 changeToNegativeStartNodes = startNodes(idxs);
 changeToNegativeEndNodes = endNodes(idxs);
-idx = sub2ind(size(adjGraph), changeToNegativeStartNodes, changeToNegativeEndNodes);
-adjGraph(idx) = -1; %Change to negative of the existing value
+idx1 = sub2ind(size(adjGraph), changeToNegativeStartNodes, changeToNegativeEndNodes);
+idx2 = sub2ind(size(adjGraph), changeToNegativeEndNodes, changeToNegativeStartNodes);
+adjGraph(idx1) = 0; %Change to zero for existing, create new edge for the transpose position. Changed from negative edges because of graphtraverse ignoring negative edges.
+adjGraph(idx2) = 1;
 % Get incidence matrix
 incGraph = adj2inc(adjGraph);
 
