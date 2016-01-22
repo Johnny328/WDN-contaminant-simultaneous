@@ -10,7 +10,7 @@ vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 % Find all affected nodes per vulnerable node, each vulnerable node has a row in the A matrix
 A = zeros(length(vulnerableNodes),nodesNum);
 for i=1:length(vulnerableNodes)
-    A(i,graphtraverse(adjGraph,i)) = -1;
+    A(i,graphtraverse(adjGraph,vulnerableNodes(i))) = -1;
 end
 
 %Decision variable coefficient vector -- f

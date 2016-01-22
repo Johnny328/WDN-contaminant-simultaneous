@@ -8,6 +8,15 @@
 \usepackage{graphicx}
 \usepackage[unicode=true]
  {hyperref}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+\makeatother
+
 \begin{document}
 
 \title{Simultaneous sensor and actuator placement for identification and
@@ -173,12 +182,41 @@ the vulnerable nodes being in the first.
 \end{figure}
 
 
+\begin{table}[H]
+
+
+\begin{centering}
+\begin{tabular}{|c|c|}
+\hline 
+Vulnerable Nodes & Sensor Nodes\tabularnewline
+\hline 
+\hline 
+1 & 41, 70, 85\tabularnewline
+\hline 
+2 & 41, 85\tabularnewline
+\hline 
+3 & 70\tabularnewline
+\hline 
+19 & 41\tabularnewline
+\hline 
+32 & 70\tabularnewline
+\hline 
+37 & 41\tabularnewline
+\hline 
+39 & 41\tabularnewline
+\hline 
+53 & 85\tabularnewline
+\hline 
+66 & 70\tabularnewline
+\hline 
+\end{tabular}\caption{Vulnerable nodes and their corresponding sensor nodes}
+
+\par\end{centering}
+
+\end{table}
+
+
 It takes three sensors to detect contaminant with no other requirments.
-
-Vulnerable nodes: 1, 2, 3, 19, 32, 37, 39, 53, 66.
-
-Sensor nodes for this run are 3, 10, 148. Three sensor nodes are needed
-for this basic formulation.
 
 This is the same as \cite{key-1}.
 
