@@ -490,7 +490,7 @@ Graph abstraction with vulnerable nodes in red and blue are sensors
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
@@ -745,6 +745,10 @@ key "key-1"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+The closing of network requires 12 actuators: 
 \end_layout
 
 \begin_layout Subsection*

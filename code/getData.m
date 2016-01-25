@@ -1,4 +1,4 @@
-function [adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getData(fileName)
+function [adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData(fileName)
 
 % Extracts struct from given file
 model = epanet_reader4_extract(fileName);
