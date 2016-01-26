@@ -1,6 +1,7 @@
 % Get data from .inp file
 [adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
 vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+NUMBER_BIGGER_THAN_NETWORK = 10000;
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -52,32 +53,26 @@ assert(isequal(size(allDistances), [length(vulnerableNodes) nodesNum]));
 shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
-shortestPathsFromVulnerableNodes(find(shortestPathsFromVulnerableNodes==Inf)) = 100000;
-distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes);
-%xorDistances = bitxor(shortestPathsFromVulnerableNodes(1,:),shortestPathsFromVulnerableNodes(2,:),shortestPathsFromVulnerableNodes(3,:)); % For uniqueness? a map? Nope, too much.
+shortestPathsFromVulnerableNodes(find(shortestPathsFromVulnerableNodes==Inf)) = NUMBER_BIGGER_THAN_NETWORK;
+distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes); 
 %Use the critical sensor for each node, each of which would check with all fo the actuators for conformancy. So a total of VulN*E constraints. Too many.
 %Use one sensor only after getting all closest sensors vector after from shortestPathsFromVulnerableNodes.
 
-%for i=1:max(shortestPathsFromVulnerableNodes)
-%    index = find(shortestPathsFromVulnerableNodes==i);
-%    Aeq2i = Aeq2i+1;
-%    Aeq2(Aeq2i)=shortestPathsFromVulnerableNodes;
-%    i++;
-%end
-
-for i=1:maxDistance
-    index = find(shortestPathsFromVulnerableNodes<=i);
-    Aeq2i = Aeq2i+1;
-    Aeq2(Aeq2i,index) = shortestPathsFromVulnerableNodes(index);
-    beq2(Aeq2i) = 0;
-end
-
+A2i = size(A2,1);
 for i=maxDistance:1
     index = find(shortestPathsFromVulnerableNodes>=i);
-    Aeq2i = Aeq2i+1;
-    Aeq2(Aeq2i,index) = shortestPathsFromVulnerableNodes(index);
-    beq2(Aeq2i) = 0;
+    A2i = A2i+1;
+    A2(A2i,index) = shortestPathsFromVulnerableNodes(index);
+    A2(A2i,(nodesNum+1):(nodesNum+edgesNum)) = -distanceEdgesFromVulnerableNodes;
+    b2(A2i) = 0;
 end
+
+%for i=1:maxDistance
+%    index = find(shortestPathsFromVulnerableNodes<=i);
+%    A2i = A2i+1;
+%    A2(A2i,index) = shortestPathsFromVulnerableNodes(index);
+%    b2(A2i) = 0;
+%end
 
 
 %% Solving combined MILP
@@ -93,7 +88,8 @@ beq = [beq1 beq2];
 f = [f1;f2];
 intcon = [intcon1 intcon2];
 [x,fval,exitflag,info] = intlinprog(f,intcon, A,b,Aeq,beq,lowerBound,upperBound);
+%isempty(x,[]); TODO
 sensorNodes = find(x(1:nodesNum));
-actuatorEdges = find(x((nodesNum*2+1):(nodesNm*2+edgesNum)));
+actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
