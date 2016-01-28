@@ -748,7 +748,9 @@ key "key-1"
 \end_layout
 
 \begin_layout Standard
-The closing of network requires 12 actuators: 
+The closing of network requires 12 actuators: on edges 2, 12, 16, 30, 38,
+ 40, 48, 51, 52, 67, 71, 76, 79, 87, 103, 108, 110.
+ 
 \end_layout
 
 \begin_layout Subsection*
@@ -1255,19 +1257,19 @@ J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $A_{eq2}=\begin{array}{ccccccccccccccc}
+\begin_inset Formula $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
-\end{array}$
+\end{array}\right]$
 \end_inset
 
 ; 
-\begin_inset Formula $b_{eq2}=\begin{array}{c}
+\begin_inset Formula $b_{eq2}=\left[\begin{array}{c}
 0\\
 0\\
 1
-\end{array}$
+\end{array}\right]$
 \end_inset
 
 
