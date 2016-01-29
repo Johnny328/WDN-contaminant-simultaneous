@@ -45,7 +45,6 @@ for i=demandNodes
 end
 beq2 = [beq2; ones(length(demandNodes),1)];
 
-
 tmp2 = graphallshortestpaths(adjGraph);
 allDistances = tmp2(vulnerableNodes,:);
 assert(isequal(size(allDistances), [length(vulnerableNodes) nodesNum]));
@@ -54,6 +53,7 @@ tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
 shortestPathsFromVulnerableNodes(find(shortestPathsFromVulnerableNodes==Inf)) = NUMBER_BIGGER_THAN_NETWORK;
 distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes); 
+
 %% Solving combined MILP
 % Lower and upper bounds/bianry constraint
 lowerBound=zeros(1,nodesNum*2+edgesNum);
@@ -67,14 +67,22 @@ beq = [beq1 beq2];
 f = [f1;f2];
 intcon = [intcon1 intcon2];
 
-% Use equality constraints to force critical(TODO) sensor nodes to be in the source
-% partition
+% Use equality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
+% partition. Observability => all are critical, can make another objective
+% for identifiability easily.
 for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,i) = 1;
-    A(index,i+nodesNum) = 1;
+    A(index,i) = shortestPathsFromVulnerableNodes(i);
+    A(index,1+nodesNum*2+edgesNum) = -1;
 end
-b = [b; ones(nodesNum,1)];
+b = [b; zeros(nodesNum,1)];
+
+for i=1:edgesNum
+    index = size(A,1)+1;
+    A(index,i+nodesNum*2) = distanceEdgesFromVulnerableNodes(i) + 1;
+    A(index,1+nodesNum*2+edgesNum) = -1; %TODO Sad implementation using floating point arithmetic if using nodes. But N <~ E so using them is better.
+end
+b = [b; ones(edgesNum,1)];
 
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
 %isempty(x,[]); TODO
