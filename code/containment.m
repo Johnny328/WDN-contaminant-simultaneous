@@ -60,11 +60,15 @@ lowerBound=zeros(1,nodesNum*2+edgesNum);
 upperBound=ones(1,nodesNum*2+edgesNum);
 %Integer constraint
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
-A = [A1 zeros(size(A1,1),size(f2,1)); zeros(size(A2,1),size(f1,1)) A2];
+
+f3 = [1 ones(nodesNum,1)];
+
+
+A = [A1 zeros(size(A1,1), size(f2,1)+size(f3,1)); zeros(size(A2,1), size(f1,1)+size(f3,1)) A2];
 b = [b1;b2];
-Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)); zeros(size(Aeq2,1),size(f1,1)) Aeq2];
+Aeq = [Aeq1 zeros(size(Aeq1,1), size(f2,1)+size(f3,1)); zeros(size(Aeq2,1), size(f1,1)+size(f3,1)) Aeq2];
 beq = [beq1 beq2];
-f = [f1;f2];
+f = [f1;f2;f3];
 intcon = [intcon1 intcon2];
 
 % Use equality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
@@ -77,12 +81,19 @@ for i=1:nodesNum
 end
 b = [b; zeros(nodesNum,1)];
 
-for i=1:edgesNum
+for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,i+nodesNum*2) = distanceEdgesFromVulnerableNodes(i) + 1;
+    A(index,i) = 1;
+    A(index,1+nodesNum*2+edgesNum+i) = -1/1000000;
+end
+b = [b; zeros(nodesNum,1)];
+
+for i=1:nodesNum
+    index = size(A,1)+1;
+    A(index,i+nodesNum*2+edgesNum+1) = distanceEdgesFromVulnerableNodes(i);
     A(index,1+nodesNum*2+edgesNum) = -1; %TODO Sad implementation using floating point arithmetic if using nodes. But N <~ E so using them is better.
 end
-b = [b; ones(edgesNum,1)];
+b = [b; zeros(edgesNum,1)];
 
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
 %isempty(x,[]); TODO
