@@ -1,3 +1,5 @@
+20160202
+* Get largest distance that'll be affected from the sensor node distances. This much be smaller than the distances of all actuators.
 
 20160122
 Possible directions
