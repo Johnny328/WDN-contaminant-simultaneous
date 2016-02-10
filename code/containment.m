@@ -55,25 +55,29 @@ shortestPathsFromVulnerableNodes(find(shortestPathsFromVulnerableNodes==Inf)) = 
 distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes); 
 
 %% Solving combined MILP
-% Lower and upper bounds/bianry constraint
-lowerBound=zeros(1,nodesNum*2+edgesNum);
-upperBound=ones(1,nodesNum*2+edgesNum);
 %Integer constraint
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
-f3 = [1 ones(nodesNum,1)];
+% New decision variables for transformed space.
+f3 = [-1/NUMBER_BIGGER_THAN_NETWORK;-1/NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum,1)];
+intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum+1+nodesNum);
 
+% Lower and upper bounds/bianry constraint
+lowerBound = [zeros(1,nodesNum*2+edgesNum) 0 ones(1,nodesNum)];
+upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK NUMBER_BIGGER_THAN_NETWORK.*ones(1,nodesNum)];
 
 A = [A1 zeros(size(A1,1), size(f2,1)+size(f3,1)); zeros(size(A2,1), size(f1,1)+size(f3,1)) A2];
 b = [b1;b2];
 Aeq = [Aeq1 zeros(size(Aeq1,1), size(f2,1)+size(f3,1)); zeros(size(Aeq2,1), size(f1,1)+size(f3,1)) Aeq2];
 beq = [beq1 beq2];
 f = [f1;f2;f3];
-intcon = [intcon1 intcon2];
+intcon = [intcon1 intcon2 intcon3];
 
-% Use equality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
+% Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
 % partition. Observability => all are critical, can make another objective
 % for identifiability easily.
+
+% Get max sensor distance
 for i=1:nodesNum
     index = size(A,1)+1;
     A(index,i) = shortestPathsFromVulnerableNodes(i);
@@ -81,19 +85,29 @@ for i=1:nodesNum
 end
 b = [b; zeros(nodesNum,1)];
 
+% Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
+% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Maximize. 
+for i=1:nodesNum
+    index = size(Aeq,1)+1;
+    Aeq(index,i+nodesNum) = 1; % TODO Fix forcing all partition nodes to be 1.
+    Aeq(index,1+nodesNum*2+edgesNum+i) = -1;
+end
+beq = [beq; zeros(nodesNum,1)];
+
+% Force all partitioning to happen after the distance.
 for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,i) = 1;
-    A(index,1+nodesNum*2+edgesNum+i) = -1/1000000;
+    A(index,i+nodesNum*2+edgesNum+1) = -shortestPathsFromVulnerableNodes(i);
+    A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
 b = [b; zeros(nodesNum,1)];
-
-for i=1:nodesNum
-    index = size(A,1)+1;
-    A(index,i+nodesNum*2+edgesNum+1) = distanceEdgesFromVulnerableNodes(i);
-    A(index,1+nodesNum*2+edgesNum) = -1; %TODO Sad implementation using floating point arithmetic if using nodes. But N <~ E so using them is better.
-end
-b = [b; zeros(edgesNum,1)];
+% Implementation using edges
+%for i=1:edgesNum
+%    index = size(A,1)+1;
+%    A(index,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);
+%    A(index,1+nodesNum*2+edgesNum) = 1; 
+%end
+%b = [b; zeros(edgesNum,1)];
 
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
 %isempty(x,[]); TODO
