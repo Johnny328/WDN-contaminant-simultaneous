@@ -1,16 +1,16 @@
 %% Given adjacency matrix
-adjGraph = sparse([1 1 2 2 2 3 3 4 5],[2 3 4 5 3 4 5 6 6],[2 2 1 1 1 1 1 2 2],6,6);
+adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[2 2 1 1 1 1 1 2 2 4],7,7);
 incGraph = adj2inc(adjGraph,0);
-
 % Total number of nodes
-nodesNum = 6;
-edgesNum = 9;
+nodesNum = size(adjGraph,1);
+edgesNum = size(incGraph,1);
 % Vulnerable nodes
-vulnerableN = [1,2];
-demandNodes=[6];
-sourceNodes=[1 2];
+vulnerableNodes = [1,2];
+demandNodes = [7];
+sourceNodes = [1 2];
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
+
 %% Actuator placement
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';

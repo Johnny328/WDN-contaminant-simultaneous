@@ -1,6 +1,17 @@
-% Get data from .inp file
-[adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
-vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+
+%% Given adjacency matrix
+adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[2 2 1 1 1 1 1 2 2 4],7,7);
+incGraph = adj2inc(adjGraph,0);
+% Total number of nodes
+nodesNum = size(adjGraph,1);
+edgesNum = size(incGraph,1);
+% Vulnerable nodes
+vulnerableNodes = [1,2,4,5];%Test failed, this should've lead to sensor at 6 and actuator after it. Something wrong with shortestPathsFromVulnerableNodes code.
+demandNodes = [7];
+sourceNodes = [1 2];
+%Weights/lengths of pipes
+edgeWeights = eye(edgesNum);
+
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
@@ -21,14 +32,6 @@ intcon1 = 1:nodesNum;
 %Equality constraints
 Aeq1 = [];
 beq1 = [];
-% Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
-%Aeq1i = 0;
-%Aeq1 = zeros(0,size(f1,1));
-%for i=[41,69,56]
-%    Aeq1i = Aeq1i + 1;
-%    Aeq1(Aeq1i,i) = 1;
-%end
-%beq1 = ones(3,1);
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
@@ -60,7 +63,7 @@ shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
 shortestPathsFromVulnerableNodes(find(shortestPathsFromVulnerableNodes==Inf)) = NUMBER_BIGGER_THAN_NETWORK;
-distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes); 
+%distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes); 
 
 %% Solving combined MILP
 %Integer constraint
