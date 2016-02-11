@@ -21,6 +21,14 @@ intcon1 = 1:nodesNum;
 %Equality constraints
 Aeq1 = [];
 beq1 = [];
+% Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
+%Aeq1i = 0;
+%Aeq1 = zeros(0,size(f1,1));
+%for i=[41,70,85]
+%    Aeq1i = Aeq1i + 1;
+%    Aeq1(Aeq1i,i) = 1;
+%end
+%beq1 = ones(3,1);
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
@@ -59,17 +67,18 @@ distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes);
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
 % New decision variables for transformed space.
-f3 = [-1/NUMBER_BIGGER_THAN_NETWORK;-1/NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum,1)];
+%f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000;-1/NUMBER_BIGGER_THAN_NETWORK/1000000.*ones(nodesNum,1)];
+f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000;zeros(nodesNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum+1+nodesNum);
 
 % Lower and upper bounds/bianry constraint
 lowerBound = [zeros(1,nodesNum*2+edgesNum) 0 ones(1,nodesNum)];
 upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK NUMBER_BIGGER_THAN_NETWORK.*ones(1,nodesNum)];
 
-A = [A1 zeros(size(A1,1), size(f2,1)+size(f3,1)); zeros(size(A2,1), size(f1,1)+size(f3,1)) A2];
+A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1)); zeros(size(A2,1),size(f1,1)) A2 zeros(size(A2,1),size(f3,1))];
 b = [b1;b2];
-Aeq = [Aeq1 zeros(size(Aeq1,1), size(f2,1)+size(f3,1)); zeros(size(Aeq2,1), size(f1,1)+size(f3,1)) Aeq2];
-beq = [beq1 beq2];
+Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)+size(f3,1)); zeros(size(Aeq2,1),size(f1,1)) Aeq2 zeros(size(Aeq2,1),size(f3,1))];
+beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
 
@@ -86,13 +95,18 @@ end
 b = [b; zeros(nodesNum,1)];
 
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
-% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Maximize. 
+% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize. 
+b = [b; zeros(nodesNum*2,1)];
 for i=1:nodesNum
-    index = size(Aeq,1)+1;
-    Aeq(index,i+nodesNum) = 1; % TODO Fix forcing all partition nodes to be 1.
-    Aeq(index,1+nodesNum*2+edgesNum+i) = -1;
+    index = size(A,1)+1;
+    A(index,i+nodesNum) = -NUMBER_BIGGER_THAN_NETWORK;
+    A(index,1+nodesNum*2+edgesNum+i) = -1;
+    b(index) = -NUMBER_BIGGER_THAN_NETWORK; 
+    index = size(A,1)+1;
+    A(index,i+nodesNum) = NUMBER_BIGGER_THAN_NETWORK-1;
+    A(index,1+nodesNum*2+edgesNum+i) = 1;
+    b(index) = NUMBER_BIGGER_THAN_NETWORK; 
 end
-beq = [beq; zeros(nodesNum,1)];
 
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
