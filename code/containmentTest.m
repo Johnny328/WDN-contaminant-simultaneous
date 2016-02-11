@@ -1,6 +1,6 @@
 
 %% Given adjacency matrix
-adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[2 2 1 1 1 1 1 2 2 4],7,7);
+adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[1 1 1 1 1 1 1 1 1 1],7,7);
 incGraph = adj2inc(adjGraph,0);
 % Total number of nodes
 nodesNum = size(adjGraph,1);
@@ -32,6 +32,14 @@ intcon1 = 1:nodesNum;
 %Equality constraints
 Aeq1 = [];
 beq1 = [];
+% Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
+%Aeq1i = 0;
+%Aeq1 = zeros(0,size(f1,1));
+%for i=[6]
+%    Aeq1i = Aeq1i + 1;
+%    Aeq1(Aeq1i,i) = 1;
+%end
+%beq1 = ones(1,1);
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
@@ -84,6 +92,7 @@ Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)+size(f3,1)); zeros(size(Aeq2,1),size(f
 beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
+%intcon = []; %Thus, bounds and linear contraints are inconsistent.
 
 % Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
 % partition. Observability => all are critical, can make another objective
@@ -114,10 +123,10 @@ end
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,i+nodesNum*2+edgesNum+1) = -shortestPathsFromVulnerableNodes(i);
+    A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-1;
     A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
-b = [b; zeros(nodesNum,1)];
+b = [b; -1*ones(nodesNum,1)];
 % Implementation using edges
 %for i=1:edgesNum
 %    index = size(A,1)+1;

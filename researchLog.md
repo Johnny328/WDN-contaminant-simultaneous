@@ -1,5 +1,11 @@
+0944
+* Solved by subtracting one from both sides of constraint.
+
+0936
+* Caused by shortestPathsFromVulnerableNodes being zero not satisfying constraints unless max distance is zero.
+
 20160211
-* Found major bug making sensors place on vulnerable nodes.
+* Found major bug making sensors place on vulnerable nodes. 
 
 20160211
 * Can't get all the possible optima in MATLAB using inbuilt funcitons.
