@@ -26,39 +26,35 @@ for il = 1:length(linewidth)
     alltext=findall(a,'Type','text');
     gplot(adjGraph == linewidth(il), [xcoorID' ycoorID']);
     hnew = setdiff(findall(gca, 'type', 'line'), h);
-    if(find(il==actuatorEdges))
-        set(hnew, 'linewidth', 1, 'color', 'black');
-    else 
-        set(hnew, 'linewidth', 1, 'color', 'blue');
-    end
+    set(hnew, 'linewidth', 1, 'color', 'black');
 end
 theta = linspace(0, 2*pi, 500)';
 for k=1:length(partitionSource)
     xc = bsxfun(@plus, r .* cos(theta), xcoorID(partitionSource(k)));
     yc = bsxfun(@plus, r .* sin(theta), ycoorID(partitionSource(k)));
-    patch(xc, yc, 'g');
+    patch(xc, yc, 'r');
 end
 for m=1:length(partitionDemand)
      %      x1(k)=x(parttion1(k));
      xc = bsxfun(@plus, r .* cos(theta), xcoorID(partitionDemand(m)));
      yc = bsxfun(@plus, r .* sin(theta), ycoorID(partitionDemand(m)));
-     patch(xc, yc, 'r');
+     patch(xc, yc, 'g');
  end
- for m=1:length(sensorNodes)
-     xc = bsxfun(@plus, r .* cos(theta), xcoorID(sensorNodes(m)));
-     yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
-     patch(xc, yc, 'y');
- end
- for k=1:length(vulnerableNodes)
-     xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));
-     yc = bsxfun(@plus, r .* sin(theta), ycoorID(vulnerableNodes(k)));
-     patch(xc, yc, 'black');
- end
- for k=1:length(demandNodes)
-     xc = bsxfun(@plus, r .* cos(theta), xcoorID(demandNodes(k)));
-     yc = bsxfun(@plus, r .* sin(theta), ycoorID(demandNodes(k)));
-     patch(xc, yc, 'white');
- end
+ %for m=1:length(sensorNodes)
+ %    xc = bsxfun(@plus, r .* cos(theta), xcoorID(sensorNodes(m)));
+ %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
+ %    patch(xc, yc, 'y');
+ %end
+ %for k=1:length(vulnerableNodes)
+ %    xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));
+ %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(vulnerableNodes(k)));
+ %    patch(xc, yc, 'black');
+ %end
+ %for k=1:length(demandNodes)
+ %    xc = bsxfun(@plus, r .* cos(theta), xcoorID(demandNodes(k)));
+ %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(demandNodes(k)));
+ %    patch(xc, yc, 'white');
+ %end
  hold on
  hold on
  for ii=1:size(adjGraph,1)
@@ -69,4 +65,5 @@ for m=1:length(partitionDemand)
  end
  %   text(x,y,lbl);
  axis equal;
- axis off
+ axis off;
+ hold off;

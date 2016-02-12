@@ -734,7 +734,7 @@ Vulnerable nodes and their corresponding sensor nodes
 \end_layout
 
 \begin_layout Standard
-It takes three sensors to detect contaminant with no other requirments.
+It takes three sensors to detect contaminant with no other requirements.
 \end_layout
 
 \begin_layout Standard
@@ -775,17 +775,21 @@ Formulating as binary integer optimization problem:
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-min & (\sum x_{i}+\sum z_{i})\\
+min & (\sum x_{i}+\sum z_{i}+\frac{1}{\Gamma}a)\\
 sub\\
 \mathbf{A}\left[\begin{array}{c}
 \mathbf{x}\\
 \mathbf{y}\\
-\mathbf{z}
+\mathbf{z}\\
+a\\
+\mathbf{w}
 \end{array}\right] & \leq & \mathbf{b}\\
 \mathbf{A_{eq}}\left[\begin{array}{c}
 \mathbf{x}\\
 \mathbf{y}\\
-\mathbf{z}
+\mathbf{z}\\
+a\\
+\mathbf{w}
 \end{array}\right] & = & \mathbf{b_{eq}}
 \end{eqnarray*}
 
@@ -830,22 +834,54 @@ edge, 0 otherwise.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Formula $a$
+\end_inset
+
+ is a decision variable which stores the maximum distance the set of sensors
+ are to the set of vulnerable nodes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{w}\equiv[w_{i}]$
+\end_inset
+
+ is 1 if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node is in the demands side of the actuators, a large number(
+\begin_inset Formula $N$
+\end_inset
+
+) otherwise.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\Gamma$
+\end_inset
+
+ is a large number.
+\end_layout
+
+\begin_layout Standard
 Hence the vector 
-\begin_inset Formula $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & y & z\end{array}}\right]$
+\begin_inset Formula $\left[\mathbf{\begin{array}{ccccc}
+\mathbf{x} & y & z & a & w\end{array}}\right]$
 \end_inset
 
  is of length 
-\begin_inset Formula $2*N+E$
+\begin_inset Formula $3*N+E+1$
 \end_inset
 
 .
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $A=\left[\begin{array}{cc}
-A_{1} & \mathbf{0}\\
-\mathbf{0} & A_{2}
+\begin_inset Formula $A=\left[\begin{array}{ccc}
+A_{1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{2} & \mathbf{0}\\
+\mathbf{} &  & A_{3}
 \end{array}\right]$
 \end_inset
 
@@ -862,23 +898,26 @@ A_{1} & \mathbf{0}\\
 \noun off
 \color none
 
-\begin_inset Formula $A=\left[\begin{array}{cc}
-A_{eq1} & \mathbf{0}\\
-\mathbf{0} & A_{eq2}
+\begin_inset Formula $A=\left[\begin{array}{ccc}
+A_{eq1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{eq2} & \mathbf{0}\\
+ &  & A_{eq3}
 \end{array}\right]$
 \end_inset
 
 , 
 \begin_inset Formula $b=\left[\begin{array}{c}
 b_{1}\\
-b_{2}
+b_{2}\\
+b_{3}
 \end{array}\right]$
 \end_inset
 
 , 
 \begin_inset Formula $b_{eq}=\left[\begin{array}{c}
 b_{eq1}\\
-b_{eq2}
+b_{eq2}\\
+b_{eq3}
 \end{array}\right]$
 \end_inset
 
@@ -970,19 +1009,6 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 So we use shortest path lengths from all the vulnerable nodes (simulating
  an attack on all of them) to all the nodes in the graph to model 
 \begin_inset Quotes eld
@@ -993,6 +1019,61 @@ farther away
 \end_inset
 
 .
+ Let the vector be 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+.
+ The first constraint of 
+\begin_inset Formula $A_{eq3}$
+\end_inset
+
+ will be this vector of shortest paths multiplied with each row of 
+\begin_inset Formula $\mathbf{I\times x}$
+\end_inset
+
+ to get the maximum distance of that particular sensor configuration, stored
+ in 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ The actuators need to be at least that much distance away from the set
+ of vulnerable nodes.
+\end_layout
+
+\begin_layout Standard
+This can be implemented in two ways: constraining the actuators to be placed
+ after a particular distance, or constraining the demand partition to start
+ after a particular distance.
+ Since generally speaking the 
+\begin_inset Formula $N<E$
+\end_inset
+
+ in a lot of real world networks, we show the node implementation.
+\end_layout
+
+\begin_layout Standard
+After transforming the 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
+
+ vector to 
+\begin_inset Formula $\mathbf{w},$
+\end_inset
+
+ we construct constraints for the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node as follows: 
+\begin_inset Formula $\left[\begin{array}{ccccc}
+... & 0 & -(\Gamma+\mathbf{S}) & 0 & ...\end{array}\right]\left[\mathbf{x}\right]\leq\left[\begin{array}{c}
+-\Gamma\end{array}\right]$
+\end_inset
+
+.
+ This completes the formulation.
 \end_layout
 
 \begin_layout Section

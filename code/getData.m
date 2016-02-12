@@ -42,6 +42,8 @@ idx1 = sub2ind(size(adjGraph), changeToNegativeStartNodes, changeToNegativeEndNo
 idx2 = sub2ind(size(adjGraph), changeToNegativeEndNodes, changeToNegativeStartNodes);
 adjGraph(idx1) = 0; %Change to zero for existing, create new edge for the transpose position. Changed from negative edges because of graphtraverse ignoring negative edges.
 adjGraph(idx2) = 1;
-% Get incidence matrix
+% Get incidence matrix TODO
+%incGraph = sparse([pipeIDs;pipeIDs], [cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'); cell2mat(cellfun(@str2num,model.valves.ni,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.ni,'un',0).'); cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'); cell2mat(cellfun(@str2num,model.valves.nj,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.nj,'un',0).')], [ones(1,model.pipes.npipes + model.valves.nv + model.pumps.npumps) -1*ones(1,model.pipes.npipes + model.valves.nv + model.pumps.npumps)]);
+%incGraph(all(incGraph==0, 2),:)=[];
 incGraph = adj2inc(adjGraph);
 

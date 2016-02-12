@@ -111,19 +111,18 @@ end
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
     index = size(A,1)+1;
-    %A(index, nodesNum+i) = 
     A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK; %Not 1, it must compete with 1+1/NUMBER_BIGGER_THAN_NETWORK
     A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
 b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
-
+ 
 % Implementation using edges
-%for i=1:edgesNum
+% for i=1:edgesNum
 %    index = size(A,1)+1;
 %    A(index,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);
 %    A(index,1+nodesNum*2+edgesNum) = 1; 
-%end
-%b = [b; zeros(edgesNum,1)];
+% end
+% b = [b; zeros(edgesNum,1)];
 
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
 %isempty(x,[]); TODO
