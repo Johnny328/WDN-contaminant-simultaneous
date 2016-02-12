@@ -11,8 +11,8 @@ demandNodes = [7];
 sourceNodes = [1 2];
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
-
 NUMBER_BIGGER_THAN_NETWORK = 10000;
+
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -35,11 +35,11 @@ beq1 = [];
 % Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
 %Aeq1i = 0;
 %Aeq1 = zeros(0,size(f1,1));
-%for i=[6]
+%for i=[41,69,56]
 %    Aeq1i = Aeq1i + 1;
 %    Aeq1(Aeq1i,i) = 1;
 %end
-%beq1 = ones(1,1);
+%beq1 = ones(3,1);
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
@@ -79,7 +79,7 @@ intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
 % New decision variables for transformed space.
 %f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000;-1/NUMBER_BIGGER_THAN_NETWORK/1000000.*ones(nodesNum,1)];
-f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000;zeros(nodesNum,1)];
+f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000; zeros(nodesNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum+1+nodesNum);
 
 % Lower and upper bounds/bianry constraint
@@ -92,7 +92,6 @@ Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)+size(f3,1)); zeros(size(Aeq2,1),size(f
 beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
-%intcon = []; %Thus, bounds and linear contraints are inconsistent.
 
 % Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
 % partition. Observability => all are critical, can make another objective
@@ -123,10 +122,12 @@ end
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-1;
+    %A(index, nodesNum+i) = 
+    A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK; %Not 1, it must compete with 1+1/NUMBER_BIGGER_THAN_NETWORK
     A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
-b = [b; -1*ones(nodesNum,1)];
+b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
+
 % Implementation using edges
 %for i=1:edgesNum
 %    index = size(A,1)+1;

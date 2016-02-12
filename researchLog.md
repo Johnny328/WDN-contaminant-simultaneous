@@ -1,3 +1,6 @@
+1800
+* Still not fixed, must subtract NUMBER_LARGE_THAN_NETWORK from both sides of equation.
+
 0944
 * Solved by subtracting one from both sides of constraint.
 

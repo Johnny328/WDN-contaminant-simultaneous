@@ -470,6 +470,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename images/netowrkSensorsOnly.png
+	scale 40
 
 \end_inset
 
@@ -969,11 +970,20 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Standard
-After adding constraints from each of the sub-problems, the only thing left
- to do to enforce containment is to add constraints reflecting it.
- Our aim is to force whatever partitioning to happen in the region farther
- away from the contaminant than the sensor nodes.
- So we use shortest path lengths from all the vulnerable nodes (simulating
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we use shortest path lengths from all the vulnerable nodes (simulating
  an attack on all of them) to all the nodes in the graph to model 
 \begin_inset Quotes eld
 \end_inset
@@ -983,8 +993,6 @@ farther away
 \end_inset
 
 .
- There are still problems associated with this approach, which I'm working
- on now.
 \end_layout
 
 \begin_layout Section
@@ -1007,6 +1015,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename images/testGraph.png
+	scale 75
 
 \end_inset
 
