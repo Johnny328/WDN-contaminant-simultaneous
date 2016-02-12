@@ -1,5 +1,5 @@
 % Get data from .inp file
-[adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
 vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 %% Sensor placement
@@ -131,3 +131,5 @@ sensorNodes = find(x(1:nodesNum));
 actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
+
+plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,demandNodes,nodeIDs,startNodes,endNodes,adjGraph,incGraph,x);
