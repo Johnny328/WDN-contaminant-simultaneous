@@ -1,5 +1,6 @@
 % Get data from .inp file
 [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
+%vulnerableNodes = [131 20]; TODO verify adjGraph to contraints
 vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 %% Sensor placement
@@ -22,19 +23,21 @@ intcon1 = 1:nodesNum;
 Aeq1 = [];
 beq1 = [];
 % Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
-%Aeq1i = 0;
-%Aeq1 = zeros(0,size(f1,1));
-%for i=[41,69,56]
-%    Aeq1i = Aeq1i + 1;
-%    Aeq1(Aeq1i,i) = 1;
-%end
-%beq1 = ones(3,1);
+% Aeq1i = 0;
+% Aeq1 = zeros(0,size(f1,1));
+% for i=[41,70,85]
+%     Aeq1i = Aeq1i + 1;
+%     Aeq1(Aeq1i,i) = 1;
+% end
+% beq1 = ones(3,1);
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
-% Inequality constraint
+% Inequality constraint 
+% TODO This does not account for zero flows or demand to source transitions
+% when flow is opposite.
 A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
 b2 = zeros(size(incGraph,1),1);
 
@@ -67,7 +70,6 @@ distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes);
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
 % New decision variables for transformed space.
-%f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000;-1/NUMBER_BIGGER_THAN_NETWORK/1000000.*ones(nodesNum,1)];
 f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000; zeros(nodesNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum+1+nodesNum);
 
@@ -82,11 +84,12 @@ beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
 
-% Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
-% partition. Observability => all are critical, can make another objective
-% for identifiability easily.
+Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
+partition. Observability => all are critical, can make another objective
+for identifiability easily.
 
-% Get max sensor distance
+% Get max sensor distance. This alone, because of the minimization changes
+% the solution, but the objective value remains same.
 for i=1:nodesNum
     index = size(A,1)+1;
     A(index,i) = shortestPathsFromVulnerableNodes(i);
@@ -96,7 +99,6 @@ b = [b; zeros(nodesNum,1)];
 
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
 % Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize. 
-b = [b; zeros(nodesNum*2,1)];
 for i=1:nodesNum
     index = size(A,1)+1;
     A(index,i+nodesNum) = -NUMBER_BIGGER_THAN_NETWORK;
@@ -110,13 +112,13 @@ end
 
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
-    index = size(A,1)+1;
-    A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK; %Not 1, it must compete with 1+1/NUMBER_BIGGER_THAN_NETWORK
-    A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
+   index = size(A,1)+1;
+   A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK; %Not 1, it must compete with 1+1/NUMBER_BIGGER_THAN_NETWORK
+   A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
 b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
  
-% Implementation using edges
+% % Implementation using edges
 % for i=1:edgesNum
 %    index = size(A,1)+1;
 %    A(index,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);

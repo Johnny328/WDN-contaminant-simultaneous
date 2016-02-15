@@ -458,7 +458,8 @@ Bangalore Water Distribution Network
  Summary            	No
  Page               	0
  Links                  All
- Flow below 0
+ Flow                   below 0.00001
+ Flow                   above -0.00001
  Flow                   No
  Headloss               No
  Head                   No

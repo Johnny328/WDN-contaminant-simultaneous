@@ -1,5 +1,13 @@
+20160215
+0820
+* The finding of maximum distance changes the sensor placement(and consequently partitioning) unless it is zero in the objective.
+0827
+* Computing the transformed variables makes it converge at another optimal solution.
+1000
+* The formulation does not account properly for zero flows or flows out of a demand partition into source.
+
 1800
-* Still not fixed, must subtract NUMBER_LARGE_THAN_NETWORK from both sides of equation.
+* Still not fixed, must subtract NUMBER_BIGGER_THAN_NETWORK from both sides of equation.
 
 0944
 * Solved by subtracting one from both sides of constraint.
