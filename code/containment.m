@@ -38,8 +38,9 @@ f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 % Inequality constraint 
 % TODO This does not account for zero flows or demand to source transitions
 % when flow is opposite.
-A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
-b2 = zeros(size(incGraph,1),1);
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights;
+        incGraph -eye(size(incGraph,1))*edgeWeights];
+b2 = zeros(size(incGraph,1)*2,1);
 
 % Set the partitions of source to 0 and demands to 1
 % Equality constraint
