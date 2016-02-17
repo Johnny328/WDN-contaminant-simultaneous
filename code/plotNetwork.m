@@ -45,16 +45,16 @@ for m=1:length(partitionDemand)
  %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
  %    patch(xc, yc, 'y');
  %end
- %for k=1:length(vulnerableNodes)
- %    xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));
- %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(vulnerableNodes(k)));
- %    patch(xc, yc, 'black');
- %end
- %for k=1:length(demandNodes)
- %    xc = bsxfun(@plus, r .* cos(theta), xcoorID(demandNodes(k)));
- %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(demandNodes(k)));
- %    patch(xc, yc, 'white');
- %end
+ for k=1:length(vulnerableNodes)
+     xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));
+     yc = bsxfun(@plus, r .* sin(theta), ycoorID(vulnerableNodes(k)));
+     patch(xc, yc, 'black');
+ end
+ for k=1:length(demandNodes)
+     xc = bsxfun(@plus, r .* cos(theta), xcoorID(demandNodes(k)));
+     yc = bsxfun(@plus, r .* sin(theta), ycoorID(demandNodes(k)));
+     patch(xc, yc, 'white');
+ end
  hold on
  hold on
  for ii=1:size(adjGraph,1)

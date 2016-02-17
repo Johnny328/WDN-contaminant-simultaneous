@@ -1,3 +1,6 @@
+20150216
+* Two ways to solve the edge from demand to source partitions: maximize with minimal weight in objective for being in demands, or add another contraint for each edge. Choosing to add constraints.
+
 20160215
 0820
 * The finding of maximum distance changes the sensor placement(and consequently partitioning) unless it is zero in the objective.

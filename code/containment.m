@@ -1,7 +1,7 @@
 % Get data from .inp file
 [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
-%vulnerableNodes = [131 20]; TODO verify adjGraph to contraints
-vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+vulnerableNodes = [131 20]; %TODO verify adjGraph to contraints
+%vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
@@ -70,7 +70,7 @@ distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes);
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
 % New decision variables for transformed space.
-f3 = [1/NUMBER_BIGGER_THAN_NETWORK/1000000; zeros(nodesNum,1)];
+f3 = [1/NUMBER_BIGGER_THAN_NETWORK/10; zeros(nodesNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum+1+nodesNum);
 
 % Lower and upper bounds/bianry constraint
@@ -84,12 +84,12 @@ beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
 
-Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
-partition. Observability => all are critical, can make another objective
-for identifiability easily.
+%Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
+%partition. Observability => all are critical, can make another objective
+%for identifiability easily.
 
-% Get max sensor distance. This alone, because of the minimization changes
-% the solution, but the objective value remains same.
+% Get max sensor distance. This alone --because of the minimization-- changes
+% the solution but the objective value remains same.
 for i=1:nodesNum
     index = size(A,1)+1;
     A(index,i) = shortestPathsFromVulnerableNodes(i);
@@ -105,7 +105,7 @@ for i=1:nodesNum
     A(index,1+nodesNum*2+edgesNum+i) = -1;
     b(index) = -NUMBER_BIGGER_THAN_NETWORK; 
     index = size(A,1)+1;
-    A(index,i+nodesNum) = NUMBER_BIGGER_THAN_NETWORK-1;
+    A(index,i+nodesNum) = (NUMBER_BIGGER_THAN_NETWORK-1);
     A(index,1+nodesNum*2+edgesNum+i) = 1;
     b(index) = NUMBER_BIGGER_THAN_NETWORK; 
 end
