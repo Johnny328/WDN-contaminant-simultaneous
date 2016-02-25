@@ -1,5 +1,5 @@
 % Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getData('bangalore_expanded221.inp');
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getWdnData('bangalore_expanded221.inp');
 vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable

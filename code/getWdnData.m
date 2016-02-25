@@ -1,4 +1,4 @@
-function [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData(fileName)
+function [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getWdnData(fileName)
 
 % Extracts struct from given file
 model = epanet_reader4_extract(fileName);
@@ -45,8 +45,14 @@ adjGraph(idx1) = 0; %Change to zero for existing, create new edge for the transp
 adjGraph(idx2) = 1;
 
 % Get incidence matrix TODO
-incGraph3 = sparse([pipeIDs;pipeIDs], [startNodes;endNodes], [ones(model.pipes.npipes + model.valves.nv + model.pumps.npumps,1); -1*ones(model.pipes.npipes + model.valves.nv + model.pumps.npumps,1)]);
-%incGraph(all(incGraph==0, 2),:)=[];
-incGraph = adj2inc(adjGraph);
-;
+incGraph1 = adj2inc(adjGraph);
+incGraph3 = sparse([1:size(startNodes);1:size(startNodes)], [startNodes;endNodes], [ones(model.pipes.npipes+model.valves.nv+model.pumps.npumps,1);-1*ones(model.pipes.npipes+model.valves.nv+model.pumps.npumps,1)]);
+for i=1:size(idxs)
+    incGraph3(find(pipeIDs==idxs(i)),:) = -incGraph3(find(pipeIDs==idxs(i)),:);
+end
+%for i=1:150
+%    i
+%    assert(size(find(incGraph3(:,i)),1)==size(find(incGraph1(:,i)),1))
+%end
+incGraph = incGraph1;
 

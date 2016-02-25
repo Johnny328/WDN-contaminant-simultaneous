@@ -752,6 +752,16 @@ key "key-1"
 The closing of network requires 12 actuators: on edges 2, 12, 16, 30, 38,
  40, 48, 51, 52, 67, 71, 76, 79, 87, 103, 108, 110.
  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Fix the edge numbers, they're wrong.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection*
@@ -775,7 +785,7 @@ Formulating as binary integer optimization problem:
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-min & (\sum x_{i}+\sum z_{i}+\frac{1}{\Gamma}a)\\
+min & (\sum x_{i}+\sum z_{i})\\
 sub\\
 \mathbf{A}\left[\begin{array}{c}
 \mathbf{x}\\
@@ -881,7 +891,7 @@ Hence the vector
 \begin_inset Formula $A=\left[\begin{array}{ccc}
 A_{1} & \mathbf{0} & \mathbf{0}\\
 \mathbf{0} & A_{2} & \mathbf{0}\\
-\mathbf{} &  & A_{3}
+\mathbf{} & A_{3}
 \end{array}\right]$
 \end_inset
 
@@ -901,7 +911,7 @@ A_{1} & \mathbf{0} & \mathbf{0}\\
 \begin_inset Formula $A=\left[\begin{array}{ccc}
 A_{eq1} & \mathbf{0} & \mathbf{0}\\
 \mathbf{0} & A_{eq2} & \mathbf{0}\\
- &  & A_{eq3}
+\mathbf{0} & A_{eq3}
 \end{array}\right]$
 \end_inset
 
@@ -960,7 +970,7 @@ b_{eq3}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $A_{eq1}=b_{eq1}=\mathbf{O}$
+\begin_inset Formula $A_{eq1}=b_{eq1}=\mathbf{\left[O\right]}$
 \end_inset
 
 
@@ -1009,31 +1019,31 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Standard
-So we use shortest path lengths from all the vulnerable nodes (simulating
- an attack on all of them) to all the nodes in the graph to model 
+We use shortest path lengths from all the vulnerable nodes (simulating an
+ attack on all of them) to all the nodes in the graph to model 
 \begin_inset Quotes eld
 \end_inset
 
-farther away
+farther away in time
 \begin_inset Quotes erd
 \end_inset
 
 .
- Let the vector be 
+ Let this vector be 
 \begin_inset Formula $\mathbf{S}$
 \end_inset
 
 .
- The first constraint of 
+ The first set of constraints of 
 \begin_inset Formula $A_{eq3}$
 \end_inset
 
- will be this vector of shortest paths multiplied with each row of 
+ is this vector of shortest paths multiplied with each column of 
 \begin_inset Formula $\mathbf{I\times x}$
 \end_inset
 
- to get the maximum distance of that particular sensor configuration, stored
- in 
+, storing the maximum distance of that particular sensor configuration in
+ 
 \begin_inset Formula $a$
 \end_inset
 
@@ -1054,7 +1064,7 @@ This can be implemented in two ways: constraining the actuators to be placed
 \end_layout
 
 \begin_layout Standard
-After transforming the 
+In order to facilitate our requirements, we transform the 
 \begin_inset Formula $\mathbf{y}$
 \end_inset
 
@@ -1062,7 +1072,16 @@ After transforming the
 \begin_inset Formula $\mathbf{w},$
 \end_inset
 
- we construct constraints for the 
+ where 
+\begin_inset Formula $\Gamma$
+\end_inset
+
+ denotes the sensor partition and 
+\begin_inset Formula $1$
+\end_inset
+
+ implies the demand partition.
+ We construct constraints for the 
 \begin_inset Formula $i^{th}$
 \end_inset
 
@@ -1078,6 +1097,10 @@ node as follows:
 
 \begin_layout Section
 Example
+\end_layout
+
+\begin_layout Subsection*
+Case 1: No containment 
 \end_layout
 
 \begin_layout Standard
@@ -1259,16 +1282,6 @@ b_{eq2}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-TODO
-\end_layout
-
-\end_inset
-
-
 \begin_inset Formula $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
 -1 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
@@ -1362,6 +1375,14 @@ J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
 \end{array}\right]$
 \end_inset
 
+
+\end_layout
+
+\begin_layout Subsection*
+Case 2: Cnontainment of contaminant
+\end_layout
+
+\begin_layout Standard
 
 \end_layout
 

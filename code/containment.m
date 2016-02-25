@@ -1,8 +1,9 @@
 % Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getData('bangalore_expanded221.inp');
-vulnerableNodes = [131 20]; %TODO verify adjGraph to contraints
-%vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getWdnData('bangalore_expanded221.inp');
+vulnerableNodes = [vulnerableNodes];% 19 32 37 39 53 66];
 NUMBER_BIGGER_THAN_NETWORK = 10000;
+maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
+
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -38,9 +39,8 @@ f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 % Inequality constraint 
 % TODO This does not account for zero flows or demand to source transitions
 % when flow is opposite.
-A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights;
-        incGraph -eye(size(incGraph,1))*edgeWeights];
-b2 = zeros(size(incGraph,1)*2,1);
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
+b2 = zeros(size(incGraph,1),1);
 
 % Set the partitions of source to 0 and demands to 1
 % Equality constraint
@@ -71,7 +71,7 @@ distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes);
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
 % New decision variables for transformed space.
-f3 = [1/NUMBER_BIGGER_THAN_NETWORK/10; zeros(nodesNum,1)];
+f3 = [0; zeros(nodesNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum+1+nodesNum);
 
 % Lower and upper bounds/bianry constraint
@@ -97,6 +97,10 @@ for i=1:nodesNum
     A(index,1+nodesNum*2+edgesNum) = -1;
 end
 b = [b; zeros(nodesNum,1)];
+
+%Maximum distance to detection implementation
+A(size(A,1)+1,1+nodesNum*2+edgesNum) = 1;
+b(size(b,1)+1) = maxDistanceToDetection;
 
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
 % Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize. 
@@ -133,5 +137,6 @@ sensorNodes = find(x(1:nodesNum));
 actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
+distanceToDetection = x(nodesNum*2+edgesNum+1)
 
 plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,demandNodes,nodeIDs,startNodes,endNodes,adjGraph,incGraph,x);

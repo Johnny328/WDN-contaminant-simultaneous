@@ -1,5 +1,12 @@
-20150216
-* Two ways to solve the edge from demand to source partitions: maximize with minimal weight in objective for being in demands, or add another contraint for each edge. Choosing to add constraints.
+20160225
+* Removing weight for containment distance. Doesn't change solution at all.
+* Rolling back the extra constraints for each edge. Must think of better solution for deamnd to source flows. 
+* Implementation: flushing of network at actuators => solution for the problem requiring undirected treatment and extra constraints for each edge.
+* Actuators must be between vulnerable and demand & they must also be after the max. distance to sensors. => no need for separete constraint to detect before any demand is contaminated.
+* Implemented distanceToDetection spec.
+
+20160216
+* Two ways to solve the edge from demand to source partitions: maximize with minimal weight in objective for being in demands, or add another constraint for each edge. Choosing to add constraints.
 
 20160215
 0820

@@ -1,5 +1,5 @@
 %% Get data from a given input file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getData('bangalore_expanded221.inp');
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes] = getWdnData('bangalore_expanded221.inp');
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
