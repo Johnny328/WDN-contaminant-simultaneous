@@ -1,4 +1,4 @@
-function [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getWdnData(fileName)
+function [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData(fileName)
 
 % Extracts struct from given file
 model = epanet_reader4_extract(fileName);
@@ -33,26 +33,29 @@ adjGraph = sparse([cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'); cell2mat
 adjGraph(nodesNum,nodesNum) = 0;
 
 negativeEdges = readNegativeFlows('report.out');
+% All of these are in order of network, not in order of the pipeIDs.
 pipeIDs = [cell2mat(cellfun(@str2num,model.pipes.id,'un',0).'); cell2mat(cellfun(@str2num,model.valves.id,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.id,'un',0).')];
-startNodes = [cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'); cell2mat(cellfun(@str2num,model.valves.ni,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.ni,'un',0).')];
-endNodes = [cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'); cell2mat(cellfun(@str2num,model.valves.nj,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.nj,'un',0).')];
+pipeStartNodes = [cell2mat(cellfun(@str2num,model.pipes.ni,'un',0).'); cell2mat(cellfun(@str2num,model.valves.ni,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.ni,'un',0).')];
+pipeEndNodes = [cell2mat(cellfun(@str2num,model.pipes.nj,'un',0).'); cell2mat(cellfun(@str2num,model.valves.nj,'un',0).'); cell2mat(cellfun(@str2num,model.pumps.nj,'un',0).')];
+% Find the netowrk IDs corresponding to the pipeIDs of negativeEdges
 idxs = arrayfun(@(x)find(pipeIDs==x,1),negativeEdges);
-changeToNegativeStartNodes = startNodes(idxs);
-changeToNegativeEndNodes = endNodes(idxs);
+changeToNegativeStartNodes = pipeStartNodes(idxs);
+changeToNegativeEndNodes = pipeEndNodes(idxs);
 idx1 = sub2ind(size(adjGraph), changeToNegativeStartNodes, changeToNegativeEndNodes);
 idx2 = sub2ind(size(adjGraph), changeToNegativeEndNodes, changeToNegativeStartNodes);
 adjGraph(idx1) = 0; %Change to zero for existing, create new edge for the transpose position. Changed from negative edges because of graphtraverse ignoring negative edges.
 adjGraph(idx2) = 1;
 
-% Get incidence matrix TODO
+% Get incidence matrix
 incGraph1 = adj2inc(adjGraph);
-incGraph3 = sparse([1:size(startNodes);1:size(startNodes)], [startNodes;endNodes], [ones(model.pipes.npipes+model.valves.nv+model.pumps.npumps,1);-1*ones(model.pipes.npipes+model.valves.nv+model.pumps.npumps,1)]);
+% This matrix is in the order edges in network model, not in order of
+% pipeIDs.
+incGraph3 = sparse([(1:size(pipeStartNodes,1))';(1:size(pipeStartNodes,1))'], [pipeStartNodes;pipeEndNodes], [ones(size(pipeStartNodes,1),1);-1*ones(size(pipeStartNodes,1),1)]);
 for i=1:size(idxs)
-    incGraph3(find(pipeIDs==idxs(i)),:) = -incGraph3(find(pipeIDs==idxs(i)),:);
+    incGraph3(pipeIDs==idxs(i),:) = -incGraph3(pipeIDs==idxs(i),:);
 end
-%for i=1:150
-%    i
-%    assert(size(find(incGraph3(:,i)),1)==size(find(incGraph1(:,i)),1))
-%end
-incGraph = incGraph1;
+for i=1:150
+    assert(size(find(incGraph3(:,i)),1)==size(find(incGraph1(:,i)),1));
+end
+incGraph = incGraph3;
 

@@ -1,6 +1,6 @@
 % Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, startNodes, endNodes] = getWdnData('bangalore_expanded221.inp');
-vulnerableNodes = [vulnerableNodes];% 19 32 37 39 53 66];
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
 
@@ -39,8 +39,9 @@ f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 % Inequality constraint 
 % TODO This does not account for zero flows or demand to source transitions
 % when flow is opposite.
-A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights];
-b2 = zeros(size(incGraph,1),1);
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights
+    incGraph -eye(size(incGraph,1))*edgeWeights]; % TODO edgeWeights must be in the order of incGraph (1:size(incGraph,1) === pipeIDs)
+b2 = zeros(size(incGraph*2,1),1);
 
 % Set the partitions of source to 0 and demands to 1
 % Equality constraint
@@ -63,8 +64,8 @@ assert(isequal(size(allDistances), [length(vulnerableNodes) nodesNum]));
 shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
-shortestPathsFromVulnerableNodes(find(shortestPathsFromVulnerableNodes==Inf)) = NUMBER_BIGGER_THAN_NETWORK;
-distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(startNodes); 
+shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER_BIGGER_THAN_NETWORK;
+distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes); 
 
 %% Solving combined MILP
 %Integer constraint
@@ -122,7 +123,11 @@ for i=1:nodesNum
    A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
 b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
- 
+
+% Get a different sensor placement solution by preventing the last.
+%Aeq(size(Aeq,1)+1,[66]) = [1];
+%beq(size(beq,1)+1) = 0; % No others are feasible?
+
 % % Implementation using edges
 % for i=1:edgesNum
 %    index = size(A,1)+1;
@@ -134,9 +139,26 @@ b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
 %isempty(x,[]); TODO
 sensorNodes = find(x(1:nodesNum));
-actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
+% Order of network
+actuatorPipes = find(x((nodesNum*2+1):(nodesNum*2+edgesNum))~=0);
+% Order of IDs
+actuatorEdges = pipeIDs(actuatorPipes);
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 distanceToDetection = x(nodesNum*2+edgesNum+1)
 
-plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,demandNodes,nodeIDs,startNodes,endNodes,adjGraph,incGraph,x);
+plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+
+% Testing the partitioned network
+% Remove actuator edges 
+adjGraphContained = adjGraph;
+adjGraphContained(pipeStartNodes(actuatorPipes),pipeEndNodes(actuatorPipes)) = 0;
+adjGraphContained(pipeEndNodes(actuatorPipes),pipeStartNodes(actuatorPipes)) = 0;
+tmp2 = graphallshortestpaths(adjGraphContained);
+allDistancesContained = tmp2(vulnerableNodes,:);
+assert(isequal(size(allDistancesContained), [length(vulnerableNodes) nodesNum]));
+shortestPathsFromVulnerableNodesContained = min(allDistancesContained);
+for i=demandNodes
+    assert(shortestPathsFromVulnerableNodesContained(i)>NUMBER_BIGGER_THAN_NETWORK);
+end
+%BGobj = biograph(adjGraph, [], 'ShowArrows', true);

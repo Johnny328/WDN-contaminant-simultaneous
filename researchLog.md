@@ -1,8 +1,13 @@
+20160229
+* Manual generation of incidence matrix to keep track of edges.
+* Adding undirected containment because of bad results.
+* Added testing framework.
+
 20160225
 * Removing weight for containment distance. Doesn't change solution at all.
-* Rolling back the extra constraints for each edge. Must think of better solution for deamnd to source flows. 
+* Rolling back the extra constraints for each edge. Must think of better solution for demand to source flows. 
 * Implementation: flushing of network at actuators => solution for the problem requiring undirected treatment and extra constraints for each edge.
-* Actuators must be between vulnerable and demand & they must also be after the max. distance to sensors. => no need for separete constraint to detect before any demand is contaminated.
+* Actuators must be between vulnerable and demand & they must also be after the max. distance to sensors => no need for separete constraint to ensure detection before any demand is contaminated.
 * Implemented distanceToDetection spec.
 
 20160216
