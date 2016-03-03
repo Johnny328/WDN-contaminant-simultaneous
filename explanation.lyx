@@ -765,8 +765,7 @@ Fix the edge numbers, they're wrong.
 \end_layout
 
 \begin_layout Subsection*
-Case 2: The contaminant contained only in the vulnerable side of actuator
- network
+Case 2: The contaminant contained in the vulnerable side of actuator network
 \end_layout
 
 \begin_layout Standard
@@ -1013,7 +1012,7 @@ J & I_{E\times E}\end{array}\right]$
 \begin_inset Formula $b_{eq2}$
 \end_inset
 
- provide bounds to force the decision variables to reality, i.e.
+ provide bounds to force the decision variables to reality, viz.
  the demand nodes being in the second partition and the vulnerable nodes
  being in the first.
 \end_layout
@@ -1056,7 +1055,7 @@ farther away in time
 This can be implemented in two ways: constraining the actuators to be placed
  after a particular distance, or constraining the demand partition to start
  after a particular distance.
- Since generally speaking the 
+ Since generally speaking 
 \begin_inset Formula $N<E$
 \end_inset
 
@@ -1064,7 +1063,7 @@ This can be implemented in two ways: constraining the actuators to be placed
 \end_layout
 
 \begin_layout Standard
-In order to facilitate our requirements, we transform the 
+We transform the 
 \begin_inset Formula $\mathbf{y}$
 \end_inset
 
@@ -1081,7 +1080,7 @@ In order to facilitate our requirements, we transform the
 \end_inset
 
  implies the demand partition.
- We construct constraints for the 
+ We construct constraints for actuator placement for the 
 \begin_inset Formula $i^{th}$
 \end_inset
 
@@ -1113,7 +1112,7 @@ The maximum distance to detection in this design is
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="3">
+<lyxtabular version="3" rows="10" columns="3">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -1141,7 +1140,7 @@ Time to sense
 \begin_inset Text
 
 \begin_layout Plain Layout
-Distance to demand node
+Minimum distance to demand node
 \end_layout
 
 \end_inset
@@ -1152,7 +1151,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+1
 \end_layout
 
 \end_inset
@@ -1161,7 +1160,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0
 \end_layout
 
 \end_inset
@@ -1181,7 +1180,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+2
 \end_layout
 
 \end_inset
@@ -1190,7 +1189,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0
 \end_layout
 
 \end_inset
@@ -1210,7 +1209,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+3
 \end_layout
 
 \end_inset
@@ -1219,7 +1218,152 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
+0
+\end_layout
 
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+53
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
 \end_layout
 
 \end_inset
@@ -1239,7 +1383,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+66
 \end_layout
 
 \end_inset
@@ -1248,7 +1392,7 @@ Distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0
 \end_layout
 
 \end_inset
@@ -1270,8 +1414,58 @@ Distance to demand node
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/containmentPartitionsVulnerableDemand.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Network figure.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Green -- Demand partition
+\begin_inset Newline newline
+\end_inset
+
+Red -- Vulnerable partition
+\begin_inset Newline newline
+\end_inset
+
+Black -- Vulnerable nodes
+\begin_inset Newline newline
+\end_inset
+
+White -- Demand nodes 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-Example
+Small network example
 \end_layout
 
 \begin_layout Subsection*

@@ -1,3 +1,6 @@
+20160303
+* Found error of some vulnerable nodes on getting contaminated solo might reach demand (and actuator) before sensor.
+
 20160229
 * Manual generation of incidence matrix to keep track of edges.
 * Adding undirected containment because of bad results.
