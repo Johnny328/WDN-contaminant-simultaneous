@@ -1,3 +1,14 @@
+### 20150311
+* Fixed bug where b2 wasn't as long as size(incGraph,1)*2.
+* Used to be: max(over sens) . min(over vulN) A -- leads to error found on 20160303
+* Must be: max(over vulN) . min(over sensors) A
+* Can be, current: (not the best possible, but still valid)
+    max(over sens) . max(over vulN) A -- Gives no solution with 9 vulnerable nodes.
+
+### 20160310
+* Abandoned the case of single/subset vulnerable nodes contamination.
+* Working on formulation for each vulnerable node separately, enforcing containment zones. 
+
 20160303
 * Found error of some vulnerable nodes on getting contaminated solo might reach demand (and actuator) before sensor.
 
