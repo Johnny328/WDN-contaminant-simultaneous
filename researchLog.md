@@ -1,4 +1,7 @@
-### 20150311
+### 20160314
+* max . max formulation makes it impossible to deal with large networks -- the largest distance from vulnerable might be greater than network.
+
+### 20160311
 * Fixed bug where b2 wasn't as long as size(incGraph,1)*2.
 * Used to be: max(over sens) . min(over vulN) A -- leads to error found on 20160303
 * Must be: max(over vulN) . min(over sensors) A
