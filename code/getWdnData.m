@@ -1,4 +1,4 @@
-function [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData(fileName)
+function [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData(fileName)
 
 % Extracts struct from given file
 model = epanet_reader4_extract(fileName);
@@ -15,6 +15,7 @@ demandNodes = find(model.nodes.demand>0);
 nodeIDs = cell2mat(cellfun(@str2num,model.nodes.id,'un',0).');
 vulnerableNodes =  nodeIDs(vulnerableNodes)';
 demandNodes = nodeIDs(demandNodes)';
+vulnerableNum = length(vulnerableNodes);
 
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
@@ -47,15 +48,15 @@ adjGraph(idx1) = 0; %Change to zero for existing, create new edge for the transp
 adjGraph(idx2) = 1;
 
 % Get incidence matrix
-incGraph1 = adj2inc(adjGraph);
+%incGraph1 = adj2inc(adjGraph);
 % This matrix is in the order edges in network model, not in order of
 % pipeIDs.
 incGraph3 = sparse([(1:size(pipeStartNodes,1))';(1:size(pipeStartNodes,1))'], [pipeStartNodes;pipeEndNodes], [ones(size(pipeStartNodes,1),1);-1*ones(size(pipeStartNodes,1),1)]);
 for i=1:size(idxs)
     incGraph3(pipeIDs==idxs(i),:) = -incGraph3(pipeIDs==idxs(i),:);
 end
-for i=1:150
-    assert(size(find(incGraph3(:,i)),1)==size(find(incGraph1(:,i)),1));
-end
+%for i=1:150
+%    assert(size(find(incGraph3(:,i)),1)==size(find(incGraph1(:,i)),1));
+%end
 incGraph = incGraph3;
 

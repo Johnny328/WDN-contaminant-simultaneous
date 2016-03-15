@@ -1,5 +1,5 @@
 % Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
 %vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
@@ -9,8 +9,8 @@ maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
 % 1 step away affected nodes
 % affectedN = adjGraph(vulnerableN,:)>=1;
 % Find all affected nodes per vulnerable node, each vulnerable node has a row in the A matrix
-A1 = zeros(length(vulnerableNodes),nodesNum);
-for i=1:length(vulnerableNodes)
+A1 = zeros(vulnerableNum,nodesNum);
+for i=1:vulnerableNum
     tmp1 = graphtraverse(adjGraph,vulnerableNodes(i));
     A1(i,tmp1) = -1;
 end
@@ -51,7 +51,7 @@ for i=vulnerableNodes
     Aeq2i = Aeq2i+1;
     Aeq2(Aeq2i,i) = 1;
 end
-beq2 = zeros(length(vulnerableNodes),1);
+beq2 = zeros(vulnerableNum,1);
 for i=demandNodes
     Aeq2i = Aeq2i+1;
     Aeq2(Aeq2i,i) = 1;
@@ -61,7 +61,7 @@ beq2 = [beq2; ones(length(demandNodes),1)];
 % Get the distances to be needed among the nodes.
 tmp2 = graphallshortestpaths(adjGraph);
 allDistances = tmp2(vulnerableNodes,:);
-assert(isequal(size(allDistances), [length(vulnerableNodes) nodesNum]));
+assert(isequal(size(allDistances), [vulnerableNum nodesNum]));
 shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
@@ -70,7 +70,6 @@ distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNod
 
 allDistances(allDistances==Inf) = -1;
 longestPossiblePathFromVulnerableNode = max(allDistances);
-
 
 %% Solving combined MILP
 %Integer constraint
@@ -99,7 +98,7 @@ intcon = [intcon1 intcon2 intcon3];
 % the solution but the objective value remains same.
 for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,i) = longestPossiblePathFromVulnerableNode(i);
+    A(index,i) = shortestPathsFromVulnerableNodes(i);
     A(index,1+nodesNum*2+edgesNum) = -1;
 end
 b = [b; zeros(nodesNum,1)];
@@ -153,7 +152,7 @@ partitionSource=setdiff(1:nodesNum,partitionDemand);
 distanceToDetection = x(nodesNum*2+edgesNum+1)
 distanceVulnerableToSensors = allDistances(:,sensorNodes)
 
-plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
 
 % Testing the partitioned network
 % Remove actuator edges 
@@ -162,7 +161,7 @@ adjGraphContained(pipeStartNodes(actuatorPipes),pipeEndNodes(actuatorPipes)) = 0
 adjGraphContained(pipeEndNodes(actuatorPipes),pipeStartNodes(actuatorPipes)) = 0;
 tmp2 = graphallshortestpaths(adjGraphContained);
 allDistancesContained = tmp2(vulnerableNodes,:);
-assert(isequal(size(allDistancesContained), [length(vulnerableNodes) nodesNum]));
+assert(isequal(size(allDistancesContained), [vulnerableNum nodesNum]));
 shortestPathsFromVulnerableNodesContained = min(allDistancesContained);
 for i=demandNodes
     assert(shortestPathsFromVulnerableNodesContained(i)>NUMBER_BIGGER_THAN_NETWORK);

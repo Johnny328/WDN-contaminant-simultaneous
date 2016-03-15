@@ -1,5 +1,5 @@
 % Inspired mostly by Venkat Reddy's implementation.
-function plotNetwork(filename, model, nodesNum, edgesNum, vulnerableNodes, demandNodes, nodeIDs, startNodes, endNodes, adjGraph, incGraph, x)
+function plotNetwork(filename, model, nodesNum, edgesNum, vulnerableNodes, vulnerableNum, demandNodes, nodeIDs, startNodes, endNodes, adjGraph, incGraph, x)
 
 xcoor = model.nodes.xcoor;
 ycoor = model.nodes.ycoor;
@@ -45,7 +45,7 @@ for m=1:length(partitionDemand)
  %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
  %    patch(xc, yc, 'y');
  %end
- for k=1:length(vulnerableNodes)
+ for k=1:vulnerableNum
      xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));
      yc = bsxfun(@plus, r .* sin(theta), ycoorID(vulnerableNodes(k)));
      patch(xc, yc, 'black');

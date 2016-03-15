@@ -18,8 +18,8 @@ NUMBER_BIGGER_THAN_NETWORK = 10000;
 % 1 step away affected nodes
 % affectedN = adjGraph(vulnerableN,:)>=1;
 % Find all affected nodes per vulnerable node, each vulnerable node has a row in the A matrix
-A1 = zeros(length(vulnerableNodes),nodesNum);
-for i=1:length(vulnerableNodes)
+A1 = zeros(vulnerableNum,nodesNum);
+for i=1:vulnerableNum
     tmp1 = graphtraverse(adjGraph,vulnerableNodes(i));
     A1(i,tmp1) = -1;
 end
@@ -57,7 +57,7 @@ for i=vulnerableNodes
     Aeq2i = Aeq2i+1;
     Aeq2(Aeq2i,i) = 1;
 end
-beq2 = zeros(length(vulnerableNodes),1);
+beq2 = zeros(vulnerableNum,1);
 for i=demandNodes
     Aeq2i = Aeq2i+1;
     Aeq2(Aeq2i,i) = 1;
@@ -66,7 +66,7 @@ beq2 = [beq2; ones(length(demandNodes),1)];
 
 tmp2 = graphallshortestpaths(adjGraph);
 allDistances = tmp2(vulnerableNodes,:);
-assert(isequal(size(allDistances), [length(vulnerableNodes) nodesNum]));
+assert(isequal(size(allDistances), [vulnerableNum nodesNum]));
 shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
