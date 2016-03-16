@@ -1,5 +1,8 @@
+### 20160315
+* Implemented containment distance for each sensor. Zone of containment for each vulnerable node.
+
 ### 20160314
-* max . max formulation makes it impossible to deal with large networks -- the largest distance from vulnerable might be greater than network.
+* max . max formulation makes it impossible to deal with large networks -- the largest distance from vulnerable might be greater than network sizes.
 
 ### 20160311
 * Fixed bug where b2 wasn't as long as size(incGraph,1)*2.
@@ -27,24 +30,32 @@
 * Actuators must be between vulnerable and demand & they must also be after the max. distance to sensors => no need for separete constraint to ensure detection before any demand is contaminated.
 * Implemented distanceToDetection spec.
 
-20160216
+### 20150217
+#### 0600
+* Started work on implementing each vulnerable node having its own minimum distance.
+
+### 20160216
+#### 1000
+* Edge based implementation leads to same results.
+#### 0900
+* Constraints lead to unnecessary actuators on flows from demand to source.
+#### 0700
 * Two ways to solve the edge from demand to source partitions: maximize with minimal weight in objective for being in demands, or add another constraint for each edge. Choosing to add constraints.
 
-20160215
-0820
-* The finding of maximum distance changes the sensor placement(and consequently partitioning) unless it is zero in the objective.
-0827
-* Computing the transformed variables makes it converge at another optimal solution.
+### 20160215
 1000
 * The formulation does not account properly for zero flows or flows out of a demand partition into source.
+0827
+* Computing the transformed variables makes it converge at another optimal solution.
+0820
+* The finding of maximum distance changes the sensor placement(and consequently partitioning) unless it is zero in the objective.
 
-1800
+### 20160212
+#### 1800
 * Still not fixed, must subtract NUMBER_BIGGER_THAN_NETWORK from both sides of equation.
-
-0944
+#### 0944
 * Solved by subtracting one from both sides of constraint.
-
-0936
+#### 0936
 * Caused by shortestPathsFromVulnerableNodes being zero not satisfying constraints unless max distance is zero.
 
 20160211
