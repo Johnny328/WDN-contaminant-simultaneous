@@ -40,11 +40,11 @@ for m=1:length(partitionDemand)
      yc = bsxfun(@plus, r .* sin(theta), ycoorID(partitionDemand(m)));
      patch(xc, yc, 'g');
  end
- %for m=1:length(sensorNodes)
- %    xc = bsxfun(@plus, r .* cos(theta), xcoorID(sensorNodes(m)));
- %    yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
- %    patch(xc, yc, 'y');
- %end
+ for m=1:length(sensorNodes)
+     xc = bsxfun(@plus, r .* cos(theta), xcoorID(sensorNodes(m)));
+     yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
+     patch(xc, yc, 'y');
+ end
  for k=1:vulnerableNum
      xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));
      yc = bsxfun(@plus, r .* sin(theta), ycoorID(vulnerableNodes(k)));

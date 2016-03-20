@@ -1,9 +1,9 @@
 % Get data from .inp file
 [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
-vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+%vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 vulnerableNum = length(vulnerableNodes);
 NUMBER_BIGGER_THAN_NETWORK = 10000;
-maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
+maxDistanceToDetection = 17;
 
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
@@ -90,62 +90,64 @@ zeros(size(Aeq2,1),size(f1,1)) Aeq2 zeros(size(Aeq2,1),size(f3,1))];
 beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
+%intocn = []; % Test if infeasibility is beacuse of intcon.
 
 %Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
 %partition. Observability => all are critical, can make another objective
 %for identifiability easily.
 
-% Get max sensor distance. This alone --because of the minimization-- changes
-% the solution but the objective value remains same.
+% Get min sensor distance for each vulnerable node
 for j=1:vulnerableNum
     for i=1:nodesNum % We could take only the nodes which are on the path of that particular vulN. Same at other places.
         index = size(A,1)+1;
-        A(index,i) = NUMBER_BIGGER_THAN_NETWORK-allDistances(j,i); % TODO edge case of allDIstance = NUMBER_BIGGER_THAN_NETWORK or 0
-        A(index,j+nodesNum*2+edgesNum) = -1;
+        A(index,i) = NUMBER_BIGGER_THAN_NETWORK - allDistances(j,i); % TODO edge case of allDIstance = NUMBER_BIGGER_THAN_NETWORK or 0
+        A(index,nodesNum*2+edgesNum+j) = -1;
     end
 end
 b = [b; zeros(nodesNum*vulnerableNum,1)];
 
 % Maximum distance to detection enforcing
-for j=1:vulnerableNum
-    A(size(A,1)+1,j+nodesNum*2+edgesNum) = 1;
-    b(size(b,1)+1) = maxDistanceToDetection;
-end
+%for j=1:vulnerableNum
+%    A(size(A,1)+1,nodesNum*2+edgesNum+j) = -1;
+%    b(size(b,1)+1) = maxDistanceToDetection - NUMBER_BIGGER_THAN_NETWORK;
+%end
 
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
 % Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize. 
 for i=1:nodesNum
     index = size(A,1)+1;
-    A(index,i+nodesNum) = -NUMBER_BIGGER_THAN_NETWORK;
-    A(index,1+nodesNum*2+edgesNum+i) = -1;
+    A(index,nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
+    A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -1;
     b(index) = -NUMBER_BIGGER_THAN_NETWORK; 
     index = size(A,1)+1;
-    A(index,i+nodesNum) = (NUMBER_BIGGER_THAN_NETWORK-1);
-    A(index,1+nodesNum*2+edgesNum+i) = 1;
+    A(index,nodesNum+i) = (NUMBER_BIGGER_THAN_NETWORK-1);
+    A(index,nodesNum*2+edgesNum+vulnerableNum+i) = 1;
     b(index) = NUMBER_BIGGER_THAN_NETWORK; 
 end
 
-% Force all partitioning to happen after the distance.
+% Force all partitioning to happen after the stored minimum distance ot each vulnerable node.
 for i=1:nodesNum
     for j=1:vulnerableNum
         index = size(A,1)+1;
         A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i)-NUMBER_BIGGER_THAN_NETWORK; %Not 1, it must compete with 1+1/NUMBER_BIGGER_THAN_NETWORK
-        A(index,nodesNum*2+edgesNum+j) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
+        A(index,nodesNum*2+edgesNum+j) = -1-1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
     end
 end
-b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum*vulnerableNum,1)];
+b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(nodesNum*vulnerableNum,1)];
 
 % Get a different sensor placement solution by preventing the last.
 %Aeq(size(Aeq,1)+1,[66]) = [1];
 %beq(size(beq,1)+1) = 0; % No others are feasible?
 
 % % Implementation using edges
+% for j=1:vulnerableNum
 % for i=1:edgesNum
 %    index = size(A,1)+1;
-%    A(index,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);
-%    A(index,1+nodesNum*2+edgesNum) = 1; 
+%    A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(i);
+%    A(index,nodesNum*2+edgesNum+j) = 1; 
 % end
-% b = [b; zeros(edgesNum,1)];
+% end
+% b = [b; zeros(edgesNum*vulnerableNum,1)];
 
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
 %isempty(x,[]); TODO
@@ -156,7 +158,10 @@ actuatorPipes = find(x((nodesNum*2+1):(nodesNum*2+edgesNum))~=0);
 actuatorEdges = pipeIDs(actuatorPipes);
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
-distanceToDetection = x(nodesNum*2+edgesNum+1)
+%disp('Distance to detection for each vulnerable');
+%for i=1:vulnerableNum
+%    -x(nodesNum*2+edgesNum+j)+NUMBER_BIGGER_THAN_NETWORK
+%end
 distanceVulnerableToSensors = allDistances(:,sensorNodes)
 
 plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
