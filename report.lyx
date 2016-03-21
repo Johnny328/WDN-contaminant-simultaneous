@@ -76,8 +76,9 @@ Simultaneous sensor and actuator placement for identification and containment
 \end_layout
 
 \begin_layout Abstract
-A multi objective integer linear optimization strategy assuming perfect
- sensors and actuators is developed and implemented.
+A multi objective integer linear optimization formulation for finding simultaneo
+us sensor and actuator placement strategies assuming perfect sensors and
+ actuators is developed and implemented.
 \end_layout
 
 \begin_layout Author
@@ -129,7 +130,7 @@ Requirements to be satisfied
 
 \begin_layout Standard
 To find distribution of sensors on nodes and actuators on edges such that
- the attack can be identified 
+ an attack can be identified 
 \begin_inset Note Note
 status open
 
@@ -139,7 +140,7 @@ vulnerable node can be identified
 
 \end_inset
 
-and the contaminant can be prevented from reaching the demands.
+in time and the contaminant can be prevented from reaching the demands.
 \end_layout
 
 \begin_layout Standard
@@ -196,7 +197,7 @@ s.
 status open
 
 \begin_layout Plain Layout
-Do a review of the review papers cited
+TODO Do a review of the review papers cited
 \end_layout
 
 \end_inset
@@ -209,8 +210,18 @@ Hypotheses
 \end_layout
 
 \begin_layout Standard
-Simultaneous sensor and actuator distribution can be achieved and is more
- efficient i.e.
+Simultaneous sensor and actuator planning can be achieved and is more efficient
+ than iterative optimization sequentially solving the two 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Check the appropriteness of the following.
+\end_layout
+
+\end_inset
+
+i.e.
  these are not independent problems, and these can be formulated as a ILP
  and solved.
 \end_layout
@@ -242,7 +253,7 @@ In this simpler case, there are no additional constraints on the actuator
 
 \begin_layout Standard
 As long as the sensor network can detect the contaminant before it reaches
- the demands and the actuation can happen simultaneously, the requirements
+ the demands and the actuation can happen immediately, the requirements
  are satisfied.
 \end_layout
 
@@ -496,10 +507,6 @@ Graph abstraction with vulnerable nodes in red and blue are sensors
 wide false
 sideways false
 status open
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \align center
@@ -771,6 +778,34 @@ Case 2: The contaminant contained in the vulnerable side of actuator network
 \begin_layout Standard
 This case is not trivial as the positions of the sensors must be used as
  input, i.e ensuring they are on the vulnerable side of actuators.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+This formulation also assumes all the vulnerable nodes are always attacked
+ simultaneously.
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+
+\series bold
+Should I present a formulation with one distance variable(and consequently
+ much fewer constraints than 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Case-3:-Vulnerable"
+
+\end_inset
+
+) which works for individual vulnerable attacks but gives very conservative
+ placements, with likely no solutions for larger networks?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1103,7 +1138,7 @@ The network is verified to be disconnected after removing edges.
 \end_layout
 
 \begin_layout Standard
-The maximum distance to detection in this design is 
+The distance to detection in this design is 
 \begin_inset Formula $0$
 \end_inset
 
@@ -1112,9 +1147,8 @@ The maximum distance to detection in this design is
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="10" columns="3">
+<lyxtabular version="3" rows="2" columns="2">
 <features rotate="0" tabularvalignment="middle">
-<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <row>
@@ -1127,7 +1161,7 @@ Vulnerable Nodes
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1136,263 +1170,13 @@ Time to sense
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Minimum distance to demand node
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-19
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-32
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-37
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-39
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-53
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-66
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
+1,2,3,19,32,37,39,53,66
 \end_layout
 
 \end_inset
@@ -1401,7 +1185,7 @@ Minimum distance to demand node
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0
 \end_layout
 
 \end_inset
@@ -1462,6 +1246,427 @@ White -- Demand nodes
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Case-3:-Vulnerable"
+
+\end_inset
+
+Case 3: Vulnerable nodes can be attacked individually
+\end_layout
+
+\begin_layout Subsubsection*
+Formulation
+\end_layout
+
+\begin_layout Standard
+Formulating as binary integer optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+min & (\sum x_{i}+\sum z_{i})\\
+sub\\
+\mathbf{A}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}\\
+\mathbf{d}\\
+\mathbf{w}
+\end{array}\right] & \leq & \mathbf{b}\\
+\mathbf{A_{eq}}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}\\
+\mathbf{d}\\
+\mathbf{w}
+\end{array}\right] & = & \mathbf{b_{eq}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $\mathbf{x}\equiv[x_{i}]$
+\end_inset
+
+ is a decision variable vector whose components are 1 if there exists a
+ sensor at 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node, 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{y}\equiv[y_{i}]$
+\end_inset
+
+ is a decision variable vector whose components are 1 if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node is in the demands side of the actuators, 0 otherwise.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{z}\equiv[z_{i}]$
+\end_inset
+
+ is a decision variable vector whose components are 1 if there exists an
+ actuator at 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+edge, 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{d}\equiv[d_{i}]$
+\end_inset
+
+ is a decision variable vector whose components store 
+\begin_inset Formula $\Gamma-$
+\end_inset
+
+the distance to detection for a particular vulnerable node.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbf{w}\equiv[w_{i}]$
+\end_inset
+
+ is 1 if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node is on the demands side of the actuators, a large number (
+\begin_inset Formula $\Gamma$
+\end_inset
+
+) otherwise.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\Gamma$
+\end_inset
+
+ is a large number greater in order than the distances int he network.
+\end_layout
+
+\begin_layout Standard
+Hence the decision vector 
+\begin_inset Formula $\left[\mathbf{\begin{array}{ccccc}
+\mathbf{x} & y & z & a & w\end{array}}\right]$
+\end_inset
+
+ is of length 
+\begin_inset Formula $3*N+E+V$
+\end_inset
+
+, where 
+\begin_inset Formula $V$
+\end_inset
+
+ is the number of vulnerable nodes, 
+\begin_inset Formula $N$
+\end_inset
+
+ is the number of nodes, 
+\begin_inset Formula $E$
+\end_inset
+
+ is the number of edges.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A=\left[\begin{array}{ccc}
+A_{1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{2} & \mathbf{0}\\
+\mathbf{} & A_{3}
+\end{array}\right]$
+\end_inset
+
+, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $A_{eq}=\left[\begin{array}{ccc}
+A_{eq1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{eq2} & \mathbf{0}\\
+\\
+\end{array}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $b=\left[\begin{array}{c}
+b_{1}\\
+b_{2}\\
+b_{3}
+\end{array}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $b_{eq}=\left[\begin{array}{c}
+b_{eq1}\\
+b_{eq2}\\
+\\
+\end{array}\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{1}$
+\end_inset
+
+ is a matrix of vulnerable nodes vs.
+ affected nodes, with 
+\begin_inset Formula $A_{1ij}=-1$
+\end_inset
+
+ if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ vulnerable node affects the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ node in graph.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $b_{1}=\left[\begin{array}{c}
+.\\
+.\\
+.\\
+-1\\
+.\\
+.\\
+.
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq1}=b_{eq1}=\mathbf{\left[O\right]}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To links the partitioning variables 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
+
+ to the variables in the cost function, 
+\begin_inset Formula $\mathbf{z}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{2}=\left[\begin{array}{cc}
+J & I_{E\times E}\end{array}\right]$
+\end_inset
+
+ where 
+\begin_inset Formula $J$
+\end_inset
+
+ is the incidence matrix.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $b_{2}=\left[\mathbf{O}\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq2}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{eq2}$
+\end_inset
+
+ provide bounds to force the decision variables to reality, viz.
+ the demand nodes being in the second partition and the vulnerable nodes
+ being in the first.
+\end_layout
+
+\begin_layout Standard
+We use the shortest distances from vulnerable nodes to all other nodes in
+ the graph to model 
+\begin_inset Quotes eld
+\end_inset
+
+distance in time
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Let this matrix be 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+.
+ The first set of constraints of 
+\begin_inset Formula $A_{3}$
+\end_inset
+
+ is a padded 
+\begin_inset Formula $\begin{array}{c}
+\Gamma-\mathbf{D}\end{array}$
+\end_inset
+
+ matrix, which is multiplied with 
+\begin_inset Formula $\mathbf{I_{N\times N}\times x}$
+\end_inset
+
+.
+ Which is balanced by a column of 
+\begin_inset Formula $-I_{V\times1}$
+\end_inset
+
+, which correspond to coefficients of 
+\begin_inset Formula $\mathbf{d}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $b_{3}=\left[\mathbf{O}\right].$
+\end_inset
+
+ Thus, the 
+\begin_inset Formula $\mathbf{d}$
+\end_inset
+
+ vector now stores 
+\begin_inset Formula $\Gamma-t$
+\end_inset
+
+ where 
+\begin_inset Formula $t\in[0,u]$
+\end_inset
+
+ and 
+\begin_inset Formula $u$
+\end_inset
+
+ is the minimum distance to sensor for each vulnerable node.
+ The actuators need to be at least that much distance away from the each
+ of the vulnerable nodes.
+\end_layout
+
+\begin_layout Standard
+This can be implemented in two ways: constraining the actuators to be placed
+ after a particular distance, or constraining the demand partition to start
+ after a particular distance.
+ Since generally speaking 
+\begin_inset Formula $N<E$
+\end_inset
+
+ in a lot of real world networks, we show the node implementation.
+\end_layout
+
+\begin_layout Standard
+Transform the 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
+
+ vector to 
+\begin_inset Formula $\mathbf{w},$
+\end_inset
+
+ where 
+\begin_inset Formula $w_{i}=\Gamma$
+\end_inset
+
+ denotes the sensor partition and 
+\begin_inset Formula $w_{i}=1$
+\end_inset
+
+ implies the demand partition.
+ 
+\end_layout
+
+\begin_layout Standard
+Construct constraints for actuator placement for the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+node as follows: 
+\begin_inset Formula $\left[\begin{array}{ccccc}
+... & 0 & -(\Gamma+\mathbf{D}) & 0 & ...\end{array}\right]\times\left[\mathbf{\mathbf{I_{N\times N}\times w}}\right]+\left[\begin{array}{c}
+-1-\frac{1}{\Gamma}\end{array}\right]\times\mathbf{d}\leq\left[\begin{array}{c}
+...\\
+-2*\Gamma-1\\
+...
+\end{array}\right]$
+\end_inset
+
+.
+ This ensures that when 
+\begin_inset Formula $\mathbf{w_{i}}$
+\end_inset
+
+ is 
+\begin_inset Formula $1$
+\end_inset
+
+, the constraint is activated and only satisfied if the corresponding 
+\begin_inset Formula $\mathbf{D_{ij}>d_{j}}$
+\end_inset
+
+.
+ When 
+\begin_inset Formula $\mathbf{w_{i}}$
+\end_inset
+
+ is 
+\begin_inset Formula $\Gamma$
+\end_inset
+
+, the constraint is always satisfied as 
+\begin_inset Formula $\Gamma^{2}$
+\end_inset
+
+is several orders of magnitude greater than 
+\begin_inset Formula $-2*\Gamma-1$
+\end_inset
+
+.
+ This completes the formulation.
+ 
 \end_layout
 
 \begin_layout Section

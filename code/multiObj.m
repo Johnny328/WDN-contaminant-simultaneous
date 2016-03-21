@@ -1,6 +1,6 @@
 % Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes] = getWdnData('bangalore_expanded221.inp');
-vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+%vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -53,7 +53,7 @@ intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 A = [A1 zeros(size(A1,1),size(f2,1)); zeros(size(A2,1),size(f1,1)) A2];
 b = [b1;b2];
 Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)); zeros(size(Aeq2,1),size(f1,1)) Aeq2];
-beq = [beq1 beq2];
+beq = [beq1;beq2];
 f = [f1;f2];
 intcon = [intcon1 intcon2];
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
@@ -62,4 +62,4 @@ actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 
-plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,startNodes,endNodes,adjGraph,incGraph,x);
+plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
