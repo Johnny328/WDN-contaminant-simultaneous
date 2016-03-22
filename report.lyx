@@ -71,14 +71,16 @@
 \begin_body
 
 \begin_layout Title
-Simultaneous sensor and actuator placement for identification and containment
+Simultaneous sensor and actuator placement for observation and containment
  of contaminants in a water distribution network
 \end_layout
 
 \begin_layout Abstract
-A multi objective integer linear optimization formulation for finding simultaneo
-us sensor and actuator placement strategies assuming perfect sensors and
- actuators is developed and implemented.
+A multi objective integer linear optimization formulation for finding sensor
+ and actuator placement strategies assuming perfect sensors and actuators
+ is developed and implemented.
+ The goal is to ensure observability of contamination while preventing contamina
+nt from reaching demands.
 \end_layout
 
 \begin_layout Author
@@ -104,12 +106,9 @@ Given
 \end_layout
 
 \begin_layout Standard
-Specification of water distribution network -- vulnerable nodes, demand
- nodes, the adjacency matrix.
-\end_layout
-
-\begin_layout Standard
-Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy
+Specifications of water distribution network are provided as vulnerable
+ nodes, demand nodes, and the sparse adjacency matrix.
+ Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy
  of sensing, 
 \begin_inset Note Note
 status open
@@ -162,11 +161,8 @@ Previous work
 
 \begin_layout Standard
 Sensor placement using the principle that there must exist a unique non-zero
- set of sensors for each set of vulnerable nodes that can be affected.
- The work augmented the graph abstraction with vulnerable nodes representing
- multiple real nodes and used sets of affected nodes to force sensor placement.
- Actuator placement on edges to achieve a balanced min-cut, between the
- sensor nodes and demands, to contain contaminant
+ set of sensors for each set of vulnerable nodes that can be affected was
+ done by Palleti et all
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"
@@ -174,7 +170,24 @@ key "key-1"
 \end_inset
 
 .
- It is also this work's primary reference.
+ The work also augmented the graph abstraction with vulnerable nodes representin
+g multiple real nodes and used sets of affected nodes to implement identifiable
+ sensor placement.
+ 
+\end_layout
+
+\begin_layout Standard
+Given sensor network, minimal actuator placement on edges to achieve shut
+ down of network to contain contaminant was performed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+.
+ The current work combines these methods to produce a multi-objective optimizati
+on formulation.
 \end_layout
 
 \begin_layout Standard
@@ -188,8 +201,8 @@ key "key-3"
  attempts to optimize different objectives: maximizing detection likelihood
  and minimizing expected time to detection and solves it using genetic algorithm
 s.
- This work assumes both of these objectives are binary -- no time delay
- in detection and accurate sensing.
+ The current work assumes both of these objectives are binary, i.e.
+ no time delay in detection and accurate sensing.
 \end_layout
 
 \begin_layout Standard
@@ -210,20 +223,21 @@ Hypotheses
 \end_layout
 
 \begin_layout Standard
-Simultaneous sensor and actuator planning can be achieved and is more efficient
- than iterative optimization sequentially solving the two 
+We hypothesize that simultaneous sensor and actuator planning can be achieved
+ and is more efficient than iterative non-linear optimization sequentially
+ solving the two placement problems, 
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-Check the appropriteness of the following.
+Check the appropriateness of the following.
 \end_layout
 
 \end_inset
 
 i.e.
- these are not independent problems, and these can be formulated as a ILP
- and solved.
+ these are not independent problems, and these can be formulated as an integer
+ linear program and solved.
 \end_layout
 
 \begin_layout Section
@@ -231,13 +245,13 @@ Method
 \end_layout
 
 \begin_layout Standard
-We first develop a formulation and algorithm for each case, implement in
- MATLAB, and compare with results from previous work to check veracity and
- improvement.
+We first develop a formulation and algorithm for each case, implement it
+ in MATLAB, and compare with results from previous works to check veracity
+ and improvement.
 \end_layout
 
 \begin_layout Section
-Implementation
+Scenarios
 \end_layout
 
 \begin_layout Subsection*
@@ -249,15 +263,21 @@ Case 1: Shutting down the network effectively stops the contaminant beyond
 In this simpler case, there are no additional constraints on the actuator
  placement problem beyond the being a min-cut of the entire graph.
  The sensor and actuator placement problems are independent.
-\end_layout
-
-\begin_layout Standard
-As long as the sensor network can detect the contaminant before it reaches
+ As long as the sensor network can detect the contaminant before it reaches
  the demands and the actuation can happen immediately, the requirements
  are satisfied.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Better place for things like these?
+\end_layout
+
+\end_inset
+
 The network is assumed to be static, the hydraulic results from 00:00 hours
  are taken.
  
@@ -469,6 +489,258 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Subsubsection*
+Small network example
+\end_layout
+
+\begin_layout Standard
+Consider the graph generated by 
+\emph on
+adjGraph = sparse([1 1 2 2 2 3 3 4 5],[2 3 4 5 3 4 5 6 6],[2 2 1 1 1 1 1
+ 2 2],6,6);
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/testGraph.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The test graph with 6 nodes and 9 edges
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Node 1,2 are vulnerable and node 6 is demand node.
+\end_layout
+
+\begin_layout Standard
+Formulating as binary integer optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+min & (\sum x_{i}+\sum z_{i})\\
+sub\\
+\mathbf{A}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}
+\end{array}\right] & \leq & \mathbf{b}\\
+\mathbf{A_{eq}}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}
+\end{array}\right] & = & \mathbf{b_{eq}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence the vector 
+\begin_inset Formula $\left[\mathbf{\begin{array}{ccc}
+\mathbf{x} & y & z\end{array}}\right]$
+\end_inset
+
+ is of length 
+\begin_inset Formula $2*N+E=21$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A=\left[\begin{array}{cc}
+A_{1} & \mathbf{0}\\
+\mathbf{0} & A_{2}
+\end{array}\right]$
+\end_inset
+
+, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $A=\left[\begin{array}{cc}
+A_{eq1} & \mathbf{0}\\
+\mathbf{0} & A_{eq2}
+\end{array}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $b=\left[\begin{array}{c}
+b_{1}\\
+b_{2}
+\end{array}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $b_{eq}=\left[\begin{array}{c}
+b_{eq1}\\
+b_{eq2}
+\end{array}\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{1}$
+\end_inset
+
+ is a matrix of vulnerable nodes vs.
+ affected nodes, with 
+\begin_inset Formula $A_{1ij}=-1$
+\end_inset
+
+ if 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ vulnerable node affects the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ node in graph.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
+-1 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $b_{1}=\left[\begin{array}{c}
+-1\\
+-1
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq1}=b_{eq1}=\mathbf{O}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The following maps the actuator placement problem to one of classification
+ into source or demand partition.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{2}=\left[\begin{array}{cc}
+J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
+-1 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+-1 & 0 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0\\
+0 & -1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0\\
+0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0\\
+0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0\\
+0 & 0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0\\
+0 & 0 & 0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1
+\end{array}\right]$
+\end_inset
+
+ where 
+\begin_inset Formula $J$
+\end_inset
+
+ is the incidence matrix.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $b_{2}=\left[\mathbf{O}\right]$
+\end_inset
+
+.
+ This links the partitioning variables 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
+
+ to the variables in the cost function, 
+\begin_inset Formula $\mathbf{z}$
+\end_inset
+
+.
+ An edge between two different partitions causes the cost function to assume
+ the presence of an edge.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq2}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{eq2}$
+\end_inset
+
+ provide bounds to force the decision variables to reality, i.e.
+ the demand nodes being in the second partition and the vulnerable nodes
+ being in the first.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\end{array}\right]$
+\end_inset
+
+; 
+\begin_inset Formula $b_{eq2}=\left[\begin{array}{c}
+0\\
+0\\
+1
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
 Results and verification
 \end_layout
 
@@ -489,7 +761,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Graph abstraction with vulnerable nodes in red and blue are sensors 
+Graph abstraction with vulnerable nodes in red and sensors in blue.
 \end_layout
 
 \end_inset
@@ -777,7 +1049,8 @@ Case 2: The contaminant contained in the vulnerable side of actuator network
 
 \begin_layout Standard
 This case is not trivial as the positions of the sensors must be used as
- input, i.e ensuring they are on the vulnerable side of actuators.
+ input, i.e.
+ they must be on the vulnerable side of actuators.
 \end_layout
 
 \begin_layout Standard
@@ -1669,293 +1942,6 @@ is several orders of magnitude greater than
  
 \end_layout
 
-\begin_layout Section
-Small network example
-\end_layout
-
-\begin_layout Subsection*
-Case 1: No containment 
-\end_layout
-
-\begin_layout Standard
-For example, take the graph generated by 
-\emph on
-adjGraph = sparse([1 1 2 2 2 3 3 4 5],[2 3 4 5 3 4 5 6 6],[2 2 1 1 1 1 1
- 2 2],6,6);
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename images/testGraph.png
-	scale 75
-
-\end_inset
-
-
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-The test graph
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Node 1,2 are vulnerable and node 6 is demand node.
-\end_layout
-
-\begin_layout Standard
-Formulating as binary integer optimization problem:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-min & (\sum x_{i}+\sum z_{i})\\
-sub\\
-\mathbf{A}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & \leq & \mathbf{b}\\
-\mathbf{A_{eq}}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & = & \mathbf{b_{eq}}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Where 
-\begin_inset Formula $\mathbf{x}\equiv[x_{i}]$
-\end_inset
-
- is 1 if there exists a sensor at 
-\begin_inset Formula $i^{th}$
-\end_inset
-
-node, 0 otherwise.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $\mathbf{y}\equiv[y_{i}]$
-\end_inset
-
- is 1 if 
-\begin_inset Formula $i^{th}$
-\end_inset
-
-node is in the demands side of the actuators, 0 otherwise.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $\mathbf{z}\equiv[z_{i}]$
-\end_inset
-
- is 1 if there exists an actuator at 
-\begin_inset Formula $i^{th}$
-\end_inset
-
-edge, 0 otherwise.
-\end_layout
-
-\begin_layout Standard
-Hence the vector 
-\begin_inset Formula $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & y & z\end{array}}\right]$
-\end_inset
-
- is of length 
-\begin_inset Formula $2*N+E=21$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A=\left[\begin{array}{cc}
-A_{1} & \mathbf{0}\\
-\mathbf{0} & A_{2}
-\end{array}\right]$
-\end_inset
-
-, 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-
-\begin_inset Formula $A=\left[\begin{array}{cc}
-A_{eq1} & \mathbf{0}\\
-\mathbf{0} & A_{eq2}
-\end{array}\right]$
-\end_inset
-
-, 
-\begin_inset Formula $b=\left[\begin{array}{c}
-b_{1}\\
-b_{2}
-\end{array}\right]$
-\end_inset
-
-, 
-\begin_inset Formula $b_{eq}=\left[\begin{array}{c}
-b_{eq1}\\
-b_{eq2}
-\end{array}\right]$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A_{1}$
-\end_inset
-
- is a matrix of vulnerable nodes vs.
- affected nodes, with 
-\begin_inset Formula $A_{1ij}=-1$
-\end_inset
-
- if 
-\begin_inset Formula $i^{th}$
-\end_inset
-
- vulnerable node affects the 
-\begin_inset Formula $j^{th}$
-\end_inset
-
- node in graph.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
--1 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
-\end{array}\right]$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $b_{1}=\left[\begin{array}{c}
--1\\
--1
-\end{array}\right]$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A_{eq1}=b_{eq1}=\mathbf{O}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A_{2}=\left[\begin{array}{cc}
-J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
--1 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
--1 & 0 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0\\
-0 & -1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0\\
-0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0\\
-0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0\\
-0 & 0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0\\
-0 & 0 & 0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1
-\end{array}\right]$
-\end_inset
-
- where 
-\begin_inset Formula $J$
-\end_inset
-
- is the incidence matrix.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $b_{2}=\left[\mathbf{O}\right]$
-\end_inset
-
-.
- This links the partitioning variables 
-\begin_inset Formula $\mathbf{y}$
-\end_inset
-
- to the variables in the cost function, 
-\begin_inset Formula $\mathbf{z}$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A_{eq2}$
-\end_inset
-
-, 
-\begin_inset Formula $b_{eq2}$
-\end_inset
-
- provide bounds to force the decision variables to reality, i.e.
- the demand nodes being in the second partition and the vulnerable nodes
- being in the first.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
-\end{array}\right]$
-\end_inset
-
-; 
-\begin_inset Formula $b_{eq2}=\left[\begin{array}{c}
-0\\
-0\\
-1
-\end{array}\right]$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection*
-Case 2: Cnontainment of contaminant
-\end_layout
-
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
@@ -1963,9 +1949,25 @@ key "key-1"
 
 \end_inset
 
- V.
- Reddy, 2015 - Sensor network design for contaminant detection and identificatio
-n in water distribution networks.
+ Palleti, V.
+ R.; Narasimhan, S.; Rengaswamy, R.; Teja, R.; Bhallamudi, S.
+ M.
+ Sensor network design for contaminant detection and identification in water
+ distribution networks.
+ Computers and Chemical Engineering 2016, 87, 246 – 256.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-6"
+
+\end_inset
+
+ Venkata Reddy Palleti, Varghese, Shankar Narasimhan and Raghunathan Rengasamy:
+ Actuator network design to mitigate contamination effects in water distribution
+ networks
 \end_layout
 
 \begin_layout Bibliography

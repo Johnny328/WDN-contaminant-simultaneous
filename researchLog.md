@@ -1,3 +1,6 @@
+### 20160322
+* Improved report to reflect published references, restructured data into scenarios.
+
 ### 20160315
 * Implemented containment distance for each sensor. Zone of containment for each vulnerable node.
 
