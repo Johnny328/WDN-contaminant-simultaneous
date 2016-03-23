@@ -1,3 +1,6 @@
+### 20160323
+* Fixed test framework, added Case 3 results to report. Fixed wrong formulation of all-vulnerable containment in report.
+
 ### 20160322
 * Improved report to reflect published references, restructured data into scenarios.
 

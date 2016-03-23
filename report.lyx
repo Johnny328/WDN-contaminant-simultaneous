@@ -3,6 +3,9 @@
 \begin_document
 \begin_header
 \textclass article
+\begin_preamble
+\date{}
+\end_preamble
 \use_default_options true
 \maintain_unincluded_children false
 \language english
@@ -84,7 +87,7 @@ nt from reaching demands.
 \end_layout
 
 \begin_layout Author
-Suhas Gundimeda, Indian Institute of technology Madras
+Suhas Gundimeda
 \begin_inset Foot
 status open
 
@@ -95,6 +98,10 @@ CH12B026
 \end_inset
 
 
+\end_layout
+
+\begin_layout Address
+Indian Institute of Technology Madras
 \end_layout
 
 \begin_layout Section
@@ -1035,7 +1042,8 @@ The closing of network requires 12 actuators: on edges 2, 12, 16, 30, 38,
 status open
 
 \begin_layout Plain Layout
-Fix the edge numbers, they're wrong.
+TODO Fix the edge numbers, they're wrong.
+ The correct set might be 1 12 49 50 71 80 106, verify.
 \end_layout
 
 \end_inset
@@ -1058,27 +1066,6 @@ This case is not trivial as the positions of the sensors must be used as
 \series bold
 This formulation also assumes all the vulnerable nodes are always attacked
  simultaneously.
-\begin_inset Marginal
-status open
-
-\begin_layout Plain Layout
-
-\series bold
-Should I present a formulation with one distance variable(and consequently
- much fewer constraints than 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Case-3:-Vulnerable"
-
-\end_inset
-
-) which works for individual vulnerable attacks but gives very conservative
- placements, with likely no solutions for larger networks?
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1388,7 +1375,7 @@ We transform the
 \end_inset
 
  implies the demand partition.
- We construct constraints for actuator placement for the 
+ Then we construct constraints for actuator placement for the 
 \begin_inset Formula $i^{th}$
 \end_inset
 
@@ -1400,6 +1387,19 @@ node as follows:
 
 .
  This completes the formulation.
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO example
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1419,8 +1419,18 @@ The distance to detection in this design is
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="2" columns="2">
+<lyxtabular version="3" rows="4" columns="2">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -1445,7 +1455,7 @@ Time to sense
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1454,7 +1464,7 @@ Time to sense
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1464,7 +1474,65 @@ Time to sense
 \end_inset
 </cell>
 </row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1,2,3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+131,20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
 </lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The distance to detection for different sets of vulnerable nodes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
 
 \end_inset
 

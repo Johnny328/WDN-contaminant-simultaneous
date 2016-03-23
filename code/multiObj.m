@@ -1,6 +1,9 @@
 % Get data from .inp file
 [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
-%vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
+if(exist('vulnerableN'))
+    vulnerableNodes = vulnerableN;
+    vulnerableNum = length(vulnerableNodes);
+end
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes

@@ -1,7 +1,9 @@
 % Get data from .inp file
 [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
-%vulnerableNodes = [vulnerableNodes 19 32 37 39 53 66];
-vulnerableNum = length(vulnerableNodes);
+if(exist('vulnerableN'))
+    vulnerableNodes = vulnerableN;
+    vulnerableNum = length(vulnerableNodes);
+end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 maxDistanceToDetection = 17;
 
@@ -150,7 +152,9 @@ b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(nodesNum*vulnerableNum,1)];
 % b = [b; zeros(edgesNum*vulnerableNum,1)];
 
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
-%isempty(x,[]); TODO
+if(exist('x')==0)
+    return;
+end
 sensorNodes = find(x(1:nodesNum));
 % Order of network
 actuatorPipes = find(x((nodesNum*2+1):(nodesNum*2+edgesNum))~=0);
