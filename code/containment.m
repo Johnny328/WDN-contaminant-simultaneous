@@ -147,11 +147,11 @@ b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
 if(exist('x')==0)
     return;
 end
-sensorNodes = find(x(1:nodesNum));
+sensorNodes = find(x(1:nodesNum))
 % Order of network
 actuatorPipes = find(x((nodesNum*2+1):(nodesNum*2+edgesNum))~=0);
 % Order of IDs
-actuatorEdges = pipeIDs(actuatorPipes);
+actuatorEdges = pipeIDs(actuatorPipes)
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 distanceToDetection = x(nodesNum*2+edgesNum+1)
