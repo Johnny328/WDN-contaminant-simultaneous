@@ -26,14 +26,14 @@ intcon1 = 1:nodesNum;
 %Equality constraints
 Aeq1 = [];
 beq1 = [];
-% Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
-% Aeq1i = 0;
-% Aeq1 = zeros(0,size(f1,1));
-% for i=[41,70,85]
-%     Aeq1i = Aeq1i + 1;
-%     Aeq1(Aeq1i,i) = 1;
-% end
-% beq1 = ones(3,1);
+% Forcing sensors at these point to see obj. fun. value.
+%Aeq1i = 0;
+%Aeq1 = zeros(0,size(f1,1));
+%for i=[131]
+%    Aeq1i = Aeq1i + 1;
+%    Aeq1(Aeq1i,i) = 1;
+%end
+%beq1 = ones(Aeq1i,1);
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
@@ -87,7 +87,7 @@ upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK.*ones(1,vul
 A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1)); 
 zeros(size(A2,1),size(f1,1)) A2 zeros(size(A2,1),size(f3,1))];
 b = [b1;b2];
-Aeq = [zeros(size(Aeq1,1),size(f1,1)+size(f2,1)+size(f3,1)); 
+Aeq = [Aeq1 zeros(size(Aeq1,1),size(f2,1)+size(f3,1));
 zeros(size(Aeq2,1),size(f1,1)) Aeq2 zeros(size(Aeq2,1),size(f3,1))];
 beq = [beq1;beq2];
 f = [f1;f2;f3];
@@ -102,11 +102,20 @@ intcon = [intcon1 intcon2 intcon3];
 for j=1:vulnerableNum
     for i=1:nodesNum % We could take only the nodes which are on the path of that particular vulN. Same at other places.
         index = size(A,1)+1;
-        A(index,i) = NUMBER_BIGGER_THAN_NETWORK - allDistances(j,i); % TODO edge case of allDIstance = NUMBER_BIGGER_THAN_NETWORK or 0
+        A(index,i) = NUMBER_BIGGER_THAN_NETWORK - allDistances(j,i); % TODO edge case of allDistance = NUMBER_BIGGER_THAN_NETWORK
         A(index,nodesNum*2+edgesNum+j) = -1;
     end
 end
 b = [b; zeros(nodesNum*vulnerableNum,1)];
+% Equality constraints for making it equal to the minimum sensor distance.
+for j=1:vulnerableNum
+    for i=1:nodesNum
+        index = size(A,1)+1;
+        A(index,i) = allDistances(j,i);
+        A(index,nodesNum*2+edgesNum+j) = 1;
+    end
+end
+b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
 
 % Maximum distance to detection enforcing
 %for j=1:vulnerableNum
@@ -131,7 +140,7 @@ end
 for i=1:nodesNum
     for j=1:vulnerableNum
         index = size(A,1)+1;
-        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i)-NUMBER_BIGGER_THAN_NETWORK; %Not 1, it must compete with 1+1/NUMBER_BIGGER_THAN_NETWORK
+        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i)-NUMBER_BIGGER_THAN_NETWORK;
         A(index,nodesNum*2+edgesNum+j) = -1-1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
     end
 end
@@ -151,7 +160,8 @@ b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(nodesNum*vulnerableNum,1)];
 % end
 % b = [b; zeros(edgesNum*vulnerableNum,1)];
 
-[x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
+options = optimoptions('intlinprog','Heuristics', 'round', 'HeuristicsMaxNodes',100);
+[x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound,options);
 if(exist('x')==0)
     return;
 end
