@@ -1,3 +1,7 @@
+### 20160329
+* Bug of sensor distances not getting reflected into the minimum sensor distance variables. The variables when constrained by the actuator placement, even with their inclusion in the objective will take higher values than the current sensor placement. This essentially allows the sensors to go wherever, breaking the formulation.
+* Need a contraint to force variable to the maximum, and not go higher.
+
 ### 20160323
 * Fixed test framework, added Case 3 results to report. Fixed wrong formulation of all-vulnerable containment in report.
 

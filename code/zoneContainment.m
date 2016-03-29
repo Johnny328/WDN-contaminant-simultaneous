@@ -127,7 +127,7 @@ for i=1:nodesNum
     b(index) = NUMBER_BIGGER_THAN_NETWORK; 
 end
 
-% Force all partitioning to happen after the stored minimum distance ot each vulnerable node.
+% Force all partitioning to happen after the stored minimum distance to each vulnerable node.
 for i=1:nodesNum
     for j=1:vulnerableNum
         index = size(A,1)+1;
