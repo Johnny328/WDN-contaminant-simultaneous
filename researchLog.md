@@ -1,3 +1,6 @@
+### 20160402
+* Another bug -- strategies still allow actuators before dettection.
+
 ### 20160330
 * Fixed bug. Using another set of constraints to constrain it to take the value of the minimum sensor.
 
