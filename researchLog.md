@@ -1,5 +1,8 @@
+### 20160403
+* Yet another: the actuator implementation seems to be better, gives the correct result of no feasible solutions, given the below bug.
+
 ### 20160402
-* Another bug -- strategies still allow actuators before dettection.
+* Another bug -- strategies still allow actuators before detection.
 
 ### 20160330
 * Fixed bug. Using another set of constraints to constrain it to take the value of the minimum sensor.

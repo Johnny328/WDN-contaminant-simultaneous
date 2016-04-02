@@ -5,6 +5,7 @@ if(exist('vulnerableN'))
     vulnerableNum = length(vulnerableNodes);
 end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
+floatTolerance = 1/NUMBER_BIGGER_THAN_NETWORK;
 if(exist('maxDistanceToDetection')==0) 
     maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
 end
@@ -30,7 +31,7 @@ Aeq1 = zeros(0,size(f1,1));
 beq1 = [];
 % Forcing sensors at these point to see obj. fun. value.
 %Aeq1i = 0;
-%for i=[131]
+%for i=[20]
 %    Aeq1i = Aeq1i + 1;
 %    Aeq1(Aeq1i,i) = 1;
 %end
@@ -152,27 +153,27 @@ end
 %Aeq(size(Aeq,1)+1,[66]) = [1];
 %beq(size(beq,1)+1) = 0; % No others are feasible?
 
-% Implementation using edges
-for j=1:vulnerableNum
-    for i=1:edgesNum
-        index = size(A,1)+1;
-        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK;
-        A(index,nodesNum*2+edgesNum+j) = -1; 
-    end
-end
-b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(edgesNum*vulnerableNum,1)];
+% Implementation using edges TODO There is an inconsistency in these, actuator gives more right answers.
+%for j=1:vulnerableNum
+%    for i=1:edgesNum
+%        index = size(A,1)+1;
+%        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK;
+%       A(index,nodesNum*2+edgesNum+j) = -1; 
+%    end
+%end
+%b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(edgesNum*vulnerableNum,1)];
 
 options = optimoptions('intlinprog','Heuristics', 'round', 'HeuristicsMaxNodes',100);
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound,options);
 if(exist('x')==0)
     return;
 end
-sensorNodes = find(x(1:nodesNum))
+sensorNodes = find(abs(x(1:nodesNum) -1) < floatTolerance)
 % Order of network
-actuatorPipes = find(x((nodesNum*2+1):(nodesNum*2+edgesNum))~=0);
+actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTolerance);
 % Order of IDs
 actuatorEdges = pipeIDs(actuatorPipes)
-partitionDemand=find(x(nodesNum+1:nodesNum*2))';
+partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 %disp('Distance to detection for each vulnerable');
 %for i=1:vulnerableNum
