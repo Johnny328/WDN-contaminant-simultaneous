@@ -2076,7 +2076,12 @@ distance in time
 \begin_inset Formula $b_{3}=\left[\mathbf{O}\right].$
 \end_inset
 
- Thus, the 
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Thus, the 
 \begin_inset Formula $\mathbf{d}$
 \end_inset
 
@@ -2093,6 +2098,10 @@ distance in time
 \end_inset
 
  is the minimum distance to sensor for each vulnerable node.
+\end_layout
+
+\end_inset
+
  The actuators need to be at least that much distance away from the each
  of the vulnerable nodes.
 \end_layout

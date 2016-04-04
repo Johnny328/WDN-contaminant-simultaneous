@@ -29,14 +29,16 @@ intcon1 = 1:nodesNum;
 %Equality constraints
 Aeq1 = zeros(0,size(f1,1));
 beq1 = [];
-% Forcing sensors at these point to see obj. fun. value.
-%Aeq1i = 0;
-%for i=[20]
-%    Aeq1i = Aeq1i + 1;
-%    Aeq1(Aeq1i,i) = 1;
-%end
-%beq1 = ones(Aeq1i,1);
 
+% Forcing sensors at these point to see obj. fun. value.
+if(exist('forcedSensors'))
+    Aeq1i = 0;
+    for i=forcedSensors
+        Aeq1i = Aeq1i + 1;
+        Aeq1(Aeq1i,i) = 1;
+end
+beq1 = ones(Aeq1i,1);
+end
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
@@ -45,7 +47,7 @@ f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 % TODO This does not account for zero flows or demand to source transitions
 % when flow is opposite.
 A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights;
-    incGraph -eye(size(incGraph,1))*edgeWeights]; % TODO edgeWeights must be in the order of incGraph (1:size(incGraph,1) === pipeIDs)
+incGraph -eye(size(incGraph,1))*edgeWeights]; % TODO edgeWeights must be in the order of incGraph (1:size(incGraph,1) === pipeIDs)
 b2 = zeros(size(incGraph,1)*2,1);
 
 % Set the partitions of source to 0 and demands to 1
@@ -95,7 +97,7 @@ zeros(size(Aeq2,1),size(f1,1)) Aeq2 zeros(size(Aeq2,1),size(f3,1))];
 beq = [beq1;beq2];
 f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
-%intocn = []; % Test if infeasibility is beacuse of intcon.
+%intcon = []; % Test if infeasibility is beacuse of intcon.
 
 %Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
 %partition. Observability => all are critical, can make another objective
@@ -110,7 +112,7 @@ for j=1:vulnerableNum
     end
 end
 b = [b; zeros(nodesNum*vulnerableNum,1)];
-% Equality constraints for making it equal to the minimum sensor distance.
+% Equality constraints for making it equal to the minimum sensor distance. One such constraint being satisfied is enough.
 for j=1:vulnerableNum
     for i=1:nodesNum
         index = size(A,1)+1;
@@ -119,6 +121,14 @@ for j=1:vulnerableNum
     end
 end
 b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
+% Enforcing at least one such constraint being satisfied.
+%index = size(A,1)+1;
+%for j=1:vulnerableNum
+%    A(index,1:size(A1,2)) = A1(j,:); %TODO is this portable?
+%    %A(index,:) = A(j,:); % This is the number of constraints active for the vulnerable node, the number of affected sensors
+%    A(index,nodesNum*2+edgesNum+vulnerableNum+j) = 1;
+%end
+%b = [b; vulnerableNum-1];
 
 % Maximum distance to detection enforcing
 for j=1:vulnerableNum

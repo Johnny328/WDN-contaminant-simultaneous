@@ -1,3 +1,6 @@
+### 20160404
+* http://www.ie.boun.edu.tr/~taskin/pdf/IP_tutorial.pdf, gives possible solution.
+
 ### 20160403
 * Yet another: the actuator implementation seems to be better, gives the correct result of no feasible solutions, given the below bug.
 
