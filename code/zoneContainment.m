@@ -82,7 +82,7 @@ distanceEdgesFromVulnerableNodes = allDistances(:,pipeStartNodes);
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
 % Decision variables for transformed space.
-f3 = [zeros(vulnerableNum + nodesNum,1)];
+f3 = [NUMBER_BIGGER_THAN_NETWORK.*ones(vulnerableNum,1) ; zeros(nodesNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum + vulnerableNum + nodesNum);
 
 % Lower and upper bounds/bianry constraint
@@ -118,6 +118,8 @@ for j=1:vulnerableNum
         index = size(A,1)+1;
         A(index,i) = allDistances(j,i);
         A(index,nodesNum*2+edgesNum+j) = 1;
+        %TODO verify, freaking brilliant heuristic
+        %A(index,nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
     end
 end
 b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];

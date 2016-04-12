@@ -1,3 +1,9 @@
+### 20160412
+* The enforcing of 1 of all the constraints on nodes will take too many decision variables -- one for each constraint.
+* As will perhaps implementing it as `w = 0 = product(All differences)` and linearizing it i.e. ensuring the product of the difference between distances to sensors and the minimum distance is 0.
+* One other way is to use the partition of a node as a heuristic to discard the equivalence condition.
+* BUG: Actuators not getting placed in spite of change in partition across an edge.First test in testZoneContainment.m, assertion fails.
+
 ### 20160404
 * http://www.ie.boun.edu.tr/~taskin/pdf/IP_tutorial.pdf, gives possible solution.
 

@@ -1,11 +1,13 @@
-
+clear all
 vulnerableN = [131 20] % Verify adjGraph to constraints TODO
 zoneContainment
 
+clear all
 vulnerableNum = [131 20]
 forcedSensors = [20]
 zoneContainment
 
+clear all
 maxDistanceToDetection = 0;
 vulnerableN = [131 20]
 zoneContainment
