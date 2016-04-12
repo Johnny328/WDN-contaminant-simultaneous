@@ -181,9 +181,9 @@ if(exist('x')==0)
     return;
 end
 sensorNodes = find(abs(x(1:nodesNum) -1) < floatTolerance)
-% Order of network
+% Order of pipeIDs
 actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTolerance);
-% Order of IDs
+% Order of edges in network model in *.inp
 actuatorEdges = pipeIDs(actuatorPipes)
 partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
