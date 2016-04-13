@@ -4,6 +4,9 @@ if(exist('vulnerableN'))
     vulnerableNodes = vulnerableN;
     vulnerableNum = length(vulnerableNodes);
 end
+if(exist('demandN'))
+    demandNodes = demandN;
+end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 floatTolerance = 1/NUMBER_BIGGER_THAN_NETWORK;
 if(exist('maxDistanceToDetection')==0) 

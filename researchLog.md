@@ -1,3 +1,7 @@
+### 20160414
+* Added a demand node of 81, this node lies behind a zero flow edge; doesn't affect anything.
+* Fixed yesterday's BUG.
+
 ### 20160412
 * The enforcing of 1 of all the constraints on nodes will take too many decision variables -- one for each constraint.
 * As will perhaps implementing it as `w = 0 = product(All differences)` and linearizing it i.e. ensuring the product of the difference between distances to sensors and the minimum distance is 0.
