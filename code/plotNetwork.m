@@ -43,7 +43,7 @@ for m=1:length(partitionDemand)
  for m=1:length(sensorNodes)
      xc = bsxfun(@plus, r .* cos(theta), xcoorID(sensorNodes(m)));
      yc = bsxfun(@plus, r .* sin(theta), ycoorID(sensorNodes(m)));
-     patch(xc-150, yc-150, 'y');
+     patch(xc, yc-150, 'y');
  end
  for k=1:vulnerableNum
      xc = bsxfun(@plus, r .* cos(theta), xcoorID(vulnerableNodes(k)));

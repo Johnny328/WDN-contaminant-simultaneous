@@ -116,16 +116,16 @@ for j=1:vulnerableNum
 end
 b = [b; zeros(nodesNum*vulnerableNum,1)];
 % Equality constraints for making it equal to the minimum sensor distance. One such constraint being satisfied is enough.
-for j=1:vulnerableNum
-    for i=1:nodesNum
-        index = size(A,1)+1;
-        A(index,i) = allDistances(j,i);
-        A(index,nodesNum*2+edgesNum+j) = 1;
-        %TODO verify, freaking brilliant heuristic
-        %A(index,nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
-    end
-end
-b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
+%for j=1:vulnerableNum
+%    for i=1:nodesNum
+%        index = size(A,1)+1;
+%        A(index,i) = allDistances(j,i);
+%        A(index,nodesNum*2+edgesNum+j) = 1;
+%        %TODO verify, freaking brilliant heuristic
+%        %A(index,nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
+%    end
+%end
+%b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
 % Enforcing at least one such constraint being satisfied.
 %index = size(A,1)+1;
 %for j=1:vulnerableNum
