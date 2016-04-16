@@ -1,3 +1,12 @@
+### 20160417
+* Implemnting contraints with large blowup in decision variables.
+
+### 20160416
+* Evidence for "minimization will not work": The test cases with [131 20] in testZoneContainment will produce higher values of the decision variable (M-dj) than from sensor distances constraints. They *can't* go any lower because the partitioning problem prevents prevents that.
+* Reasoning for why this formulation produces "No feasible solutions": The forcing of distances does not handle zeroes in decision variables.
+* BUG: Test case with [131 20]; Node 19 is put into source partition because wherever the break occurs from 19 to 134, there's no distinction w.r.t the objective, contraints. 
+Possible solutions: Source partition only if affected.
+
 ### 20160414
 * Added a demand node of 81, this node lies behind a zero flow edge; doesn't affect anything.
 * Fixed yesterday's BUG.
@@ -22,7 +31,7 @@
 
 ### 20160329
 * Bug of sensor distances not getting reflected into the minimum sensor distance variables. The variables when constrained by the actuator placement, even with their inclusion in the objective will take higher values than the current sensor placement. This essentially allows the sensors to go wherever, breaking the formulation.
-* Need a contraint to force variable to the maximum, and not go higher.
+* Need a constraint to force variable to the maximum, and not go higher.
 
 ### 20160323
 * Fixed test framework, added Case 3 results to report. Fixed wrong formulation of all-vulnerable containment in report.

@@ -169,14 +169,14 @@ end
 %beq(size(beq,1)+1) = 0; % No others are feasible?
 
 % Implementation using edges TODO There is an inconsistency in these, actuator gives more right answers.
-%for j=1:vulnerableNum
-%    for i=1:edgesNum
-%        index = size(A,1)+1;
-%        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK;
-%       A(index,nodesNum*2+edgesNum+j) = -1; 
-%    end
-%end
-%b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(edgesNum*vulnerableNum,1)];
+for j=1:vulnerableNum
+    for i=1:edgesNum
+        index = size(A,1)+1;
+        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK;
+       A(index,nodesNum*2+edgesNum+j) = -1; 
+    end
+end
+b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(edgesNum*vulnerableNum,1)];
 
 options = optimoptions('intlinprog','Heuristics', 'round', 'HeuristicsMaxNodes',100);
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound,options);
