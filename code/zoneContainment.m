@@ -159,7 +159,7 @@ end
 %    for j=1:vulnerableNum
 %        index = size(A,1)+1;
 %        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i)-NUMBER_BIGGER_THAN_NETWORK;
-%        A(index,nodesNum*2+edgesNum+j) = -1-1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
+%        A(index,nodesNum*2+edgesNum+j) = -1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 %    end
 %end
 %b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(nodesNum*vulnerableNum,1)];
@@ -168,12 +168,12 @@ end
 %Aeq(size(Aeq,1)+1,[66]) = [1];
 %beq(size(beq,1)+1) = 0; % No others are feasible?
 
-% Implementation using edges TODO There is an inconsistency in these, actuator gives more right answers.
+% Implementation using edges 
 for j=1:vulnerableNum
     for i=1:edgesNum
         index = size(A,1)+1;
         A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK;
-       A(index,nodesNum*2+edgesNum+j) = -1; 
+        A(index,nodesNum*2+edgesNum+j) = -1; 
     end
 end
 b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(edgesNum*vulnerableNum,1)];

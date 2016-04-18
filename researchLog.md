@@ -1,9 +1,15 @@
+### 20160418
+* FIXed different solutions from edge and node contraints.
+* BUG from 20160416, more nodes being compromised isn't necessarily a bad thing. There's a reason why they're not distinguished in the objective function.
+But it isn't just more nodes being compromised. It is a situation where the real nodes *wont* be compromised, but are shown as compromised. 
+With constraints of total number of affected nodes, it could cause unintended effects. Delaying this until later.
+
 ### 20160417
 * Implemnting contraints with large blowup in decision variables.
 
 ### 20160416
 * Evidence for "minimization will not work": The test cases with [131 20] in testZoneContainment will produce higher values of the decision variable (M-dj) than from sensor distances constraints. They *can't* go any lower because the partitioning problem prevents prevents that.
-* Reasoning for why this formulation produces "No feasible solutions": The forcing of distances does not handle zeroes in decision variables.
+* Reasoning for why the edge based formulation produces "No feasible solutions": The forcing of distances does not handle zeroes in decision variables.
 * BUG: Test case with [131 20]; Node 19 is put into source partition because wherever the break occurs from 19 to 134, there's no distinction w.r.t the objective, contraints. 
 Possible solutions: Source partition only if affected.
 
