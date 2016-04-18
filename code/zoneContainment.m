@@ -80,7 +80,7 @@ distanceEdgesFromAllVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStart
 allDistances(allDistances==Inf) = NUMBER_BIGGER_THAN_NETWORK; % TODO check effects.
 distanceEdgesFromVulnerableNodes = allDistances(:,pipeStartNodes);
 
-%% Solving combined MILP
+%% Combining MILP
 %Integer constraint
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
@@ -102,9 +102,8 @@ f = [f1;f2;f3];
 intcon = [intcon1 intcon2 intcon3];
 %intcon = []; % Test if infeasibility is beacuse of intcon.
 
-%Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source
-%partition. Observability => all are critical, can make another objective
-%for identifiability easily.
+%% Adding constraints to force actuators after sensors
+% Use inequality constraints to force sensor nodes(and all nodes at or lesser distance from vulnerable nodes) to be in the source partition. Observability => all are critical, can make another objective for identifiability easily.
 
 % Get min sensor distance for each vulnerable node
 for j=1:vulnerableNum
@@ -155,29 +154,30 @@ for i=1:nodesNum
 end
 
 % Force all partitioning to happen after the stored minimum distance to each vulnerable node.
-%for i=1:nodesNum
-%    for j=1:vulnerableNum
-%        index = size(A,1)+1;
-%        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i)-NUMBER_BIGGER_THAN_NETWORK;
-%        A(index,nodesNum*2+edgesNum+j) = -1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
-%    end
-%end
-%b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(nodesNum*vulnerableNum,1)];
+for i=1:nodesNum
+    for j=1:vulnerableNum
+        index = size(A,1)+1;
+        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i) -NUMBER_BIGGER_THAN_NETWORK +1/NUMBER_BIGGER_THAN_NETWORK;
+        A(index,nodesNum*2+edgesNum+j) = -1;
+    end
+end
+b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK)*ones(nodesNum*vulnerableNum,1)];
 
 % Get a different sensor placement solution by preventing the last.
 %Aeq(size(Aeq,1)+1,[66]) = [1];
 %beq(size(beq,1)+1) = 0; % No others are feasible?
 
 % Implementation using edges 
-for j=1:vulnerableNum
-    for i=1:edgesNum
-        index = size(A,1)+1;
-        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK;
-        A(index,nodesNum*2+edgesNum+j) = -1; 
-    end
-end
-b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(edgesNum*vulnerableNum,1)];
+%for j=1:vulnerableNum
+%    for i=1:edgesNum
+%        index = size(A,1)+1;
+%        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK; %TODO zero d.v. case
+%        A(index,nodesNum*2+edgesNum+j) = -1; 
+%    end
+%end
+%b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK)*ones(edgesNum*vulnerableNum,1)];
 
+%% Options for the LP solving
 options = optimoptions('intlinprog','Heuristics', 'round', 'HeuristicsMaxNodes',100);
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound,options);
 if(exist('x')==0)

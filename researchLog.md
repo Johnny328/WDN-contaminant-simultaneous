@@ -1,3 +1,7 @@
+### 20160419
+* Fixed no feasible solution in node imple.: Part of two bugs, actuator zeroes aren't handled, node the inequality isn't handled properly.
+* Zero in the dj will cause a meltdown of inequality(dj < Dij) logic 5 lines below.
+
 ### 20160418
 * FIXed different solutions from edge and node contraints.
 * BUG from 20160416, more nodes being compromised isn't necessarily a bad thing. There's a reason why they're not distinguished in the objective function.
@@ -5,7 +9,7 @@ But it isn't just more nodes being compromised. It is a situation where the real
 With constraints of total number of affected nodes, it could cause unintended effects. Delaying this until later.
 
 ### 20160417
-* Implemnting contraints with large blowup in decision variables.
+* Implemnting constraints with large blowup in decision variables.
 
 ### 20160416
 * Evidence for "minimization will not work": The test cases with [131 20] in testZoneContainment will produce higher values of the decision variable (M-dj) than from sensor distances constraints. They *can't* go any lower because the partitioning problem prevents prevents that.
