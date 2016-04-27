@@ -167,7 +167,7 @@ end
 for i=1:nodesNum
     for j=1:vulnerableNum
         index = size(A,1)+1;
-        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i) -NUMBER_BIGGER_THAN_NETWORK +1/NUMBER_BIGGER_THAN_NETWORK;
+        A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -allDistances(j,i) -NUMBER_BIGGER_THAN_NETWORK +1;
         A(index,nodesNum*2+edgesNum+j) = -1;
     end
 end
