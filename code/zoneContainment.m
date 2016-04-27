@@ -127,12 +127,12 @@ b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
 %% Enforcing at least one such constraint being satisfied.
 for j=1:vulnerableNum
     index = size(A,1)+1;
-    %A(index,1:size(A1,2)) = -A1(j,:); 
+    %A(index,1:size(A1,2)) = A1(j,:); 
     for i=1:nodesNum
         A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = 1;
     end
 end
-b = [b; 150.*ones(vulnerableNum,1)];
+b = [b; 149.*ones(vulnerableNum,1)];
 
 % Maximum distance to detection enforcing
 for j=1:vulnerableNum
