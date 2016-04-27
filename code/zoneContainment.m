@@ -89,7 +89,7 @@ f3 = [zeros(vulnerableNum + nodesNum + nodesNum*vulnerableNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum + vulnerableNum + nodesNum + vulnerableNum*nodesNum);
 
 % Lower and upper bounds/bianry constraint
-lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum) ones(1,nodesNum) zeros(nodesNum*vulnerableNum)];
+lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum) ones(1,nodesNum) zeros(1,nodesNum*vulnerableNum)];
 upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK.*ones(1,vulnerableNum + nodesNum) ones(1,nodesNum*vulnerableNum)];
 
 A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1)); 
@@ -132,7 +132,7 @@ for j=1:vulnerableNum
         A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = 1;
     end
 end
-b = [b; 149.*ones(vulnerableNum,1)];
+b = [b; ones(vulnerableNum,1)];
 
 % Maximum distance to detection enforcing
 for j=1:vulnerableNum
