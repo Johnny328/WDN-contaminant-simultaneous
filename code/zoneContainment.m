@@ -84,13 +84,13 @@ distanceEdgesFromVulnerableNodes = allDistances(:,pipeStartNodes);
 %Integer constraint
 intcon2 = nodesNum+1:nodesNum*2+edgesNum;
 
-% Decision variables for transformed space.
-f3 = [NUMBER_BIGGER_THAN_NETWORK.*ones(vulnerableNum,1) ; zeros(nodesNum,1)];
-intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum + vulnerableNum + nodesNum);
+% Decision variables for transformed space and for finding minimum distances.
+f3 = [zeros(vulnerableNum + nodesNum + nodesNum*vulnerableNum,1)];
+intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum + vulnerableNum + nodesNum + vulnerableNum*nodesNum);
 
 % Lower and upper bounds/bianry constraint
-lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum) ones(1,nodesNum)];
-upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK.*ones(1,vulnerableNum + nodesNum)];
+lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum + nodesNum*vulnerableNum) ones(1,nodesNum)];
+upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK.*ones(1,vulnerableNum + nodesNum) ones(1,nodesNum*vulnerableNum)];
 
 A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1)); 
 zeros(size(A2,1),size(f1,1)) A2 zeros(size(A2,1),size(f3,1))];
@@ -115,24 +115,24 @@ for j=1:vulnerableNum
 end
 b = [b; zeros(nodesNum*vulnerableNum,1)];
 % Equality constraints for making it equal to the minimum sensor distance. One such constraint being satisfied is enough.
-%for j=1:vulnerableNum
-%    for i=1:nodesNum
-%        index = size(A,1)+1;
-%        A(index,i) = allDistances(j,i);
-%        A(index,nodesNum*2+edgesNum+j) = 1;
-%        %TODO verify, freaking brilliant heuristic
-%        %A(index,nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
-%    end
-%end
-%b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
-% Enforcing at least one such constraint being satisfied.
-%index = size(A,1)+1;
-%for j=1:vulnerableNum
-%    A(index,1:size(A1,2)) = A1(j,:); %TODO is this portable?
-%    %A(index,:) = A(j,:); % This is the number of constraints active for the vulnerable node, the number of affected sensors
-%    A(index,nodesNum*2+edgesNum+vulnerableNum+j) = 1;
-%end
-%b = [b; vulnerableNum-1];
+for j=1:vulnerableNum
+    for i=1:nodesNum
+        index = size(A,1)+1;
+        %A(index,i) = allDistances(j,i);
+        A(index,nodesNum*2+edgesNum+j) = 1;
+        %A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
+    end
+end
+b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
+%% Enforcing at least one such constraint being satisfied.
+for j=1:vulnerableNum
+    index = size(A,1)+1;
+    A(index,1:size(A1,2)) = -A1(j,:); 
+    for i=1:nodesNum
+        A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = 1;
+    end
+end
+b = [b; 150.*ones(vulnerableNum,1)];
 
 % Maximum distance to detection enforcing
 for j=1:vulnerableNum
