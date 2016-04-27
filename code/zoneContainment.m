@@ -89,7 +89,7 @@ f3 = [zeros(vulnerableNum + nodesNum + nodesNum*vulnerableNum,1)];
 intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum + vulnerableNum + nodesNum + vulnerableNum*nodesNum);
 
 % Lower and upper bounds/bianry constraint
-lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum + nodesNum*vulnerableNum) ones(1,nodesNum)];
+lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum) ones(1,nodesNum) zeros(nodesNum*vulnerableNum)];
 upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK.*ones(1,vulnerableNum + nodesNum) ones(1,nodesNum*vulnerableNum)];
 
 A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1)); 
