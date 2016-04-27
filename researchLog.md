@@ -1,3 +1,6 @@
+### 20160421
+* Fixed the brute force implementation. Various errors.
+
 ### 20160420
 * Brute Force: implementation stuck in non-feasibility errors in equality.
 * Way to implement distance: store the relevant critical vulN in a d.v, then use only those sensors for those vulN -- 1 per vulN. Can find thier distance exactly, because it's only one.
