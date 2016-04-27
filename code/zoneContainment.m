@@ -118,18 +118,18 @@ b = [b; zeros(nodesNum*vulnerableNum,1)];
 for j=1:vulnerableNum
     for i=1:nodesNum
         index = size(A,1)+1;
-        %A(index,i) = allDistances(j,i);
+        A(index,i) = allDistances(j,i);
         A(index,nodesNum*2+edgesNum+j) = 1;
-        %A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
+        A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
     end
 end
 b = [b; NUMBER_BIGGER_THAN_NETWORK.*ones(nodesNum*vulnerableNum,1)];
 %% Enforcing at least one such constraint being satisfied.
 for j=1:vulnerableNum
     index = size(A,1)+1;
-    %A(index,1:size(A1,2)) = A1(j,:); 
+    A(index,1:size(A1,2)) = A1(j,:); % Negative numbahs
     for i=1:nodesNum
-        A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = 1;
+        A(index,nodesNum*2+edgesNum+vulnerableNum+nodesNum + (j-1)*nodesNum+i) = -A1(j,i); % Positive numbahs
     end
 end
 b = [b; ones(vulnerableNum,1)];
@@ -162,7 +162,6 @@ for i=1:nodesNum
     end
 end
 b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK)*ones(nodesNum*vulnerableNum,1)];
-
 % Get a different sensor placement solution by preventing the last.
 %Aeq(size(Aeq,1)+1,[66]) = [1];
 %beq(size(beq,1)+1) = 0; % No others are feasible?
