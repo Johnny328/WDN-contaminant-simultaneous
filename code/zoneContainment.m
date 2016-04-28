@@ -72,7 +72,7 @@ beq2 = [beq2; ones(length(demandNodes),1)];
 tmp2 = graphallshortestpaths(adjGraph);
 allDistances = tmp2(vulnerableNodes,:);
 assert(isequal(size(allDistances), [vulnerableNum nodesNum]));
-shortestPathsFromVulnerableNodes = min(allDistances);
+shortestPathsFromVulnerableNodes = min(allDistances,[],1);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER_BIGGER_THAN_NETWORK;
 distanceEdgesFromAllVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes);
@@ -215,7 +215,7 @@ adjGraphContained(pipeEndNodes(actuatorPipes),pipeStartNodes(actuatorPipes)) = 0
 tmp2 = graphallshortestpaths(adjGraphContained);
 allDistancesContained = tmp2(vulnerableNodes,:);
 assert(isequal(size(allDistancesContained), [vulnerableNum nodesNum]));
-shortestPathsFromVulnerableNodesContained = min(allDistancesContained);
+shortestPathsFromVulnerableNodesContained = min(allDistancesContained,[],1);
 for i=demandNodes
     assert(shortestPathsFromVulnerableNodesContained(i)>NUMBER_BIGGER_THAN_NETWORK);
 end

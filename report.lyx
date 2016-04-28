@@ -1159,7 +1159,7 @@ node is in the demands side of the actuators, a large number(
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $\Gamma$
+\begin_inset Formula $M$
 \end_inset
 
  is a large number.
@@ -1364,7 +1364,7 @@ We transform the
 \end_inset
 
  where 
-\begin_inset Formula $\Gamma$
+\begin_inset Formula $M$
 \end_inset
 
  denotes the sensor partition and 
@@ -1378,8 +1378,8 @@ We transform the
 
 node as follows: 
 \begin_inset Formula $\left[\begin{array}{ccccc}
-... & 0 & -(\Gamma+\mathbf{S}) & 0 & ...\end{array}\right]\mathbf{w}_{i}+\left[a+\frac{a}{\Gamma}\right]\leq\left[\begin{array}{c}
--\Gamma\end{array}\right]$
+... & 0 & -(M+\mathbf{S}) & 0 & ...\end{array}\right]\mathbf{w}_{i}+\left[a+\frac{a}{M}\right]\leq\left[\begin{array}{c}
+-M\end{array}\right]$
 \end_inset
 
 .
@@ -1435,27 +1435,27 @@ a
 \begin_inset Formula 
 \[
 \left[\begin{array}{cccccc}
--(\Gamma) & 0 & 0 & 0 & 0 & 0\\
-0 & -(\Gamma) & 0 & 0 & 0 & 0\\
-0 & 0 & -(\Gamma+1) & 0 & 0 & 0\\
-0 & 0 & 0 & -(\Gamma+1) & 0 & 0\\
-0 & 0 & 0 & 0 & -(\Gamma+1) & 0\\
-0 & 0 & 0 & 0 & 0 & -(\Gamma+2)
+-(M) & 0 & 0 & 0 & 0 & 0\\
+0 & -(M) & 0 & 0 & 0 & 0\\
+0 & 0 & -(M+1) & 0 & 0 & 0\\
+0 & 0 & 0 & -(M+1) & 0 & 0\\
+0 & 0 & 0 & 0 & -(M+1) & 0\\
+0 & 0 & 0 & 0 & 0 & -(M+2)
 \end{array}\right]\mathbf{w}+\left[\begin{array}{c}
-a+\frac{a}{\Gamma}\\
-a+\frac{a}{\Gamma}\\
-a+\frac{a}{\Gamma}\\
-a+\frac{a}{\Gamma}\\
-a+\frac{a}{\Gamma}\\
-a+\frac{a}{\Gamma}
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}
 \end{array}\right]\leq\left[\begin{array}{c}
 \begin{array}{c}
--\Gamma\\
--\Gamma\\
--\Gamma\\
--\Gamma\\
--\Gamma\\
--\Gamma
+-M\\
+-M\\
+-M\\
+-M\\
+-M\\
+-M
 \end{array}\end{array}\right]
 \]
 
@@ -1786,14 +1786,16 @@ sub\\
 \mathbf{y}\\
 \mathbf{z}\\
 \mathbf{d}\\
-\mathbf{w}
+\mathbf{w}\\
+\mathbf{v}
 \end{array}\right] & \leq & \mathbf{b}\\
 \mathbf{A_{eq}}\left[\begin{array}{c}
 \mathbf{x}\\
 \mathbf{y}\\
 \mathbf{z}\\
 \mathbf{d}\\
-\mathbf{w}
+\mathbf{w}\\
+\mathbf{v}
 \end{array}\right] & = & \mathbf{b_{eq}}
 \end{eqnarray*}
 
@@ -1844,7 +1846,7 @@ edge, 0 otherwise.
 \end_inset
 
  is a decision variable vector whose components store 
-\begin_inset Formula $\Gamma-$
+\begin_inset Formula $M-$
 \end_inset
 
 the distance to detection for a particular vulnerable node.
@@ -1859,7 +1861,7 @@ the distance to detection for a particular vulnerable node.
 \end_inset
 
 node is on the demands side of the actuators, a large number (
-\begin_inset Formula $\Gamma$
+\begin_inset Formula $M$
 \end_inset
 
 ) otherwise.
@@ -1867,20 +1869,37 @@ node is on the demands side of the actuators, a large number (
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $\Gamma$
+\begin_inset Formula $\mathbf{v}\equiv[v_{ji}]$
 \end_inset
 
- is a large number greater in order than the distances int he network.
+ is 1 if the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ vulnerable node's distance to detection is inequal to the distance to the
+ 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ node.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $M$
+\end_inset
+
+ is a large number greater in order than the distances in the network.
 \end_layout
 
 \begin_layout Standard
 Hence the decision vector 
-\begin_inset Formula $\left[\mathbf{\begin{array}{ccccc}
-\mathbf{x} & y & z & a & w\end{array}}\right]$
+\begin_inset Formula $\left[\mathbf{\begin{array}{cccccc}
+\mathbf{x} & y & z & a & w & \mathbf{v}\end{array}}\right]$
 \end_inset
 
  is of length 
-\begin_inset Formula $3*N+E+V$
+\begin_inset Formula $3*N+E+V+N*V$
 \end_inset
 
 , where 
@@ -2034,8 +2053,8 @@ J & I_{E\times E}\end{array}\right]$
 \end_layout
 
 \begin_layout Standard
-We use the shortest distances from vulnerable nodes to all other nodes in
- the graph to model 
+We use the shortest distances from each of the vulnerable nodes to all other
+ nodes in the graph to model 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2053,55 +2072,66 @@ distance in time
 \begin_inset Formula $A_{3}$
 \end_inset
 
- is a padded 
+ is one for each entry in 
 \begin_inset Formula $\begin{array}{c}
-\Gamma-\mathbf{D}\end{array}$
+M-\mathbf{D}\end{array}$
 \end_inset
 
- matrix, which is multiplied with 
+ matrix, each of which is multiplied with 
 \begin_inset Formula $\mathbf{x}_{i}$
 \end_inset
 
 .
- This is balanced by a column of 
-\begin_inset Formula $-I_{V\times1}$
+ Each is balanced by 
+\begin_inset Formula $-d_{j}$
 \end_inset
 
-, which correspond to coefficients of 
-\begin_inset Formula $\mathbf{d}$
-\end_inset
-
-.
+, where j is the vulnerable node.
  
 \begin_inset Formula $b_{3}=\left[\mathbf{O}\right].$
 \end_inset
 
+ Now, 
+\begin_inset Formula $d_{j}$
+\end_inset
+
+ is greater than or equal to 
+\begin_inset Formula $M-D$
+\end_inset
+
+
+\begin_inset Formula $_{ij}$
+\end_inset
+
+.
+ We add constraints to force equality to the distance to the closest sensor:
  
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Thus, the 
-\begin_inset Formula $\mathbf{d}$
+\begin_inset Formula $D_{ij}+M-d_{j}-Mv_{ij}\leq M$
 \end_inset
 
- vector now stores 
-\begin_inset Formula $\Gamma-t$
+ for all sensors.
+ Constraints for making sure non-sensor nodes don't use 
+\begin_inset Formula $v_{ij}$
 \end_inset
 
- where 
-\begin_inset Formula $t\in[0,u]$
+: 
+\begin_inset Formula $-x_{i}+v_{i}\leq0$
+\end_inset
+
+.
+ For ensuring one equality of 
+\begin_inset Formula $D{}_{ij}$
 \end_inset
 
  and 
-\begin_inset Formula $u$
+\begin_inset Formula $d_{j}$
 \end_inset
 
- is the minimum distance to sensor for each vulnerable node.
-\end_layout
-
+: 
+\begin_inset Formula $A_{1j}\mathbf{x}-A_{j}\mathbf{v}\leq-1$
 \end_inset
 
+.
  The actuators need to be at least that much distance away from the each
  of the vulnerable nodes.
 \end_layout
@@ -2127,7 +2157,7 @@ Transform the
 \end_inset
 
  where 
-\begin_inset Formula $w_{i}=\Gamma$
+\begin_inset Formula $w_{i}=M$
 \end_inset
 
  denotes the sensor partition and 
@@ -2145,10 +2175,10 @@ Construct constraints for actuator placement for the
 
 node as follows: 
 \begin_inset Formula $\left[\begin{array}{ccccc}
-... & 0 & -(\Gamma+\mathbf{D}) & 0 & ...\end{array}\right]\times\left[\mathbf{\mathbf{w}}\right]+\left[\begin{array}{c}
--1-\frac{1}{\Gamma}\end{array}\right]\times\mathbf{d}\leq\left[\begin{array}{c}
+... & 0 & -(M+\mathbf{D}-1) & 0 & ...\end{array}\right]\times\left[\mathbf{\mathbf{w}}\right]+\left[\begin{array}{c}
+-1\end{array}\right]\times\mathbf{d}\leq\left[\begin{array}{c}
 ...\\
--2*\Gamma-1\\
+-2*M\\
 ...
 \end{array}\right]$
 \end_inset
@@ -2172,15 +2202,15 @@ node as follows:
 \end_inset
 
  is 
-\begin_inset Formula $\Gamma$
+\begin_inset Formula $M$
 \end_inset
 
 , the constraint is always satisfied as 
-\begin_inset Formula $\Gamma^{2}$
+\begin_inset Formula $M^{2}$
 \end_inset
 
 is several orders of magnitude greater than 
-\begin_inset Formula $-2*\Gamma-1$
+\begin_inset Formula $2*M$
 \end_inset
 
 .
@@ -2192,7 +2222,7 @@ Small network example
 \end_layout
 
 \begin_layout Standard
-Consider the same network in Figure 1, with the two vulnerbale nodes (1,
+Consider the same network in Figure 1, with the two vulnerable nodes (1,
  2) and one demand node (6).
 \end_layout
 
@@ -2201,12 +2231,12 @@ The additional constraints introduced in this case are
 \begin_inset Formula 
 \begin{eqnarray*}
 \left[\begin{array}{cccccc}
-\Gamma-0 & 0 & 0 & 0 & 0 & 0\\
-0 & \Gamma-1 & 0 & 0 & 0 & 0\\
-0 & 0 & \Gamma-1 & 0 & 0 & 0\\
-0 & 0 & 0 & \Gamma-2 & 0 & 0\\
-0 & 0 & 0 & 0 & \Gamma-2 & 0\\
-0 & 0 & 0 & 0 & 0 & \Gamma-3
+M-0 & 0 & 0 & 0 & 0 & 0\\
+0 & M-1 & 0 & 0 & 0 & 0\\
+0 & 0 & M-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M-2 & 0 & 0\\
+0 & 0 & 0 & 0 & M-2 & 0\\
+0 & 0 & 0 & 0 & 0 & M-3
 \end{array}\right]\mathbf{x}-\left[\begin{array}{c}
 d_{1}\\
 d_{1}\\
@@ -2223,12 +2253,12 @@ d_{1}
 0
 \end{array}\right]\\
 \left[\begin{array}{cccccc}
-\Gamma-\Gamma & 0 & 0 & 0 & 0 & 0\\
-0 & \Gamma-0 & 0 & 0 & 0 & 0\\
-0 & 0 & \Gamma-1 & 0 & 0 & 0\\
-0 & 0 & 0 & \Gamma-1 & 0 & 0\\
-0 & 0 & 0 & 0 & \Gamma-1 & 0\\
-0 & 0 & 0 & 0 & 0 & \Gamma-2
+M-M & 0 & 0 & 0 & 0 & 0\\
+0 & M-0 & 0 & 0 & 0 & 0\\
+0 & 0 & M-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M-1 & 0 & 0\\
+0 & 0 & 0 & 0 & M-1 & 0\\
+0 & 0 & 0 & 0 & 0 & M-2
 \end{array}\right]\mathbf{x}-\left[\begin{array}{c}
 d_{2}\\
 d_{2}\\
@@ -2243,7 +2273,7 @@ d_{2}
 0\\
 0\\
 0
-\end{array}\right]
+\end{array}\right]\\
 \end{eqnarray*}
 
 \end_inset
@@ -2253,7 +2283,7 @@ d_{2}
 \end_inset
 
 This gets us variables storing the 
-\begin_inset Formula $\Gamma-d_{i}$
+\begin_inset Formula $M-d_{i}$
 \end_inset
 
 , the value after subtracting the minimum distance to sensor from the large
@@ -2265,50 +2295,50 @@ This gets us variables storing the
 \begin_inset Formula 
 \begin{eqnarray*}
 \left[\begin{array}{cccccc}
--(\Gamma+0) & 0 & 0 & 0 & 0 & 0\\
-0 & -(\Gamma+1) & 0 & 0 & 0 & 0\\
-0 & 0 & -(\Gamma+1) & 0 & 0 & 0\\
-0 & 0 & 0 & -(\Gamma+2) & 0 & 0\\
-0 & 0 & 0 & 0 & -(\Gamma+2) & 0\\
-0 & 0 & 0 & 0 & 0 & -(\Gamma+3)
+-(M+0) & 0 & 0 & 0 & 0 & 0\\
+0 & -(M+1) & 0 & 0 & 0 & 0\\
+0 & 0 & -(M+1) & 0 & 0 & 0\\
+0 & 0 & 0 & -(M+2) & 0 & 0\\
+0 & 0 & 0 & 0 & -(M+2) & 0\\
+0 & 0 & 0 & 0 & 0 & -(M+3)
 \end{array}\right]\mathbf{w}-\left[\begin{array}{c}
-\Gamma-d_{1}+\frac{\Gamma-d_{1}}{\Gamma}\\
-\Gamma+1-d_{1}-\frac{d_{1}}{\Gamma}\\
-\Gamma+1-d_{1}-\frac{d_{1}}{\Gamma}\\
-\Gamma+1-d_{1}-\frac{d_{1}}{\Gamma}\\
-\Gamma+1-d_{1}-\frac{d_{1}}{\Gamma}\\
-\Gamma+1-d_{1}-\frac{d_{1}}{\Gamma}
+M-d_{1}+\frac{M-d_{1}}{M}\\
+M+1-d_{1}-\frac{d_{1}}{M}\\
+M+1-d_{1}-\frac{d_{1}}{M}\\
+M+1-d_{1}-\frac{d_{1}}{M}\\
+M+1-d_{1}-\frac{d_{1}}{M}\\
+M+1-d_{1}-\frac{d_{1}}{M}
 \end{array}\right] & \leq & \left[\begin{array}{c}
 \begin{array}{c}
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1
+-2M-1\\
+-2M-1\\
+-2M-1\\
+-2M-1\\
+-2M-1\\
+-2M-1
 \end{array}\end{array}\right]\\
 -1\times\left[\begin{array}{cccccc}
-\Gamma+\Gamma & 0 & 0 & 0 & 0 & 0\\
-0 & \Gamma+0 & 0 & 0 & 0 & 0\\
-0 & 0 & \Gamma+1 & 0 & 0 & 0\\
-0 & 0 & 0 & \Gamma+1 & 0 & 0\\
-0 & 0 & 0 & 0 & \Gamma+1 & 0\\
-0 & 0 & 0 & 0 & 0 & \Gamma+2
+M+M & 0 & 0 & 0 & 0 & 0\\
+0 & M+0 & 0 & 0 & 0 & 0\\
+0 & 0 & M+1 & 0 & 0 & 0\\
+0 & 0 & 0 & M+1 & 0 & 0\\
+0 & 0 & 0 & 0 & M+1 & 0\\
+0 & 0 & 0 & 0 & 0 & M+2
 \end{array}\right]\mathbf{w}-\left[\begin{array}{c}
-\Gamma+1-d_{2}-\frac{d_{2}}{\Gamma}\\
-\Gamma+1-d_{2}-\frac{d_{2}}{\Gamma}\\
-\Gamma+1-d_{2}-\frac{d_{2}}{\Gamma}\\
-\Gamma+1-d_{2}-\frac{d_{2}}{\Gamma}\\
-\Gamma+1-d_{2}-\frac{d_{2}}{\Gamma}\\
-\Gamma+1-d_{2}-\frac{d_{2}}{\Gamma}
+M+1-d_{2}-\frac{d_{2}}{M}\\
+M+1-d_{2}-\frac{d_{2}}{M}\\
+M+1-d_{2}-\frac{d_{2}}{M}\\
+M+1-d_{2}-\frac{d_{2}}{M}\\
+M+1-d_{2}-\frac{d_{2}}{M}\\
+M+1-d_{2}-\frac{d_{2}}{M}
 \end{array}\right] & \leq & \left[\begin{array}{c}
 \begin{array}{c}
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1\\
--2\Gamma-1
+-2M-1\\
+-2M-1\\
+-2M-1\\
+-2M-1\\
+-2M-1\\
+-2M-1
 \end{array}\end{array}\right]
 \end{eqnarray*}
 
