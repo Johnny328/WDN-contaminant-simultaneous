@@ -74,7 +74,6 @@ allDistances = tmp2(vulnerableNodes,:);
 assert(isequal(size(allDistances), [vulnerableNum nodesNum]));
 shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
-maxDistance = tmp3(end-1);
 shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER_BIGGER_THAN_NETWORK;
 distanceEdgesFromAllVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes);
 allDistances(allDistances==Inf) = NUMBER_BIGGER_THAN_NETWORK; % TODO check effects.

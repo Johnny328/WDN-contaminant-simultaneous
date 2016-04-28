@@ -1,6 +1,6 @@
 ### 20160428
-* FIXed BUG: bangalore [131 20] case, sensor placement allows elalkage without detection, increased minimum distance number to 1.
-* BUG: assertion of disconnection phails.
+* FIXed BUG: bangalore [131 20] case, sensor placement allows lealkage without detection, increased minimum distance number to 1.
+* FIXed bug of equality comparison for float integer variables.
 
 ### 20160427
 * Fixed the brute force implementation. Various errors.
