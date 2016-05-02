@@ -1,3 +1,6 @@
+### 20160502
+* BUG: Adding more vulnerable nodes or more forced sources breaks the formulation.
+
 ### 20160428
 * FIXed BUG: bangalore [131 20] case, sensor placement allows lealkage without detection, increased minimum distance number to 1.
 * FIXed bug of equality comparison for float integer variables.
