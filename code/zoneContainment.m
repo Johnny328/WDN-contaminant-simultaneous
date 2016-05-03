@@ -13,6 +13,20 @@ if(exist('maxDistanceToDetection')==0)
     maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
 end
 
+% Get the distances to be needed among the nodes.
+tmp2 = graphallshortestpaths(adjGraph);
+allDistances = tmp2(vulnerableNodes,:);
+assert(isequal(size(allDistances), [vulnerableNum nodesNum]));
+shortestPathsFromVulnerableNodes = min(allDistances,[],1);
+tmp3 = sort(shortestPathsFromVulnerableNodes);
+shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER_BIGGER_THAN_NETWORK;
+%distancePipesFromAllVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes);
+allDistances(allDistances==Inf) = NUMBER_BIGGER_THAN_NETWORK; % TODO check effects.
+distancePipesFromVulnerableNodes = allDistances(:,pipeStartNodes);
+if(exist('nodesNextToVulnerableNodes')==0)
+    nodesNextToVulnerableNodes = find(shortestPathsFromVulnerableNodes==1);
+end
+
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes
@@ -42,6 +56,7 @@ if(exist('forcedSensors'))
 end
 beq1 = ones(Aeq1i,1);
 end
+
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
@@ -59,25 +74,21 @@ Aeq2i = 0;
 Aeq2 = zeros(0,size(f2,1));
 for i=vulnerableNodes
     Aeq2i = Aeq2i+1;
-    Aeq2(Aeq2i,i) = 1;
+    Aeq2(Aeq2i,i) = 1; % Source partition to zero.
 end
 beq2 = zeros(vulnerableNum,1);
+
+for i=nodesNextToVulnerableNodes
+    Aeq2i = Aeq2i+1;
+    Aeq2(Aeq2i,i) = 1; % Vulnerable nodes + 1 distance = source partition.
+end
+beq2 = [beq2; zeros(length(nodesNextToVulnerableNodes),1)];
+
 for i=demandNodes
     Aeq2i = Aeq2i+1;
-    Aeq2(Aeq2i,i) = 1;
+    Aeq2(Aeq2i,i) = 1; % Demand partition to one.
 end
 beq2 = [beq2; ones(length(demandNodes),1)];
-
-% Get the distances to be needed among the nodes.
-tmp2 = graphallshortestpaths(adjGraph);
-allDistances = tmp2(vulnerableNodes,:);
-assert(isequal(size(allDistances), [vulnerableNum nodesNum]));
-shortestPathsFromVulnerableNodes = min(allDistances,[],1);
-tmp3 = sort(shortestPathsFromVulnerableNodes);
-shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER_BIGGER_THAN_NETWORK;
-distanceEdgesFromAllVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes);
-allDistances(allDistances==Inf) = NUMBER_BIGGER_THAN_NETWORK; % TODO check effects.
-distanceEdgesFromVulnerableNodes = allDistances(:,pipeStartNodes);
 
 %% Combining MILP
 %Integer constraint
@@ -180,7 +191,7 @@ b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK)*ones(nodesNum*vulnerableNum,1)];
 %for j=1:vulnerableNum
 %    for i=1:edgesNum
 %        index = size(A,1)+1;
-%        A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK; %TODO zero d.v. case
+%        A(index,nodesNum*2+i) = -distancePipesFromVulnerableNodes(j,i) - NUMBER_BIGGER_THAN_NETWORK; %TODO zero d.v. case
 %        A(index,nodesNum*2+edgesNum+j) = -1; 
 %    end
 %end
@@ -199,11 +210,12 @@ actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTole
 actuatorEdges = pipeIDs(actuatorPipes)
 partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
-%disp('Distance to detection for each vulnerable');
-%for i=1:vulnerableNum
-%    -x(nodesNum*2+edgesNum+j)+NUMBER_BIGGER_THAN_NETWORK
-%end
+for j=1:vulnerableNum
+    distanceToDetectionForEachVulnerable(j) = -x(nodesNum*2+edgesNum+j)+NUMBER_BIGGER_THAN_NETWORK;
+end
+distanceToDetectionForEachVulnerable
 distanceVulnerableToSensors = allDistances(:,sensorNodes)
+distancesVulnerableToActuators = distancePipesFromVulnerableNodes(:,actuatorPipes)
 
 plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
 

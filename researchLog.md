@@ -1,3 +1,6 @@
+###20160503
+* BUG from yesterday: Addition of 67, 127, 128 makes it infeasible. Why?
+
 ### 20160502
 * BUG: Adding more vulnerable nodes or more forced sources breaks the formulation.
 

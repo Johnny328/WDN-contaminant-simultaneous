@@ -55,3 +55,22 @@ tolerance = 10^-4;
 vulnerableN = [1 2 3] % Original bangalore_expanded network
 zoneContainment
 
+%% Increasing vulnerable nodes to check robustness (and bug which prevents this)
+clear all
+demandN = [81 9 83 82 21 80 17 41 79 76 74 78 77 75 73 72 61 63 31 29 85 86 84 70 68];
+tolerance = 10^-4;
+% Some extra nodes. Shouldn't cause infeasibilty. Addition of 67 causes infeasibility.
+%vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 78 127 129] 
+vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 53 57] 
+zoneContainment
+
+%% Testing actuator placement at least one node after vulnerable.
+clear all
+demandN = [81 9 83 82 21 80 17 41 79 76 74 78 77 75 73 72 61 63 31 29 85 86 84 70 68];
+tolerance = 10^-4;
+% Some extra nodes. Shouldn't cause infeasibilty.
+%nodesNextToVulnerableNodes= [4 20 33 34 40 47 54 57 67 78 127 129] 
+vulnerableN = [1 2 3 19 32 37 39 53 66]
+nodesNextToVulnerableNodes = [4 20 33 34 40 47 54 57]
+zoneContainment
+
