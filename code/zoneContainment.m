@@ -23,9 +23,6 @@ shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER
 %distancePipesFromAllVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes);
 allDistances(allDistances==Inf) = NUMBER_BIGGER_THAN_NETWORK; % TODO check effects.
 distancePipesFromVulnerableNodes = allDistances(:,pipeStartNodes);
-if(exist('nodesNextToVulnerableNodes')==0)
-    nodesNextToVulnerableNodes = find(shortestPathsFromVulnerableNodes==1);
-end
 
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
@@ -53,8 +50,8 @@ if(exist('forcedSensors'))
     for i=forcedSensors
         Aeq1i = Aeq1i + 1;
         Aeq1(Aeq1i,i) = 1;
-end
-beq1 = ones(Aeq1i,1);
+    end
+    beq1 = ones(Aeq1i,1);
 end
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
@@ -78,11 +75,14 @@ for i=vulnerableNodes
 end
 beq2 = zeros(vulnerableNum,1);
 
-for i=nodesNextToVulnerableNodes
-    Aeq2i = Aeq2i+1;
-    Aeq2(Aeq2i,i) = 1; % Vulnerable nodes + 1 distance = source partition.
+if(exist('nodesNextToVulnerableNodes'))
+    %nodesNextToVulnerableNodes = find(shortestPathsFromVulnerableNodes==1);
+    for i=nodesNextToVulnerableNodes
+        Aeq2i = Aeq2i+1;
+        Aeq2(Aeq2i,i) = 1; % Vulnerable nodes + 1 distance = source partition.
+    end
+    beq2 = [beq2; zeros(length(nodesNextToVulnerableNodes),1)];
 end
-beq2 = [beq2; zeros(length(nodesNextToVulnerableNodes),1)];
 
 for i=demandNodes
     Aeq2i = Aeq2i+1;

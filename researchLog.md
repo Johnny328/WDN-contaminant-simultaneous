@@ -1,3 +1,10 @@
+###20160505
+* IDEA: Can implement equality using continuous penalized variables.
+
+###20160504
+* FIXed bug from yesterday. 78 is a demand node. Thus infeasible to have it in both source and demand.
+* BUG from yesterday: 127+129+3 = infeasible.
+
 ###20160503
 * BUG from yesterday: Addition of 67, 127, 128 makes it infeasible. Why?
 
