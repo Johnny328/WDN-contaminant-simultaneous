@@ -29,10 +29,16 @@ for il = 1:length(lines)
     %set(hnew, 'linewidth', 1, 'color', 'black');
 end
 theta = linspace(0, 2*pi, 500)';
+%s = warning('error', 'ARROW:Permission');
+%warning('error', 'MATLAB:DELETE:FileNotFound');
 for ii=1:size(adjGraph,1)
     jj=find(adjGraph(ii,:));
     for kk=1:length(jj)
+        %try %TODO check usefulness and effect
          arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)),ycoorID(jj(kk))],'Baseangle',80,'Tipangle',17,'Width',0.3,'Length',8);
+         %catch
+      %       arrow fixlimits;
+       %  end
     end
 end
 for k=1:length(partitionSource)

@@ -1,5 +1,13 @@
+###2060508
+* Added images and updated results table.
+
+###20160506
+* Updated report with latest results and formation.
+* TODO: Independent case solution has no constraints about detection before contaminating demands.
+
 ###20160505
-* IDEA: Can implement equality using continuous penalized variables.
+* IDEA: Can implement equality using continuous penalized variables. A good ratio of penalty to desired decision variables can be found with RL (Some paper I read TODO link here)
+* Tests of the code seem okay.
 
 ###20160504
 * FIXed bug from yesterday. 78 is a demand node. Thus infeasible to have it in both source and demand.

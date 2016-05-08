@@ -32,7 +32,7 @@
 \spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
@@ -56,6 +56,8 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 1.5cm
+\rightmargin 1.5cm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -74,8 +76,12 @@
 \begin_body
 
 \begin_layout Title
-Simultaneous sensor and actuator placement for observation and containment
- of contaminants in a water distribution network
+Simultaneous sensor and actuator placement for containment of contaminants
+ in a 
+\begin_inset Newline newline
+\end_inset
+
+water distribution network
 \end_layout
 
 \begin_layout Abstract
@@ -87,72 +93,41 @@ nt from reaching demands.
 \end_layout
 
 \begin_layout Author
-Suhas Gundimeda
+Suhas Gundimeda, Shankar Narasimhan
 \end_layout
 
 \begin_layout Address
-Indian Institute of Technology Madras
+Department of Chemical Engineering, Indian Institute of Technology Madras,
+ Chennai
 \end_layout
 
 \begin_layout Section
-Scenario
+Introduction
+\end_layout
+
+\begin_layout Standard
+Water Distribution Networks (WDNs) are networks of pipes, tanks, pumps,
+ valves, and other components that are used to distribute water from sources
+ like reservoirs, to consumers.
+ These networks are identified to be vulnerable to contamination
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-7,key-8"
+
+\end_inset
+
+.
+ Suggested detection and response methods are varied, and one such is the
+ placing of online sensors and actuators (valves) for detection and containment
+ of contaminants.
+ The sensor detects the contaminant, and the actuator shuts down the network,
+ preventing further spread.
+ The task then becomes the computing of optimal sensor and actuator placement
+ strategies.
+ 
 \end_layout
 
 \begin_layout Subsection
-Given
-\end_layout
-
-\begin_layout Standard
-Specifications of water distribution network are provided as vulnerable
- nodes, demand nodes, and the sparse adjacency matrix.
- Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy
- of sensing, 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-identification of which vulnerable node was affected, 
-\end_layout
-
-\end_inset
-
-etc.
- can be added onto this work easily, and are ignored.
-\end_layout
-
-\begin_layout Subsection
-Requirements to be satisfied
-\end_layout
-
-\begin_layout Standard
-To find distribution of sensors on nodes and actuators on edges such that
- an attack can be identified 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-vulnerable node can be identified 
-\end_layout
-
-\end_inset
-
-in time and the contaminant can be prevented from reaching the demands.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-In addition, we look for a way of 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
 Previous work
 \end_layout
 
@@ -183,8 +158,8 @@ key "key-6"
 \end_inset
 
 .
- The current work combines these methods to produce a multi-objective optimizati
-on formulation.
+ The current work combines these methods in a multi-objective optimization
+ formulation.
 \end_layout
 
 \begin_layout Standard
@@ -215,10 +190,6 @@ TODO Do a review of the review papers cited
 
 \end_layout
 
-\begin_layout Section
-Hypotheses
-\end_layout
-
 \begin_layout Standard
 We hypothesize that simultaneous sensor and actuator planning can be achieved
  and is more efficient than iterative non-linear optimization sequentially
@@ -237,14 +208,56 @@ i.e.
  linear program and solved.
 \end_layout
 
+\begin_layout Standard
+We first develop a formulation and algorithm for each case, implement a
+ simulation in MATLAB, and compare with results from previous works to check
+ veracity and improvement.
+\end_layout
+
 \begin_layout Section
-Method
+Problem formulation
 \end_layout
 
 \begin_layout Standard
-We first develop a formulation and algorithm for each case, implement it
- in MATLAB, and compare with results from previous works to check veracity
- and improvement.
+Specifications of the water distribution network are provided as vulnerable
+ nodes, demand nodes, and the sparse adjacency matrix.
+ The demand nodes are the nodes we want to prevent the contamination of.
+ Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy
+ of sensing, 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+identification of which vulnerable node was affected, 
+\end_layout
+
+\end_inset
+
+etc.
+ can be added onto this work easily, and are not considered here.
+\end_layout
+
+\begin_layout Subsection
+Requirements to be satisfied
+\end_layout
+
+\begin_layout Standard
+To find distribution of sensors on nodes and actuators on edges such that
+ an attack can be identified and the network shutdown, preventing the contaminan
+t from reaching the demand nodes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+In addition, we look for a way of 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -253,7 +266,7 @@ Scenarios
 
 \begin_layout Subsection*
 Case 1: Shutting down the network effectively stops the contaminant beyond
- the actuator too.
+ the actuator as well.
 \end_layout
 
 \begin_layout Standard
@@ -1005,10 +1018,6 @@ Vulnerable nodes and their corresponding sensor nodes
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1049,20 +1058,14 @@ The old set was 2, 12, 16, 30, 38, 40, 48, 51, 52, 67, 71, 76, 79, 87, 103,
 \end_layout
 
 \begin_layout Subsection*
-Case 2: The contaminant contained in the vulnerable side of actuator network
+Case 2: The contaminant must be contained in the vulnerable side of actuator
+ network; attacks occur on all vulnernerable nodes at once
 \end_layout
 
 \begin_layout Standard
 This case is not trivial as the positions of the sensors must be used as
  input, i.e.
  they must be on the vulnerable side of actuators.
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-This formulation assumes in addition vulnerable nodes are always attacked
- simultaneously.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1765,15 +1768,15 @@ name "sub:Case-3:-Vulnerable"
 
 \end_inset
 
-Case 3: Vulnerable nodes can be attacked individually
+Case 3: Vulnerable nodes might be attacked individually
 \end_layout
 
 \begin_layout Subsubsection*
-Formulation
+Solution formulation
 \end_layout
 
 \begin_layout Standard
-Formulating as binary integer optimization problem:
+Formulating as mixed integer linear optimization problem:
 \end_layout
 
 \begin_layout Standard
@@ -1825,7 +1828,8 @@ node, 0 otherwise.
 \begin_inset Formula $i^{th}$
 \end_inset
 
-node is in the demands side of the actuators, 0 otherwise.
+node is in the demands side of the actuators(demand partition), 0 otherwise
+ (source partition).
  
 \end_layout
 
@@ -1849,7 +1853,15 @@ edge, 0 otherwise.
 \begin_inset Formula $M-$
 \end_inset
 
-the distance to detection for a particular vulnerable node.
+the 
+\begin_inset Quotes eld
+\end_inset
+
+distance to detection
+\begin_inset Quotes erd
+\end_inset
+
+ for a particular vulnerable node.
 \end_layout
 
 \begin_layout Standard
@@ -1860,7 +1872,7 @@ the distance to detection for a particular vulnerable node.
 \begin_inset Formula $i^{th}$
 \end_inset
 
-node is on the demands side of the actuators, a large number (
+node is in the demand partition, a large number (
 \begin_inset Formula $M$
 \end_inset
 
@@ -1881,7 +1893,14 @@ node is on the demands side of the actuators, a large number (
 \begin_inset Formula $i^{th}$
 \end_inset
 
- node.
+ (sensor
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "v-inequality-at-sensor-nodes"
+
+\end_inset
+
+) node.
  
 \end_layout
 
@@ -1941,7 +1960,7 @@ A_{1} & \mathbf{0} & \mathbf{0}\\
 \begin_inset Formula $A_{eq}=\left[\begin{array}{ccc}
 A_{eq1} & \mathbf{0} & \mathbf{0}\\
 \mathbf{0} & A_{eq2} & \mathbf{0}\\
-\\
+ & A_{eq3}
 \end{array}\right]$
 \end_inset
 
@@ -1957,7 +1976,7 @@ b_{3}
 \begin_inset Formula $b_{eq}=\left[\begin{array}{c}
 b_{eq1}\\
 b_{eq2}\\
-\\
+b_{eq3}
 \end{array}\right]$
 \end_inset
 
@@ -2007,7 +2026,7 @@ b_{eq2}\\
 \end_layout
 
 \begin_layout Standard
-To links the partitioning variables 
+To link the partitioning variables 
 \begin_inset Formula $\mathbf{y}$
 \end_inset
 
@@ -2036,7 +2055,11 @@ J & I_{E\times E}\end{array}\right]$
 \end_inset
 
 .
- 
+ The pesence of an edge from source to demand forces the corresponding 
+\begin_inset Formula $\mathbf{z}_{i}$
+\end_inset
+
+ to switch to one, indicating the presence of an actuator on that edge.
 \end_layout
 
 \begin_layout Standard
@@ -2048,21 +2071,23 @@ J & I_{E\times E}\end{array}\right]$
 \end_inset
 
  provide bounds to force the decision variables to reality, viz.
- the demand nodes being in the second partition and the vulnerable nodes
- being in the first.
+ the demand nodes necessarily being in the demand partition and the vulnerable
+ nodes being in the source.
+ We might also include constraints to consider a few steps after vulnerable
+ node to be necessarily in the source partition, as done in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
 We use the shortest distances from each of the vulnerable nodes to all other
- nodes in the graph to model 
-\begin_inset Quotes eld
-\end_inset
-
-distance in time
-\begin_inset Quotes erd
-\end_inset
-
-.
+ nodes in the graph to model time to contamination.
+ We're assuming the actual times are linear functions of distance.
  Let this matrix be 
 \begin_inset Formula $\mathbf{D}$
 \end_inset
@@ -2078,20 +2103,28 @@ M-\mathbf{D}\end{array}$
 \end_inset
 
  matrix, each of which is multiplied with 
-\begin_inset Formula $\mathbf{x}_{i}$
+\begin_inset Formula $\mathbf{x}$
 \end_inset
 
 .
- Each is balanced by 
+ Each constraint is balanced by 
 \begin_inset Formula $-d_{j}$
 \end_inset
 
-, where j is the vulnerable node.
+, where 
+\begin_inset Formula $j$
+\end_inset
+
+ is the vulnerable node under consideration in that constraint.
  
 \begin_inset Formula $b_{3}=\left[\mathbf{O}\right].$
 \end_inset
 
- Now, 
+ 
+\end_layout
+
+\begin_layout Standard
+Now, 
 \begin_inset Formula $d_{j}$
 \end_inset
 
@@ -2106,11 +2139,18 @@ M-\mathbf{D}\end{array}$
 .
  We add constraints to force equality to the distance to the closest sensor:
  
-\begin_inset Formula $D_{ij}+M-d_{j}-Mv_{ij}\leq M$
+\begin_inset Formula $D_{ij}+d_{j}-Mv_{ij}\leq M$
 \end_inset
 
  for all sensors.
- Constraints for making sure non-sensor nodes don't use 
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "v-inequality-at-sensor-nodes"
+
+\end_inset
+
+More constraints for making sure non-sensor nodes don't use positive 
 \begin_inset Formula $v_{ij}$
 \end_inset
 
@@ -2119,7 +2159,7 @@ M-\mathbf{D}\end{array}$
 \end_inset
 
 .
- For ensuring one equality of 
+ For ensuring at least one equality of 
 \begin_inset Formula $D{}_{ij}$
 \end_inset
 
@@ -2127,24 +2167,32 @@ M-\mathbf{D}\end{array}$
 \begin_inset Formula $d_{j}$
 \end_inset
 
+, per 
+\begin_inset Formula $j$
+\end_inset
+
 : 
-\begin_inset Formula $A_{1j}\mathbf{x}-A_{j}\mathbf{v}\leq-1$
+\begin_inset Formula $A_{1j}\mathbf{x}-A_{j}\mathbf{v}_{j}\leq-1$
 \end_inset
 
 .
- The actuators need to be at least that much distance away from the each
- of the vulnerable nodes.
+ 
 \end_layout
 
 \begin_layout Standard
-This can be implemented in two ways: constraining the actuators to be placed
+The actuators need to be at least 
+\begin_inset Formula $M-d_{j}$
+\end_inset
+
+ distance away from the each of the vulnerable nodes.
+ This can be implemented in two ways: constraining the actuators to be placed
  after a particular distance, or constraining the demand partition to start
  after a particular distance.
  Since generally speaking 
 \begin_inset Formula $N<E$
 \end_inset
 
- in a lot of real world networks, we show the node implementation.
+ in a lot of networks, we show the node implementation.
 \end_layout
 
 \begin_layout Standard
@@ -2164,28 +2212,24 @@ Transform the
 \begin_inset Formula $w_{i}=1$
 \end_inset
 
- implies the demand partition.
- 
-\end_layout
-
-\begin_layout Standard
-Construct constraints for actuator placement for the 
+ implies the node is in demand partition.
+ Construct constraints for actuator placement for the 
 \begin_inset Formula $i^{th}$
 \end_inset
 
 node as follows: 
 \begin_inset Formula $\left[\begin{array}{ccccc}
-... & 0 & -(M+\mathbf{D}-1) & 0 & ...\end{array}\right]\times\left[\mathbf{\mathbf{w}}\right]+\left[\begin{array}{c}
--1\end{array}\right]\times\mathbf{d}\leq\left[\begin{array}{c}
-...\\
+... & 0 & -(M+D_{ij}-1) & 0 & ...\end{array}\right]\left[\mathbf{\mathbf{w}}\right]+\left[\begin{array}{c}
+-1\end{array}\right]d_{j}\leq\left[\begin{array}{c}
+\\
 -2*M\\
-...
+\\
 \end{array}\right]$
 \end_inset
 
 .
  This ensures that when 
-\begin_inset Formula $\mathbf{w_{i}}$
+\begin_inset Formula $\mathbf{w}_{i}$
 \end_inset
 
  is 
@@ -2198,7 +2242,7 @@ node as follows:
 
 .
  When 
-\begin_inset Formula $\mathbf{w_{i}}$
+\begin_inset Formula $\mathbf{w}_{i}$
 \end_inset
 
  is 
@@ -2227,7 +2271,7 @@ Consider the same network in Figure 1, with the two vulnerable nodes (1,
 \end_layout
 
 \begin_layout Standard
-The additional constraints introduced in this case are 
+The additional constraints over case 2 introduced in this case are: 
 \begin_inset Formula 
 \begin{eqnarray*}
 \left[\begin{array}{cccccc}
@@ -2278,67 +2322,176 @@ d_{2}
 
 \end_inset
 
-
-\begin_inset Newline newline
-\end_inset
-
-This gets us variables storing the 
+This gets us variables storing 
 \begin_inset Formula $M-d_{i}$
 \end_inset
 
 , the value after subtracting the minimum distance to sensor from the large
  number for each vulnerable node.
- The constraints for ensuring desired partitioning are 
+ 
+\end_layout
+
+\begin_layout Standard
+Constraints for ensuring the conditions around 
+\begin_inset Formula $d_{j}$
+\end_inset
+
+'s:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
 \left[\begin{array}{cccccc}
--(M+0) & 0 & 0 & 0 & 0 & 0\\
-0 & -(M+1) & 0 & 0 & 0 & 0\\
-0 & 0 & -(M+1) & 0 & 0 & 0\\
-0 & 0 & 0 & -(M+2) & 0 & 0\\
-0 & 0 & 0 & 0 & -(M+2) & 0\\
-0 & 0 & 0 & 0 & 0 & -(M+3)
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 2 & 0 & 0\\
+0 & 0 & 0 & 0 & 2 & 0\\
+0 & 0 & 0 & 0 & 0 & 3
+\end{array}\right]\mathbf{x}+\left[\begin{array}{c}
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}
+\end{array}\right]-M\left[\begin{array}{c}
+v_{11}\\
+v_{12}\\
+v_{13}\\
+v_{14}\\
+v_{15}\\
+v_{16}
+\end{array}\right] & \leq & M\left[\begin{array}{c}
+1\\
+1\\
+1\\
+1\\
+1\\
+1
+\end{array}\right]\\
+\left[\begin{array}{cccccc}
+M & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 1 & 0\\
+0 & 0 & 0 & 0 & 0 & 2
+\end{array}\right]\mathbf{x}+\left[\begin{array}{c}
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}
+\end{array}\right]-M\left[\begin{array}{c}
+v_{21}\\
+v_{22}\\
+v_{23}\\
+v_{24}\\
+v_{25}\\
+v_{26}
+\end{array}\right] & \leq & M\left[\begin{array}{c}
+1\\
+1\\
+1\\
+1\\
+1\\
+1
+\end{array}\right]\\
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+'s are 1 only when 
+\begin_inset Formula $i$
+\end_inset
+
+ is a sensor:
+\begin_inset Formula $-x_{i}+v_{i}\leq0$
+\end_inset
+
+.
+ At least one equality constraint being satisfied: 
+\begin_inset Formula $\left[\begin{array}{cccccc}
+-1 & -1 & -1 & -1 & -1 & -1\\
+0 & -1 & -1 & -1 & -1 & -1
+\end{array}\right]\mathbf{x}-\left[\begin{array}{cccccc}
+1 & 1 & 1 & 1 & 1 & 1\\
+0 & 1 & 1 & 1 & 1 & 1
+\end{array}\right]\left[\begin{array}{c}
+\mathbf{v_{1}}\\
+\mathbf{v_{2}}
+\end{array}\right]\leq\left[\begin{array}{c}
+-1\\
+-1
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The constraints for ensuring desired partitioning are 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
+-(M+0-1) & 0 & 0 & 0 & 0 & 0\\
+0 & -(M+1-1) & 0 & 0 & 0 & 0\\
+0 & 0 & -(M+1-1) & 0 & 0 & 0\\
+0 & 0 & 0 & -(M+2-1) & 0 & 0\\
+0 & 0 & 0 & 0 & -(M+2-1) & 0\\
+0 & 0 & 0 & 0 & 0 & -(M+3-1)
 \end{array}\right]\mathbf{w}-\left[\begin{array}{c}
-M-d_{1}+\frac{M-d_{1}}{M}\\
-M+1-d_{1}-\frac{d_{1}}{M}\\
-M+1-d_{1}-\frac{d_{1}}{M}\\
-M+1-d_{1}-\frac{d_{1}}{M}\\
-M+1-d_{1}-\frac{d_{1}}{M}\\
-M+1-d_{1}-\frac{d_{1}}{M}
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}
 \end{array}\right] & \leq & \left[\begin{array}{c}
 \begin{array}{c}
--2M-1\\
--2M-1\\
--2M-1\\
--2M-1\\
--2M-1\\
--2M-1
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M
 \end{array}\end{array}\right]\\
 -1\times\left[\begin{array}{cccccc}
-M+M & 0 & 0 & 0 & 0 & 0\\
-0 & M+0 & 0 & 0 & 0 & 0\\
-0 & 0 & M+1 & 0 & 0 & 0\\
-0 & 0 & 0 & M+1 & 0 & 0\\
-0 & 0 & 0 & 0 & M+1 & 0\\
-0 & 0 & 0 & 0 & 0 & M+2
+M+M-1 & 0 & 0 & 0 & 0 & 0\\
+0 & M+0-1 & 0 & 0 & 0 & 0\\
+0 & 0 & M+1-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M+1-1 & 0 & 0\\
+0 & 0 & 0 & 0 & M+1-1 & 0\\
+0 & 0 & 0 & 0 & 0 & M+2-1
 \end{array}\right]\mathbf{w}-\left[\begin{array}{c}
-M+1-d_{2}-\frac{d_{2}}{M}\\
-M+1-d_{2}-\frac{d_{2}}{M}\\
-M+1-d_{2}-\frac{d_{2}}{M}\\
-M+1-d_{2}-\frac{d_{2}}{M}\\
-M+1-d_{2}-\frac{d_{2}}{M}\\
-M+1-d_{2}-\frac{d_{2}}{M}
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}
 \end{array}\right] & \leq & \left[\begin{array}{c}
 \begin{array}{c}
--2M-1\\
--2M-1\\
--2M-1\\
--2M-1\\
--2M-1\\
--2M-1
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M
 \end{array}\end{array}\right]
 \end{eqnarray*}
 
@@ -2354,14 +2507,8 @@ Results and verification
 \begin_layout Standard
 The network is verified to have no paths from vulnerable to demand after
  removing edges.
-\end_layout
-
-\begin_layout Standard
-The distance to detection in this design is 
-\begin_inset Formula $0$
-\end_inset
-
- units.
+ The distance to detection is always lesser than the distance to the first
+ actuators.
 \end_layout
 
 \begin_layout Standard
@@ -2421,7 +2568,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-1,2,3,19,32,37,39,53,66
+1 2 3 19 32 37 39 53 66
 \end_layout
 
 \end_inset
@@ -2430,7 +2577,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-0
+0 0 0 
 \end_layout
 
 \end_inset
@@ -2439,7 +2586,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-41,70,85
+1 2 3 19 32 37 39 53 66
 \end_layout
 
 \end_inset
@@ -2448,8 +2595,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-1, 13, 27, 30, 38, 39, 40, 44, 51, 52, 68, 72, 80, 87, 90, 103, 150, 149
- 
+1 4 40 48 51 52 68 150 151 152 153 149
 \end_layout
 
 \end_inset
@@ -2460,25 +2606,25 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
+1 2 3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0 0 0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 1,2,3
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-72,150
 \end_layout
 
 \end_inset
@@ -2498,7 +2644,17 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-131,20
+1 2 3 19 32 37 39 53 66
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+all nodes 1 distace downstream are considered source partition
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2507,7 +2663,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-0
+0 4 1 0 1 0 0 1 0
 \end_layout
 
 \end_inset
@@ -2516,7 +2672,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-132
+1 7 19 33 37 39 54 57 66
 \end_layout
 
 \end_inset
@@ -2525,7 +2681,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-27, 30, 37
+2 8 12 30 38 40 48 51 52 67 69 77 78 89 103 108 110
 \end_layout
 
 \end_inset
@@ -2560,11 +2716,15 @@ key "key-6"
 
 \end_inset
 
-, the equivalent task was partial shutdown of WDN.
- The number of actuators suggested was 19 viz.
+, the similar task was partial shutdown of WDN.
+ The number of actuators suggested was 20 viz.
  2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86, 79, 89, 108, 110,
- 127 with 3 sensors (at nodes 40, 54, 67) and the same 9 vulnerable nodes.
- Here we get a solution with 18 actuators, 3 sensors.
+ 127, 112 with 3 sensors (at nodes 40, 54, 67) and the same 9 vulnerable
+ nodes.
+ The nodes directly downstream of vulnerable are taken as source nodes.
+ Here for task 4, we get a solution with 26 cardinality; 17 actuators, 9
+ sensors.
+ The previous work does not require that no demand node be compromised though.
 \end_layout
 
 \begin_layout Standard
@@ -2575,7 +2735,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename images/zoneContainmentPartitions.png
+	filename images/containment_9sources.eps
 
 \end_inset
 
@@ -2583,8 +2743,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Network figure.
- 
+Sensor and actuator placement strategy for 9 vulnerable nodes
 \begin_inset Newline newline
 \end_inset
 
@@ -2604,11 +2763,53 @@ White -- Demand nodes
 \begin_inset Newline newline
 \end_inset
 
+Yellow -- sensor nodes
+\end_layout
 
-\begin_inset Note Note
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/containment_9sources_1downstreamSourceEach.eps
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Sensor and actuator placement strategy for 9 vulnerable nodes and instant
+ downstream contamination
+\begin_inset Newline newline
+\end_inset
+
+Green -- Demand partition
+\begin_inset Newline newline
+\end_inset
+
+Red -- Vulnerable partition
+\begin_inset Newline newline
+\end_inset
+
+Black -- Vulnerable nodes
+\begin_inset Newline newline
+\end_inset
+
+White -- Demand nodes
+\begin_inset Newline newline
+\end_inset
+
 Yellow -- sensor nodes
 \end_layout
 
@@ -2622,9 +2823,8 @@ Yellow -- sensor nodes
 
 \end_layout
 
-\end_inset
-
-
+\begin_layout Section*
+Conclusion and future work
 \end_layout
 
 \begin_layout Bibliography
@@ -2725,6 +2925,34 @@ target "doi:10.1016/j.proeng.2014.11.175"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-7"
+
+\end_inset
+
+Kessler, A.; Ostfeld, A.; Sinai, G.
+ Detecting Accidental Contaminations in Municipal Water Networks.
+ Journal of Water Resources Planning and Management 1998, 124, 192–198.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-8"
+
+\end_inset
+
+Ostfeld, A.
+ et al.
+ The Battle of the Water Sensor Networks (BWSN): A Design Challenge for
+ Engineers and Algorithms.
+ Journal of Water Resources Planning and Management 2008, 134, 20 556–568.
+ 
 \end_layout
 
 \end_body
