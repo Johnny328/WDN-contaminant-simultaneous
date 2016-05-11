@@ -1,15 +1,13 @@
 % Inspired mostly by Venkat Reddy's implementation.
-function plotNetwork(filename, model, nodesNum, edgesNum, vulnerableNodes, vulnerableNum, demandNodes, nodeIDs, pipeStartNodes, pipeEndNodes, adjGraph, incGraph, x)
-
+plotBiograph%(filename, model, nodesNum, edgesNum, vulnerableNodes, vulnerableNum, demandNodes, nodeIDs, pipeStartNodes, pipeEndNodes, adjGraph, incGraph, x)
+h = view(biograph(adjGraph));
+for i=1:size(adjGraph,1)
+    xcoorID(i) = h.nodes(i).Position(1)
+    ycoorID(i) = h.nodes(i).Position(2)
+end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 floatTolerance = 1/NUMBER_BIGGER_THAN_NETWORK;
-xcoor = model.nodes.xcoor;
-ycoor = model.nodes.ycoor;
 count = 1;
-for i=1:nodesNum
-    xcoorID(nodeIDs(i)) = xcoor(i);
-    ycoorID(nodeIDs(i)) = ycoor(i);
-end
 sensorNodes = find(abs(x(1:nodesNum) -1) < floatTolerance)
 % Order of pipeIDs
 actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTolerance);
