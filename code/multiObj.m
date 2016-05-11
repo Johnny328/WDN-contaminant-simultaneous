@@ -4,6 +4,10 @@ if(exist('vulnerableN'))
     vulnerableNodes = vulnerableN;
     vulnerableNum = length(vulnerableNodes);
 end
+if(exist('demandN'))
+    demandNodes = demandN;
+end
+
 %% Sensor placement
 % Given vulnerable, find affected for each vulnerable
 % 1 step away affected nodes

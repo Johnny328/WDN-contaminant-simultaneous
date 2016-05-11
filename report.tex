@@ -3,6 +3,8 @@
 \documentclass[english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,lmargin=1.5cm,rmargin=1.5cm}
 \usepackage{babel}
 \usepackage{float}
 \usepackage{graphicx}
@@ -15,91 +17,157 @@
 %% Because html converters don't know tabularnewline
 \providecommand{\tabularnewline}{\\}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\newcommand{\lyxaddress}[1]{
+\par {\raggedright #1
+\vspace{1.4em}
+\noindent\par}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
 \makeatother
 
 \begin{document}
 
-\title{Simultaneous sensor and actuator placement for identification and
-containment of contaminants in a water distribution network}
+\title{Simultaneous sensor and actuator placement for contaminant containment
+in water distribution networks}
 \maketitle
 \begin{abstract}
-A multi objective integer linear optimization strategy assuming perfect
-sensors and actuators is developed and implemented.
+Water distribution networks are acknowledged to be vulnerable\cite{key-7},
+and there are multiple proposed ways of handling the hazard\cite{key-4,key-5}.
+A multi-objective mixed integer linear optimization formulation for
+simultaneously finding sensor and actuator placement strategies for
+detection and containment in water distribution networks is presented.
+This work assumes perfect, instant, digital sensors and actuators.
+The goal is to ensure observability of contaminants and prevent them
+from reaching demands. The formulation involves tracking the minimum
+time to detection for each vulnerable node and placing actuators beyond
+the compromised nodes at that time. Agreement with previous work's\cite{key-6}
+results is seen. 
 \end{abstract}
 
-\author{Suhas Gundimeda, Indian Institute of technology Madras\thanks{CH12B026}}
+\author{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Suhas
+Gundimeda, Shankar Narasimhan}
 
 
-\section{Scenario}
+\lyxaddress{\begin{center}
+Department of Chemical Engineering, Indian Institute of Technology
+Madras, Chennai
+\par\end{center}}
 
 
-\subsection{Given}
+\section{Introduction}
 
-Specification of water distribution network -- vulnerable nodes, demand
-nodes, the adjacency matrix.
+Water Distribution Networks (WDNs) are networks of pipes, tanks, pumps,
+valves, and other components that are used to distribute water from
+sources, like reservoirs, to consumers. These networks are identified
+to be vulnerable to contamination\cite{key-7,key-8}. Suggested detection
+and response methods are varied, and one such is the placing of online
+sensors and actuators (valves) for detection and containment of contaminants.
+The sensors detect the contaminant, and the actuators shut down the
+network, preventing further spread. The task then becomes the computing
+of optimal sensor and actuator placement strategies. 
 
-Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy
-of sensing, etc. can be added onto this work easily, and are ignored.
+
+\subsection{Previous work}
+
+Sensor placement using the principle that there must exist a unique
+non-zero set of sensors for each of the vulnerable nodes that can
+be affected was done by V. Palleti et all\cite{key-1}. The work also
+augmented the graph abstraction with vulnerable nodes representing
+multiple real nodes and used sets of affected nodes to implement identifiable
+sensor placement. 
+
+Given sensor network, minimal actuator placement on edges to achieve
+shut down of network to contain contaminant was performed in \cite{key-6}.
+The current work combines these methods in a multi-objective optimization
+formulation.
+
+The approach in \cite{key-3} attempts to optimize different objectives:
+maximizing detection likelihood and minimizing expected time to detection
+and solves it using genetic algorithms. The current work assumes both
+of these objectives are binary, i.e. no time delay in detection and
+accurate sensing.
+
+
+
+We hypothesize that simultaneous sensor and actuator planning can
+be achieved and is more efficient than iterative non-linear optimization
+sequentially solving the two placement problems, i.e. these are not
+independent problems, and these can be formulated as an integer linear
+program and solved.
+
+We first develop a formulation and algorithm for each case, implement
+a simulation in MATLAB, and compare with results from previous works
+to check veracity and improvement.
+
+
+\section{Problem description}
+
+Specifications of the water distribution network are provided as vulnerable
+nodes, demand nodes, and the sparse adjacency matrix. The demand nodes
+are the nodes we want to prevent the contamination of. Time-delay
+in sensors of contaminant sensing, lengths of pipes, accuracy of sensing,
+etc. can be added onto this work easily, and are not considered here.
 
 
 \subsection{Requirements to be satisfied}
 
 To find distribution of sensors on nodes and actuators on edges such
-that the attack can be identified and the contaminant can be prevented
-from reaching the demands.
+that an attack can be identified and the network shutdown, preventing
+the contaminant from reaching the demand nodes.
+
+Partial requirement (same as in \cite{key-6}): A sensor and actuator
+placement strategy that might allow for initial contamination of some
+demand nodes, but will stop any further contamination to all demand
+nodes.
 
 
 
 
-\section{Previous work}
+\subsection{Case study network}
 
-Sensor placement using the principle that there must exist a unique
-non-zero set of sensors for each set of vulnerable nodes that can
-be affected. The work augmented the graph abstraction with vulnerable
-nodes representing multiple real nodes and used sets of affected nodes
-to force sensor placement. Actuator placement on edges to achieve
-a balanced min-cut, between the sensor nodes and demands, to contain
-contaminant\cite{key-1}. It is also this work's primary reference.
-
-The approach in \cite{key-3} attempts to optimize different objectives:
-maximizing detection likelihood and minimizing expected time to detection
-and solves it using genetic algorithms. This work assumes both of
-these objectives are binary -- no time delay in detection and accurate
-sensing.
+The algorithms are tested on an urban WDN of Bangalore city, India.
+\begin{figure}[H]
 
 
+\includegraphics{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
+the six others shown are pumps}
 
 
-\section{Hypotheses}
-
-Simultaneous sensor and actuator distribution can be achieved and
-is more efficient i.e. these are not independent problems, and these
-can be formulated as a ILP and solved.
-
-
-\section{Method}
-
-We first develop a formulation and algorithm for each case, implement
-in MATLAB, and compare with results from previous work to check veracity
-and improvement.
+\end{figure}
+ It has 3 reservoirs and 6 pumps, which are considered vulnerable
+nodes. 24 demand nodes are presented in the network. The network consists
+of 116 pipes, 29 control valves, 3 on-off valves and 7 pumps. The
+primary purpose of the network is to supply the water to all demand
+nodes.
 
 
-\section{Implementation}
+
+The network is assumed to be static, and the hydraulic results at
+00:00 hours after EPANET simulation are considered for this work.
+All of the results are produced using no more hydraulic information
+then directed connectivity results. All pipes are assumed to be of
+length 1.
+
+
+\section{Scenarios}
 
 
 \subsection*{Case 1: Shutting down the network effectively stops the contaminant
-beyond the actuator too.}
+beyond the actuator as well.}
 
 In this simpler case, there are no additional constraints on the actuator
-placement problem beyond the being a min-cut of the entire graph.
-The sensor and actuator placement problems are independent.
-
+placement problem beyond that of actuator edges being a min-cut of
+the entire graph. The sensor and actuator placement problems are independent.
 As long as the sensor network can detect the contaminant before it
-reaches the demands and the actuation can happen simultaneously, the
-requirements are satisfied.
-
-The network is assumed to be static, the hydraulic results from 00:00
-hours are taken. 
+reaches the demands and the actuation can happen immediately, the
+full requirements are satisfied. Without additional constraints, the
+formulation presented here deals with the case where detection is
+not enforced before any demand node is compromised, viz. the partial
+requirements.
 
 
 \subsubsection*{Formulation}
@@ -175,60 +243,15 @@ to reality, i.e. the demand nodes being in the second partition and
 the vulnerable nodes being in the first.
 
 
-\subsubsection*{Results and verification}
+\subsubsection*{Small network example}
+
+Consider the graph represented by Figure 1, with demand node 6 and
+vulnerable nodes 1 and 2. 
 
 \begin{figure}[H]
-\includegraphics{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and blue are sensors }
+\includegraphics[scale=0.75]{images/testGraph}\caption{The example graph with 6 nodes and 9 edges}
 \end{figure}
 
-
-\begin{table}[H]
-
-
-\begin{centering}
-\begin{tabular}{|c|c|}
-\hline 
-Vulnerable Nodes & Sensor Nodes\tabularnewline
-\hline 
-\hline 
-1 & 41, 70, 85\tabularnewline
-\hline 
-2 & 41, 85\tabularnewline
-\hline 
-3 & 70\tabularnewline
-\hline 
-19 & 41\tabularnewline
-\hline 
-32 & 70\tabularnewline
-\hline 
-37 & 41\tabularnewline
-\hline 
-39 & 41\tabularnewline
-\hline 
-53 & 85\tabularnewline
-\hline 
-66 & 70\tabularnewline
-\hline 
-\end{tabular}\caption{Vulnerable nodes and their corresponding sensor nodes}
-
-\par\end{centering}
-
-\end{table}
-
-
-It takes three sensors to detect contaminant with no other requirments.
-
-This is the same as \cite{key-1}.
-
-
-\subsection*{Case 2: The contaminant contained only in the vulnerable side of
-actuator network}
-
-This case is not trivial as the positions of the sensors must be used
-as input, i.e ensuring they are on the vulnerable side of actuators.
-
-
-\subsubsection*{Formulation}
 
 Formulating as binary integer optimization problem:
 
@@ -247,107 +270,6 @@ sub\\
 \end{array}\right] & = & \mathbf{b_{eq}}
 \end{eqnarray*}
 
-
-Where $\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
-$i^{th}$node, 0 otherwise.
-
-$\mathbf{y}\equiv[y_{i}]$ is 1 if $i^{th}$node is in the demands
-side of the actuators, 0 otherwise. 
-
-$\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
-0 otherwise.
-
-Hence the vector $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & y & z\end{array}}\right]$ is of length $2*N+E$.
-
-$A=\left[\begin{array}{cc}
-A_{1} & \mathbf{0}\\
-\mathbf{0} & A_{2}
-\end{array}\right]$, $A=\left[\begin{array}{cc}
-A_{eq1} & \mathbf{0}\\
-\mathbf{0} & A_{eq2}
-\end{array}\right]$, $b=\left[\begin{array}{c}
-b_{1}\\
-b_{2}
-\end{array}\right]$, $b_{eq}=\left[\begin{array}{c}
-b_{eq1}\\
-b_{eq2}
-\end{array}\right]$.
-
-$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
-$A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
-in graph.
-
-$b_{1}=\left[\begin{array}{c}
-.\\
-.\\
-.\\
--1\\
-.\\
-.\\
-.
-\end{array}\right]$
-
-$A_{eq1}=b_{eq1}=\mathbf{O}$
-
-$A_{2}=\left[\begin{array}{cc}
-J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix. 
-
-$b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
-$\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
-
-$A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
-to reality, i.e. the demand nodes being in the second partition and
-the vulnerable nodes being in the first.
-
-After adding constraints from each of the sub-problems, the only thing
-left to do to enforce containment is to add constraints reflecting
-it. Our aim is to force whatever partitioning to happen in the region
-farther away from the contaminant than the sensor nodes. So we use
-shortest path lengths from all the vulnerable nodes (simulating an
-attack on all of them) to all the nodes in the graph to model ``farther
-away''. There are still problems associated with this approach, which
-I'm working on now.
-
-
-\section{Example}
-
-For example, take the graph generated by \emph{adjGraph = sparse({[}1
-1 2 2 2 3 3 4 5{]},{[}2 3 4 5 3 4 5 6 6{]},{[}2 2 1 1 1 1 1 2 2{]},6,6);}
-
-\begin{figure}[H]
-\includegraphics{images/testGraph}\caption{The test graph}
-\end{figure}
-
-
-Node 1,2 are vulnerable and node 6 is demand node.
-
-Formulating as binary integer optimization problem:
-
-\begin{eqnarray*}
-min & (\sum x_{i}+\sum z_{i})\\
-sub\\
-\mathbf{A}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & \leq & \mathbf{b}\\
-\mathbf{A_{eq}}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & = & \mathbf{b_{eq}}
-\end{eqnarray*}
-
-
-Where $\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
-$i^{th}$node, 0 otherwise.
-
-$\mathbf{y}\equiv[y_{i}]$ is 1 if $i^{th}$node is in the demands
-side of the actuators, 0 otherwise. 
-
-$\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
-0 otherwise.
 
 Hence the vector $\left[\mathbf{\begin{array}{ccc}
 \mathbf{x} & y & z\end{array}}\right]$ is of length $2*N+E=21$.
@@ -382,6 +304,9 @@ $b_{1}=\left[\begin{array}{c}
 
 $A_{eq1}=b_{eq1}=\mathbf{O}$
 
+The following maps the actuator placement problem to one of classification
+into source or demand partition.
+
 $A_{2}=\left[\begin{array}{cc}
 J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
 -1 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -397,23 +322,732 @@ J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
 
 $b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
 $\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
+An edge between two different partitions causes the cost function
+to assume the presence of an edge.
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
 to reality, i.e. the demand nodes being in the second partition and
-the vulnerable nodes being in the first.
+the vulnerable nodes being in the first. 
 
-$A_{eq2}=\begin{array}{ccccccccccccccc}
+$A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
-\end{array}$; $b_{eq2}=\begin{array}{c}
+\end{array}\right]$; $b_{eq2}=\left[\begin{array}{c}
 0\\
 0\\
 1
-\end{array}$
+\end{array}\right]$
+
+
+\subsubsection*{Results and verification}
+
+\begin{figure}[H]
+\includegraphics[scale=0.4]{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
+\end{figure}
+
+
+\begin{table}[H]
+\centering{}%
+\begin{tabular}{|c|c|}
+\hline 
+Vulnerable Nodes & Sensor Nodes\tabularnewline
+\hline 
+\hline 
+1 & 41, 70, 85\tabularnewline
+\hline 
+2 & 41, 85\tabularnewline
+\hline 
+3 & 70\tabularnewline
+\hline 
+19 & 41\tabularnewline
+\hline 
+32 & 70\tabularnewline
+\hline 
+37 & 41\tabularnewline
+\hline 
+39 & 41\tabularnewline
+\hline 
+53 & 85\tabularnewline
+\hline 
+66 & 70\tabularnewline
+\hline 
+\end{tabular}\caption{Vulnerable nodes and their corresponding sensor nodes}
+\end{table}
+
+
+It takes three sensors to detect contaminant with no other requirements.
+
+This is the same as \cite{key-1}.
+
+The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
+39, 47, 49, 50, 64, 81, 149, 154.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{images/multiobj_indep}\caption{Results of independent placement case}
+
+\par\end{centering}
+
+\end{figure}
+
+
+
+
+
+
+
+\subsection*{Case 2: The contaminant must be contained in the vulnerable side
+of actuator network; attacks occur on all vulnerable nodes at once}
+
+This case is not trivial as the positions of the sensors must be used
+as input, i.e. they must be on the vulnerable side of actuators.
+
+
+\subsubsection*{Formulation}
+
+Formulating as binary integer optimization problem:
+
+\begin{eqnarray*}
+min & (\sum x_{i}+\sum z_{i})\\
+sub\\
+\mathbf{A}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}\\
+a\\
+\mathbf{w}
+\end{array}\right] & \leq & \mathbf{b}\\
+\mathbf{A_{eq}}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}\\
+a\\
+\mathbf{w}
+\end{array}\right] & = & \mathbf{b_{eq}}
+\end{eqnarray*}
+
+
+Where $\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
+$i^{th}$node, 0 otherwise.
+
+$\mathbf{y}\equiv[y_{i}]$ is 1 if $i^{th}$node is in the demands
+side of the actuators, 0 otherwise. 
+
+$\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
+0 otherwise.
+
+$a$ is a decision variable which stores the maximum distance the
+set of sensors are to the set of vulnerable nodes.
+
+$\mathbf{w}\equiv[w_{i}]$ is 1 if $i^{th}$node is in the demands
+side of the actuators, a large number($N$) otherwise. 
+
+$M$ is a large number.
+
+Hence the vector $\left[\mathbf{\begin{array}{ccccc}
+\mathbf{x} & y & z & a & w\end{array}}\right]$ is of length $3*N+E+1$.
+
+$A=\left[\begin{array}{ccc}
+A_{1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{2} & \mathbf{0}\\
+\mathbf{} & A_{3}
+\end{array}\right]$, $A=\left[\begin{array}{ccc}
+A_{eq1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{eq2} & \mathbf{0}\\
+\mathbf{0} & A_{eq3}
+\end{array}\right]$, $b=\left[\begin{array}{c}
+b_{1}\\
+b_{2}\\
+b_{3}
+\end{array}\right]$, $b_{eq}=\left[\begin{array}{c}
+b_{eq1}\\
+b_{eq2}\\
+b_{eq3}
+\end{array}\right]$.
+
+$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
+$A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
+in graph.
+
+$b_{1}=\left[\begin{array}{c}
+.\\
+.\\
+.\\
+-1\\
+.\\
+.\\
+.
+\end{array}\right]$
+
+$A_{eq1}=b_{eq1}=\mathbf{\left[O\right]}$
+
+$A_{2}=\left[\begin{array}{cc}
+J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix. 
+
+$b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
+$\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
+
+$A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
+to reality, viz. the demand nodes being in the second partition and
+the vulnerable nodes being in the first.
+
+We use shortest path lengths from all the vulnerable nodes (simulating
+an attack on all of them) to all the nodes in the graph to model ``farther
+away in time''. Let this vector be $\mathbf{S}$. The first set of
+constraints of $A_{3}$ is this vector of shortest paths multiplied
+with each column of $\mathbf{I\times x}$, storing the maximum distance
+of that particular sensor configuration in $a$. The actuators need
+to be at least that much distance away from the set of vulnerable
+nodes.
+
+This can be implemented in two ways: constraining the actuators to
+be placed after a particular distance, or constraining the demand
+partition to start after a particular distance. Since generally speaking
+$N<E$ in a lot of real world networks, we show the node implementation.
+
+We transform the $\mathbf{y}$ vector to $\mathbf{w},$ where $M$
+denotes the sensor partition and $1$ implies the demand partition.
+Then we construct constraints for actuator placement for the $i^{th}$node
+as follows: $\left[\begin{array}{ccccc}
+... & 0 & -(M+\mathbf{S}) & 0 & ...\end{array}\right]\mathbf{w}_{i}+\left[a+\frac{a}{M}\right]\leq\left[\begin{array}{c}
+-M\end{array}\right]$. This completes the formulation.
+
+
+\subsubsection*{Small network example}
+
+Consider the same network in Figure 1, with the two vulnerable nodes
+(1, 2) and one demand node (6).
+
+The additional constraints introduced in this case are $\mathbf{S}_{i}\mathbf{x}_{i}-a\leq0$
+for each node $i$. This becomes 
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 1 & 0\\
+0 & 0 & 0 & 0 & 0 & 2
+\end{array}\right]\mathbf{x}-\left[\begin{array}{c}
+a\\
+a\\
+a\\
+a\\
+a\\
+a
+\end{array}\right] & \leq & \left[\begin{array}{c}
+0\\
+0\\
+0\\
+0\\
+0\\
+0
+\end{array}\right]\\
+\end{eqnarray*}
+ The constraints for ensuring desired partitioning are: 
+\[
+\left[\begin{array}{cccccc}
+-(M) & 0 & 0 & 0 & 0 & 0\\
+0 & -(M) & 0 & 0 & 0 & 0\\
+0 & 0 & -(M+1) & 0 & 0 & 0\\
+0 & 0 & 0 & -(M+1) & 0 & 0\\
+0 & 0 & 0 & 0 & -(M+1) & 0\\
+0 & 0 & 0 & 0 & 0 & -(M+2)
+\end{array}\right]\mathbf{w}+\left[\begin{array}{c}
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}\\
+a+\frac{a}{M}
+\end{array}\right]\leq\left[\begin{array}{c}
+\begin{array}{c}
+-M\\
+-M\\
+-M\\
+-M\\
+-M\\
+-M
+\end{array}\end{array}\right]
+\]
+
+
+This ensures that $\mathbf{S}_{i}$ is greater than $a$ for all nodes
+$i$.
+
+
+\subsubsection*{Results and verification}
+
+
+
+The network is verified to have no paths from vulnerable to demand
+after removing edges.
+
+The distance to detection in this design is $0$ units.
+
+\begin{table}[H]
+\begin{tabular}{|c|c|c|c|}
+\hline 
+Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
+\hline 
+\hline 
+1,2,3,19,32,37,39,53,66 & 0 & 19,39,53,66 & 1, 13, 27, 30, 38, 39, 40, 44, 51, 52, 68, 72, 80, 87, 90, 103, 150,
+149 \tabularnewline
+\hline 
+1,2,3 & 0 & 1,2,3 & 1,4,68\tabularnewline
+\hline 
+131,20 & 0 & 131 & 27, 30, 37\tabularnewline
+\hline 
+\end{tabular}\caption{The distance to detection for different sets of vulnerable nodes}
+\end{table}
+
+
+In the previous work \cite{key-6}, the number of actuators suggested
+was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
+79, 89, 108, 110, 127 with 3 sensors (at nodes 40, 54, 67) and the
+same 9 vulnerable nodes. 
+
+\begin{figure}[H]
+\includegraphics{images/containment_attackAtOnce_9V}\caption{Network figure. \protect \\
+Green -- Demand partition\protect \\
+Red -- Vulnerable partition\protect \\
+Black -- Vulnerable nodes\protect \\
+White -- Demand nodes}
+\end{figure}
+
+
+
+\subsection*{\label{sub:Case-3:-Vulnerable}Case 3: Vulnerable nodes may be attacked
+individually}
+
+
+\subsubsection*{Solution formulation}
+
+Formulating as mixed integer linear optimization problem:
+
+\begin{eqnarray*}
+min & (\sum x_{i}+\sum z_{i})\\
+sub\\
+\mathbf{A}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}\\
+\mathbf{d}\\
+\mathbf{w}\\
+\mathbf{v}
+\end{array}\right] & \leq & \mathbf{b}\\
+\mathbf{A_{eq}}\left[\begin{array}{c}
+\mathbf{x}\\
+\mathbf{y}\\
+\mathbf{z}\\
+\mathbf{d}\\
+\mathbf{w}\\
+\mathbf{v}
+\end{array}\right] & = & \mathbf{b_{eq}}
+\end{eqnarray*}
+
+
+Where $\mathbf{x}\equiv[x_{i}]$ is a decision variable vector whose
+components are 1 if there exists a sensor at $i^{th}$node, 0 otherwise.
+
+$\mathbf{y}\equiv[y_{i}]$ is a decision variable vector whose components
+are 1 if $i^{th}$node is in the demands side of the actuators(demand
+partition), 0 otherwise (source partition). 
+
+$\mathbf{z}\equiv[z_{i}]$ is a decision variable vector whose components
+are 1 if there exists an actuator at $i^{th}$edge, 0 otherwise.
+
+$\mathbf{d}\equiv[d_{i}]$ is a decision variable vector whose components
+store $M-$the ``distance to detection'' for a particular vulnerable
+node.
+
+$\mathbf{w}\equiv[w_{i}]$ is 1 if $i^{th}$node is in the demand
+partition, a large number ($M$) otherwise. 
+
+$\mathbf{v}\equiv[v_{ji}]$ is 1 if the $j^{th}$ vulnerable node's
+distance to detection is inequal to the distance to the $i^{th}$
+(sensor\ref{v-inequality-at-sensor-nodes}) node. 
+
+$M$ is a large number greater in order than the distances in the
+network.
+
+Hence the decision vector $\left[\mathbf{\begin{array}{cccccc}
+\mathbf{x} & y & z & a & w & \mathbf{v}\end{array}}\right]$ is of length $3*N+E+V+N*V$, where $V$ is the number of vulnerable
+nodes, $N$ is the number of nodes, $E$ is the number of edges.
+
+$A=\left[\begin{array}{ccc}
+A_{1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{2} & \mathbf{0}\\
+\mathbf{} & A_{3}
+\end{array}\right]$, $A_{eq}=\left[\begin{array}{ccc}
+A_{eq1} & \mathbf{0} & \mathbf{0}\\
+\mathbf{0} & A_{eq2} & \mathbf{0}\\
+ & A_{eq3}
+\end{array}\right]$, $b=\left[\begin{array}{c}
+b_{1}\\
+b_{2}\\
+b_{3}
+\end{array}\right]$, $b_{eq}=\left[\begin{array}{c}
+b_{eq1}\\
+b_{eq2}\\
+b_{eq3}
+\end{array}\right]$.
+
+$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
+$A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
+in graph.
+
+$b_{1}=\left[\begin{array}{c}
+.\\
+.\\
+.\\
+-1\\
+.\\
+.\\
+.
+\end{array}\right]$
+
+$A_{eq1}=b_{eq1}=\mathbf{\left[O\right]}$
+
+To link the partitioning variables $\mathbf{y}$ to the variables
+in the cost function, $\mathbf{z}$:
+
+$A_{2}=\left[\begin{array}{cc}
+J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix. 
+
+$b_{2}=\left[\mathbf{O}\right]$. The presence of an edge from source
+to demand forces the corresponding $\mathbf{z}_{i}$ to switch to
+one, indicating the presence of an actuator on that edge.
+
+$A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
+to reality, viz. the demand nodes necessarily being in the demand
+partition and the vulnerable nodes being in the source. We might also
+include constraints to consider a few steps after vulnerable node
+to be necessarily in the source partition, as done in \cite{key-6}.
+
+We use the shortest distances from each of the vulnerable nodes to
+all other nodes in the graph to model time to contamination. We're
+assuming the actual times are linear functions of distance. Let this
+matrix be $\mathbf{D}$. The first set of constraints of $A_{3}$
+is one for each entry in $\begin{array}{c}
+M-\mathbf{D}\end{array}$ matrix, each of which is multiplied with $\mathbf{x}$. Each constraint
+is balanced by $-d_{j}$, where $j$ is the vulnerable node under
+consideration in that constraint. $b_{3}=\left[\mathbf{O}\right].$ 
+
+Now, $d_{j}$ is greater than or equal to $M-D$$_{ij}$. We add constraints
+to force equality to the distance to the closest sensor: $D_{ij}+d_{j}-Mv_{ij}\leq M$
+for all sensors. \label{v-inequality-at-sensor-nodes}More constraints
+for making sure non-sensor nodes don't use positive $v_{ij}$: $-x_{i}+v_{i}\leq0$.
+For ensuring at least one equality of $D{}_{ij}$ and $d_{j}$, per
+$j$: $A_{1j}\mathbf{x}-A_{j}\mathbf{v}_{j}\leq-1$. 
+
+The actuators need to be at least $M-d_{j}$ distance away from the
+each of the vulnerable nodes. This can be implemented in two ways:
+constraining the actuators to be placed after a particular distance,
+or constraining the demand partition to start after a particular distance.
+Since generally speaking $N<E$ in a lot of networks, we show the
+node implementation.
+
+Transform the $\mathbf{y}$ vector to $\mathbf{w},$ where $w_{i}=M$
+denotes the sensor partition and $w_{i}=1$ implies the node is in
+demand partition. Construct constraints for actuator placement for
+the $i^{th}$node as follows: $\left[\begin{array}{ccccc}
+... & 0 & -(M+D_{ij}-1) & 0 & ...\end{array}\right]\left[\mathbf{\mathbf{w}}\right]+\left[\begin{array}{c}
+-1\end{array}\right]d_{j}\leq\left[\begin{array}{c}
+-2*M\end{array}\right]$. This ensures that when $\mathbf{w}_{i}$ is $1$, the constraint
+is activated and only satisfied if the corresponding $\mathbf{D_{ij}>d_{j}}$.
+When $\mathbf{w}_{i}$ is $M$, the constraint is always satisfied
+as $M^{2}$is several orders of magnitude greater than $2*M$. 
+
+
+\subsubsection*{Small network example}
+
+Consider the same network in Figure 1, with the two vulnerable nodes
+(1, 2) and one demand node (6).
+
+The additional constraints over case 2 introduced in this case are:
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
+M-0 & 0 & 0 & 0 & 0 & 0\\
+0 & M-1 & 0 & 0 & 0 & 0\\
+0 & 0 & M-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M-2 & 0 & 0\\
+0 & 0 & 0 & 0 & M-2 & 0\\
+0 & 0 & 0 & 0 & 0 & M-3
+\end{array}\right]\mathbf{x}-\left[\begin{array}{c}
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}
+\end{array}\right] & \leq & \left[\begin{array}{c}
+0\\
+0\\
+0\\
+0\\
+0\\
+0
+\end{array}\right]\\
+\left[\begin{array}{cccccc}
+M-M & 0 & 0 & 0 & 0 & 0\\
+0 & M-0 & 0 & 0 & 0 & 0\\
+0 & 0 & M-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M-1 & 0 & 0\\
+0 & 0 & 0 & 0 & M-1 & 0\\
+0 & 0 & 0 & 0 & 0 & M-2
+\end{array}\right]\mathbf{x}-\left[\begin{array}{c}
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}
+\end{array}\right] & \leq & \left[\begin{array}{c}
+0\\
+0\\
+0\\
+0\\
+0\\
+0
+\end{array}\right]\\
+\end{eqnarray*}
+This gets us variables storing $M-d_{i}$, the value after subtracting
+the minimum distance to sensor from the large number for each vulnerable
+node. 
+
+Constraints for ensuring the conditions around $d_{j}$'s:
+
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 2 & 0 & 0\\
+0 & 0 & 0 & 0 & 2 & 0\\
+0 & 0 & 0 & 0 & 0 & 3
+\end{array}\right]\mathbf{x}+\left[\begin{array}{c}
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}
+\end{array}\right]-M\left[\begin{array}{c}
+v_{11}\\
+v_{12}\\
+v_{13}\\
+v_{14}\\
+v_{15}\\
+v_{16}
+\end{array}\right] & \leq & M\left[\begin{array}{c}
+1\\
+1\\
+1\\
+1\\
+1\\
+1
+\end{array}\right]\\
+\left[\begin{array}{cccccc}
+M & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 1 & 0\\
+0 & 0 & 0 & 0 & 0 & 2
+\end{array}\right]\mathbf{x}+\left[\begin{array}{c}
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}
+\end{array}\right]-M\left[\begin{array}{c}
+v_{21}\\
+v_{22}\\
+v_{23}\\
+v_{24}\\
+v_{25}\\
+v_{26}
+\end{array}\right] & \leq & M\left[\begin{array}{c}
+1\\
+1\\
+1\\
+1\\
+1\\
+1
+\end{array}\right]\\
+\end{eqnarray*}
+
+
+For $v_{i}$'s are 1 only when $i$ is a sensor:$-x_{i}+v_{i}\leq0$.
+At least one equality constraint being satisfied:
+
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
+-1 & -1 & -1 & -1 & -1 & -1\\
+0 & -1 & -1 & -1 & -1 & -1
+\end{array}\right]\mathbf{x}-\left[\begin{array}{cccccc}
+1 & 1 & 1 & 1 & 1 & 1\\
+0 & 1 & 1 & 1 & 1 & 1
+\end{array}\right]\left[\begin{array}{c}
+\mathbf{v_{1}}\\
+\mathbf{v_{2}}
+\end{array}\right] & \leq & \left[\begin{array}{c}
+-1\\
+-1
+\end{array}\right]\\
+\end{eqnarray*}
+
+
+The constraints for ensuring desired partitioning are:
+
+\begin{eqnarray*}
+-1\times\left[\begin{array}{cccccc}
+M+0-1 & 0 & 0 & 0 & 0 & 0\\
+0 & M+1-1 & 0 & 0 & 0 & 0\\
+0 & 0 & M+1-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M+2-1 & 0 & 0\\
+0 & 0 & 0 & 0 & M+2-1 & 0\\
+0 & 0 & 0 & 0 & 0 & M+3-1
+\end{array}\right]\mathbf{w}-\left[\begin{array}{c}
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}\\
+d_{1}
+\end{array}\right] & \leq & \left[\begin{array}{c}
+\begin{array}{c}
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M
+\end{array}\end{array}\right]\\
+-1\times\left[\begin{array}{cccccc}
+M+M-1 & 0 & 0 & 0 & 0 & 0\\
+0 & M+0-1 & 0 & 0 & 0 & 0\\
+0 & 0 & M+1-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M+1-1 & 0 & 0\\
+0 & 0 & 0 & 0 & M+1-1 & 0\\
+0 & 0 & 0 & 0 & 0 & M+2-1
+\end{array}\right]\mathbf{w}-\left[\begin{array}{c}
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}\\
+d_{2}
+\end{array}\right] & \leq & \left[\begin{array}{c}
+\begin{array}{c}
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M\\
+-2M
+\end{array}\end{array}\right]
+\end{eqnarray*}
+
+
+
+\subsubsection*{Results and verification}
+
+The network is verified to have no paths from vulnerable to demand
+after removing edges. The distance to detection is always lesser than
+the distance to the first actuators.
+
+\begin{table}[H]
+\begin{tabular}{|c|c|c|c|}
+\hline 
+Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
+\hline 
+\hline 
+1 2 3 19 32 37 39 53 66 & 0 0 0 0 0 0 0 0 0 & 1 2 3 19 32 37 39 53 66 & 1 4 40 48 51 52 68 150 151 152 153 149\tabularnewline
+\hline 
+1 2 3 & 0 0 0 & 1,2,3 & 1,4,68\tabularnewline
+\hline 
+1 2 3 19 32 37 39 53 66\footnote{all nodes 1 distance downstream are considered source partition} & 0 4 1 0 1 0 0 1 0 & 1 7 19 33 37 39 54 57 66 & 2 8 12 30 38 40 48 51 52 67 69 77 78 89 103 108 110\tabularnewline
+\hline 
+\end{tabular}\caption{The distance to detection for different sets of vulnerable nodes}
+\end{table}
+
+
+In the previous work \cite{key-6}, the similar task was partial shutdown
+of WDN. The number of actuators suggested was 20 viz. 2, 12, 16, 24,
+30, 38, 40, 48, 51, 52, 67, 71, 76, 86, 79, 89, 108, 110, 127, 112
+with 3 sensors (at nodes 40, 54, 67) and the same 9 vulnerable nodes.
+The nodes directly downstream of vulnerable are taken as source nodes.
+Here for task 4, we get a solution with 26 cardinality: 17 actuators,
+9 sensors. The previous work does not require that no demand node
+be compromised though.
+
+\begin{figure}[H]
+\includegraphics{images/zoneContainment_9sources}\caption{Sensor and actuator placement strategy for 9 vulnerable nodes\protect \\
+Green -- Demand partition\protect \\
+Red -- Vulnerable partition\protect \\
+Black -- Vulnerable nodes\protect \\
+White -- Demand nodes\protect \\
+Yellow -- sensor nodes}
+\end{figure}
+\begin{figure}[H]
+\includegraphics{images/containment_9sources_1downstreamSourceEach}\caption{Sensor and actuator placement strategy for 9 vulnerable nodes and
+instant downstream contamination\protect \\
+Green -- Demand partition\protect \\
+Red -- Vulnerable partition\protect \\
+Black -- Vulnerable nodes\protect \\
+White -- Demand nodes\protect \\
+Yellow -- sensor nodes}
+\end{figure}
+
+
+
+\section*{
+\begin{figure}[H]
+\protect\includegraphics{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{key-6}, case of allowing demand nodes to be compromised
+\protect \\
+The cardinality is 21, the same as presented in the earlier work.}
+\end{figure}
+}
+
+
+\section*{Conclusions and future work}
+
+For a given WDN, we presented ways to arrive at a sensor and actuator
+placement strategy. This sensor and actuator network design is useful
+for water authorities to detect contaminants and isolate the contaminated
+area in the event of an attack on the WDN. We proposed a multi-objective
+linear programming formulation that gives the optimal sensor and actuator
+cardinality. 
+
+The formulation can reproduce the results of \cite{key-6} after relaxing
+the full requirements to partial, viz. to prevent further contamination
+of demand nodes.
+
+A performance benchmark of the simultaneous framework and the sequential
+non-linear optimization solution would be an illuminating exercise.
+
+This formulation introduces an $O(NV)$ blowup in the number of decision
+variables, but there exist techniques to solve such specifically constrained
+variables much faster. An implementation using such techniques would
+be useful for assessing real performance.
+
+Integration of an implementation of these algorithms with existing
+open-source toolboxes for sensor and actuator placement is a possible
+future action, which makes the techniques presented here much more
+accessible.
 \begin{thebibliography}{1}
-\bibitem{key-1} V. Reddy, 2015 - Sensor network design for contaminant
-detection and identification in water distribution networks.
+\bibitem{key-1} Palleti, V. R.; Narasimhan, S.; Rengaswamy, R.; Teja,
+R.; Bhallamudi, S. M. Sensor network design for contaminant detection
+and identification in water distribution networks. Computers and Chemical
+Engineering 2016, 87, 246 \textendash{} 256. 
+
+\bibitem{key-6} Venkata Reddy Palleti, Varghese, Shankar Narasimhan
+and Raghunathan Rengasamy: Actuator network design to mitigate contamination
+effects in water distribution networks
 
 \bibitem{key-2}\href{http://link.springer.com/article/10.1007\%2FBF01581031}{On the structure of all min cuts in a network}
 
@@ -422,6 +1056,14 @@ detection and identification in water distribution networks.
 \bibitem{key-4}\href{http://files.waterky.org/aamastrrefs/Hart\%20and\%20Murray.\%202010.\%20Rev\%20of\%20\%20sensor\%20placem\%20strateg\%20for\%20contam\%20warn\%20systs\%20in\%20dr\%20wtr\%20dist\%20systs.\%20JWRPM\%20136.\%20611..pdf}{Review of Sensor Placement Strategies for Contamination Warning Systems in Drinking Water Distribution Systems}
 10.1061/ ASCE WR.1943-5452.0000081
 
-\bibitem{key-5}\href{http://doi:10.1016/j.proeng.2014.11.175}{Sensor Placement Methods for Contamination Detection in Water Distribution Networks: A Review}\end{thebibliography}
+\bibitem{key-5}\href{http://doi:10.1016/j.proeng.2014.11.175}{Sensor Placement Methods for Contamination Detection in Water Distribution Networks: A Review}
+
+\bibitem{key-7}Kessler, A.; Ostfeld, A.; Sinai, G. Detecting Accidental
+Contaminations in Municipal Water Networks. Journal of Water Resources
+Planning and Management 1998, 124, 192\textendash 198. 
+
+\bibitem{key-8}Ostfeld, A. et al. The Battle of the Water Sensor
+Networks (BWSN): A Design Challenge for Engineers and Algorithms.
+Journal of Water Resources Planning and Management 2008, 134, 20 556\textendash 568. \end{thebibliography}
 
 \end{document}

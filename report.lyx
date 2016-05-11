@@ -76,27 +76,235 @@
 \begin_body
 
 \begin_layout Title
-Simultaneous sensor and actuator placement for containment of contaminants
- in a 
-\begin_inset Newline newline
-\end_inset
-
-water distribution network
+Simultaneous sensor and actuator placement for contaminant containment in
+ water distribution networks
 \end_layout
 
 \begin_layout Abstract
-A multi objective integer linear optimization formulation for finding sensor
- and actuator placement strategies assuming perfect sensors and actuators
- is developed and implemented.
- The goal is to ensure observability of contamination while preventing contamina
-nt from reaching demands.
+Water distribution networks are acknowledged to be vulnerable
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-7"
+
+\end_inset
+
+, and there are multiple proposed ways of handling the hazard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-4,key-5"
+
+\end_inset
+
+.
+ A multi-objective mixed integer linear optimization formulation for simultaneou
+sly finding sensor and actuator placement strategies for detection and containme
+nt in water distribution networks is presented.
+ This work assumes perfect, instant, digital sensors and actuators.
+ The goal is to ensure observability of contaminants and prevent them from
+ reaching demands.
+ The formulation involves tracking the minimum time to detection for each
+ vulnerable node and placing actuators beyond the compromised nodes at that
+ time.
+ Agreement with previous work's
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+ results is seen.
+ 
 \end_layout
 
 \begin_layout Author
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
 Suhas Gundimeda, Shankar Narasimhan
 \end_layout
 
 \begin_layout Address
+\align center
 Department of Chemical Engineering, Indian Institute of Technology Madras,
  Chennai
 \end_layout
@@ -107,7 +315,7 @@ Introduction
 
 \begin_layout Standard
 Water Distribution Networks (WDNs) are networks of pipes, tanks, pumps,
- valves, and other components that are used to distribute water from sources
+ valves, and other components that are used to distribute water from sources,
  like reservoirs, to consumers.
  These networks are identified to be vulnerable to contamination
 \begin_inset CommandInset citation
@@ -120,7 +328,7 @@ key "key-7,key-8"
  Suggested detection and response methods are varied, and one such is the
  placing of online sensors and actuators (valves) for detection and containment
  of contaminants.
- The sensor detects the contaminant, and the actuator shuts down the network,
+ The sensors detect the contaminant, and the actuators shut down the network,
  preventing further spread.
  The task then becomes the computing of optimal sensor and actuator placement
  strategies.
@@ -133,8 +341,9 @@ Previous work
 
 \begin_layout Standard
 Sensor placement using the principle that there must exist a unique non-zero
- set of sensors for each set of vulnerable nodes that can be affected was
- done by Palleti et all
+ set of sensors for each of the vulnerable nodes that can be affected was
+ done by V.
+ Palleti et all
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"
@@ -215,7 +424,7 @@ We first develop a formulation and algorithm for each case, implement a
 \end_layout
 
 \begin_layout Section
-Problem formulation
+Problem description
 \end_layout
 
 \begin_layout Standard
@@ -248,6 +457,19 @@ t from reaching the demand nodes.
 \end_layout
 
 \begin_layout Standard
+Partial requirement (same as in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+): A sensor and actuator placement strategy that might allow for initial
+ contamination of some demand nodes, but will stop any further contamination
+ to all demand nodes.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -258,6 +480,75 @@ In addition, we look for a way of
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Case study network
+\end_layout
+
+\begin_layout Standard
+The algorithms are tested on an urban WDN of Bangalore city, India.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/bangalore_vuln_venkat.png
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and the
+ six others shown are pumps
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+ It has 3 reservoirs and 6 pumps, which are considered vulnerable nodes.
+ 24 demand nodes are presented in the network.
+ The network consists of 116 pipes, 29 control valves, 3 on-off valves and
+ 7 pumps.
+ The primary purpose of the network is to supply the water to all demand
+ nodes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The network we're considering is available
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The network is assumed to be static, and the hydraulic results at 00:00
+ hours after EPANET simulation are considered for this work.
+ All of the results are produced using no more hydraulic information then
+ directed connectivity results.
+ All pipes are assumed to be of length 1.
 \end_layout
 
 \begin_layout Section
@@ -271,26 +562,16 @@ Case 1: Shutting down the network effectively stops the contaminant beyond
 
 \begin_layout Standard
 In this simpler case, there are no additional constraints on the actuator
- placement problem beyond the being a min-cut of the entire graph.
+ placement problem beyond that of actuator edges being a min-cut of the
+ entire graph.
  The sensor and actuator placement problems are independent.
  As long as the sensor network can detect the contaminant before it reaches
- the demands and the actuation can happen immediately, the requirements
+ the demands and the actuation can happen immediately, the full requirements
  are satisfied.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Better place for things like these?
-\end_layout
-
-\end_inset
-
-The network is assumed to be static, the hydraulic results from 00:00 hours
- are taken.
- 
+ Without additional constraints, the formulation presented here deals with
+ the case where detection is not enforced before any demand node is compromised,
+ viz.
+ the partial requirements.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1039,8 +1320,43 @@ key "key-1"
 \end_layout
 
 \begin_layout Standard
-The closing of network requires 7 actuators: on edges 1, 12, 49, 50, 71,
- 80, 106.
+The closing of network requires 12 actuators: on edges 1, 4, 30, 37, 39,
+ 47, 49, 50, 64, 81, 149, 154.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/multiobj_indep.eps
+	scale 75
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Results of independent placement case
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1057,9 +1373,23 @@ The old set was 2, 12, 16, 30, 38, 40, 48, 51, 52, 67, 71, 76, 79, 87, 103,
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The next replaced set was 7 actuators.
+ verify.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection*
 Case 2: The contaminant must be contained in the vulnerable side of actuator
- network; attacks occur on all vulnernerable nodes at once
+ network; attacks occur on all vulnerable nodes at once
 \end_layout
 
 \begin_layout Standard
@@ -1394,7 +1724,7 @@ Small network example
 \end_layout
 
 \begin_layout Standard
-Consider the same network in Figure 1, with the two vulnerbale nodes (1,
+Consider the same network in Figure 1, with the two vulnerable nodes (1,
  2) and one demand node (6).
 \end_layout
 
@@ -1409,7 +1739,9 @@ The additional constraints introduced in this case are
 
 .
  This becomes 
-\begin_inset Formula $\left[\begin{array}{cccccc}
+\begin_inset Formula 
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 1 & 0 & 0 & 0\\
@@ -1423,18 +1755,19 @@ a\\
 a\\
 a\\
 a
-\end{array}\right]\leq\left[\begin{array}{c}
+\end{array}\right] & \leq & \left[\begin{array}{c}
 0\\
 0\\
 0\\
 0\\
 0\\
 0
-\end{array}\right]$
+\end{array}\right]\\
+\end{eqnarray*}
+
 \end_inset
 
- for this network.
- The constraints for ensuring desired partitioning are 
+ The constraints for ensuring desired partitioning are: 
 \begin_inset Formula 
 \[
 \left[\begin{array}{cccccc}
@@ -1723,7 +2056,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename images/containmentPartitionsVulnerableDemand.png
+	filename images/containment_attackAtOnce_9V.eps
 
 \end_inset
 
@@ -1768,7 +2101,7 @@ name "sub:Case-3:-Vulnerable"
 
 \end_inset
 
-Case 3: Vulnerable nodes might be attacked individually
+Case 3: Vulnerable nodes may be attacked individually
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2055,7 +2388,8 @@ J & I_{E\times E}\end{array}\right]$
 \end_inset
 
 .
- The pesence of an edge from source to demand forces the corresponding 
+ The presence of an edge from source to demand forces the corresponding
+ 
 \begin_inset Formula $\mathbf{z}_{i}$
 \end_inset
 
@@ -2221,10 +2555,7 @@ node as follows:
 \begin_inset Formula $\left[\begin{array}{ccccc}
 ... & 0 & -(M+D_{ij}-1) & 0 & ...\end{array}\right]\left[\mathbf{\mathbf{w}}\right]+\left[\begin{array}{c}
 -1\end{array}\right]d_{j}\leq\left[\begin{array}{c}
-\\
--2*M\\
-\\
-\end{array}\right]$
+-2*M\end{array}\right]$
 \end_inset
 
 .
@@ -2421,8 +2752,13 @@ For
 \end_inset
 
 .
- At least one equality constraint being satisfied: 
-\begin_inset Formula $\left[\begin{array}{cccccc}
+ At least one equality constraint being satisfied:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left[\begin{array}{cccccc}
 -1 & -1 & -1 & -1 & -1 & -1\\
 0 & -1 & -1 & -1 & -1 & -1
 \end{array}\right]\mathbf{x}-\left[\begin{array}{cccccc}
@@ -2431,29 +2767,31 @@ For
 \end{array}\right]\left[\begin{array}{c}
 \mathbf{v_{1}}\\
 \mathbf{v_{2}}
-\end{array}\right]\leq\left[\begin{array}{c}
+\end{array}\right] & \leq & \left[\begin{array}{c}
 -1\\
 -1
-\end{array}\right]$
+\end{array}\right]\\
+\end{eqnarray*}
+
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
-The constraints for ensuring desired partitioning are 
+The constraints for ensuring desired partitioning are:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-\left[\begin{array}{cccccc}
--(M+0-1) & 0 & 0 & 0 & 0 & 0\\
-0 & -(M+1-1) & 0 & 0 & 0 & 0\\
-0 & 0 & -(M+1-1) & 0 & 0 & 0\\
-0 & 0 & 0 & -(M+2-1) & 0 & 0\\
-0 & 0 & 0 & 0 & -(M+2-1) & 0\\
-0 & 0 & 0 & 0 & 0 & -(M+3-1)
+-1\times\left[\begin{array}{cccccc}
+M+0-1 & 0 & 0 & 0 & 0 & 0\\
+0 & M+1-1 & 0 & 0 & 0 & 0\\
+0 & 0 & M+1-1 & 0 & 0 & 0\\
+0 & 0 & 0 & M+2-1 & 0 & 0\\
+0 & 0 & 0 & 0 & M+2-1 & 0\\
+0 & 0 & 0 & 0 & 0 & M+3-1
 \end{array}\right]\mathbf{w}-\left[\begin{array}{c}
 d_{1}\\
 d_{1}\\
@@ -2577,7 +2915,7 @@ Actuator edges
 \begin_inset Text
 
 \begin_layout Plain Layout
-0 0 0 
+0 0 0 0 0 0 0 0 0
 \end_layout
 
 \end_inset
@@ -2649,7 +2987,7 @@ Actuator edges
 status open
 
 \begin_layout Plain Layout
-all nodes 1 distace downstream are considered source partition
+all nodes 1 distance downstream are considered source partition
 \end_layout
 
 \end_inset
@@ -2722,7 +3060,7 @@ key "key-6"
  127, 112 with 3 sensors (at nodes 40, 54, 67) and the same 9 vulnerable
  nodes.
  The nodes directly downstream of vulnerable are taken as source nodes.
- Here for task 4, we get a solution with 26 cardinality; 17 actuators, 9
+ Here for task 4, we get a solution with 26 cardinality: 17 actuators, 9
  sensors.
  The previous work does not require that no demand node be compromised though.
 \end_layout
@@ -2735,7 +3073,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename images/containment_9sources.eps
+	filename images/zoneContainment_9sources.eps
 
 \end_inset
 
@@ -2824,7 +3162,92 @@ Yellow -- sensor nodes
 \end_layout
 
 \begin_layout Section*
-Conclusion and future work
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/cardinality21_Venkat_results_reproduced.eps
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Validation of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+, case of allowing demand nodes to be compromised 
+\begin_inset Newline newline
+\end_inset
+
+The cardinality is 21, the same as presented in the earlier work.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Conclusions and future work
+\end_layout
+
+\begin_layout Standard
+For a given WDN, we presented ways to arrive at a sensor and actuator placement
+ strategy.
+ This sensor and actuator network design is useful for water authorities
+ to detect contaminants and isolate the contaminated area in the event of
+ an attack on the WDN.
+ We proposed a multi-objective linear programming formulation that gives
+ the optimal sensor and actuator cardinality.
+ 
+\end_layout
+
+\begin_layout Standard
+The formulation can reproduce the results of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+ after relaxing the full requirements to partial, viz.
+ to prevent further contamination of demand nodes.
+\end_layout
+
+\begin_layout Standard
+A performance benchmark of the simultaneous framework and the sequential
+ non-linear optimization solution would be an illuminating exercise.
+\end_layout
+
+\begin_layout Standard
+This formulation introduces an 
+\begin_inset Formula $O(NV)$
+\end_inset
+
+ blowup in the number of decision variables, but there exist techniques
+ to solve such specifically constrained variables much faster.
+ An implementation using such techniques would be useful for assessing real
+ performance.
+\end_layout
+
+\begin_layout Standard
+Integration of an implementation of these algorithms with existing open-source
+ toolboxes for sensor and actuator placement is a possible future action,
+ which makes the techniques presented here much more accessible.
 \end_layout
 
 \begin_layout Bibliography

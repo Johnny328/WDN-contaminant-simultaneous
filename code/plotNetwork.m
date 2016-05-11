@@ -16,7 +16,7 @@ actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTole
 partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 
-r = 70; % Radius of drawn nodes
+r = 100; % Radius of drawn nodes
 figure;
 axes;
 hold on;
