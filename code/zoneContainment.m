@@ -13,6 +13,11 @@ elseif(exist('adjGraph'))
     %demandNodes = [7];
     %Weights/lengths of pipes
     edgeWeights = eye(edgesNum);
+    for i=1:size(incGraph,1)
+        pipeStartNodes(i) = find(incGraph(i,:)>0);
+        pipeEndNodes(i) = find(incGraph(i,:)<0);
+    end
+    pipeIDs = 1:size(incGraph,1);
 else
     % Get data from .inp file
     [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
@@ -234,8 +239,11 @@ distanceToDetectionForEachVulnerable
 distanceVulnerableToSensors = allDistances(:,sensorNodes)
 distancesVulnerableToActuators = distancePipesFromVulnerableNodes(:,actuatorPipes)
 
-plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
-
+if(exist('model'))
+    plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+else
+    plotBiograph;
+end
 % Testing the partitioned network
 % Remove actuator edges 
 adjGraphContained = adjGraph;

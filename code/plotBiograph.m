@@ -1,9 +1,9 @@
 % Inspired mostly by Venkat Reddy's implementation.
-plotBiograph%(filename, model, nodesNum, edgesNum, vulnerableNodes, vulnerableNum, demandNodes, nodeIDs, pipeStartNodes, pipeEndNodes, adjGraph, incGraph, x)
+%plotBiograph(filename, model, nodesNum, edgesNum, vulnerableNodes, vulnerableNum, demandNodes, nodeIDs, pipeStartNodes, pipeEndNodes, adjGraph, incGraph, x)
 h = view(biograph(adjGraph));
 for i=1:size(adjGraph,1)
-    xcoorID(i) = h.nodes(i).Position(1)
-    ycoorID(i) = h.nodes(i).Position(2)
+    xcoorID(i) = h.nodes(i).Position(1);
+    ycoorID(i) = h.nodes(i).Position(2);
 end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 floatTolerance = 1/NUMBER_BIGGER_THAN_NETWORK;
@@ -14,7 +14,7 @@ actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTole
 partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 
-r = 70; % Radius of drawn nodes
+r = 6; % Radius of drawn nodes
 figure;
 axes;
 hold on;
@@ -36,7 +36,7 @@ for ii=1:size(adjGraph,1)
     jj=find(adjGraph(ii,:));
     for kk=1:length(jj)
         %try %TODO check usefulness and effect
-         arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)),ycoorID(jj(kk))],'Baseangle',45,'Tipangle',15 ,'Width',0.5,'Length',6);
+         arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)),ycoorID(jj(kk))],'Baseangle',45,'Tipangle',15 ,'Width',1,'Length',6);
          %catch
       %       arrow fixlimits;
        %  end
@@ -76,9 +76,9 @@ for k=1:length(actuatorPipes)
     y2 = ycoorID(pipeEndNodes(actuatorPipes(k)));
     c = ([x1 y1]+[x2 y2])/2;
     %d = sqrt(sum(([x1 y1] - [x2 y2]).^2));
-    d=500;
-    x3 = d/5*polygonX+c(1);
-    y3 = d/5*polygonY+c(2);
+    d=6*r/5;
+    x3 = d*polygonX+c(1);
+    y3 = d*polygonY+c(2);
     patch(x3,y3,'m');
 end
 %   text(x,y,lbl);
