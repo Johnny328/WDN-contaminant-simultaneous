@@ -1,14 +1,29 @@
 %% Given adjacency matrix
-adjGraph = sparse([1 1 2 2 2 3 3 4 5],[2 3 4 5 3 4 5 6 6],[2 2 1 1 1 1 1 2 2],6,6);
-incGraph = adj2inc(adjGraph,0);
-
+%adjGraph = sparse([1 1 2 2 2 3 3 4 5],[2 3 4 5 3 4 5 6 6],[2 2 1 1 1 1 1 2 2],6,6);
+%incGraph = adj2inc(adjGraph,0);
+%
 % Total number of nodes
-nodesNum = 6;
-edgesNum = 9;
+%nodesNum = 6;
+%edgesNum = 9;
 % Vulnerable nodes
-vulnerableN = [1,2];
-demandNodes=6;
-sourceNodes=[1 2];
+%vulnerableN = [1,2];
+%demandNodes=6;
+%sourceNodes=[1 2];
+incGraph = adj2inc(adjGraph,0);
+    % Total number of nodes
+    nodesNum = size(adjGraph,1);
+    edgesNum = size(incGraph,1);
+    % Vulnerable nodes
+    %vulnerableNodes = [1,2,4,5];%Test failed, this should've lead to sensor at 6 and actuator after it. Something wrong with shortestPathsFromVulnerableNodes code.
+    %demandNodes = [7];
+    %Weights/lengths of pipes
+    edgeWeights = eye(edgesNum);
+    for i=1:size(incGraph,1)
+        pipeStartNodes(i) = find(incGraph(i,:)>0);
+        pipeEndNodes(i) = find(incGraph(i,:)<0);
+    end
+    pipeIDs = 1:size(incGraph,1);
+    demandNodes = demandN;
 
 %Weights/lengths of pipes
 edgeWeights = eye(edgesNum);
@@ -43,12 +58,12 @@ b2 = zeros(size(incGraph,1),1);
 % Equality constraint
 tmp = 0;
 Aeq2=zeros(0,size(f2,1));
-for i=sourceNodes
+for i=1:length(vulnerableN)
     tmp = tmp+1;
     Aeq2(tmp,i) = 1;
 end
-beq2 = zeros(length(sourceNodes),1);
-for i=demandNodes
+beq2 = zeros(length(vulnerableN),1);
+for i=1:length(demandNodes)
     tmp = tmp+1;
     Aeq2(tmp,i) = 1;
 end
@@ -69,3 +84,4 @@ intcon = [intcon1 intcon2];
 [x,fval,exitflag,info] = intlinprog(f,intcon, A,b,Aeq,beq,lowerBound,upperBound);
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
+plotBiograph

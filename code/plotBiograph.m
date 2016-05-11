@@ -1,6 +1,14 @@
 % Inspired mostly by Venkat Reddy's implementation.
 %plotBiograph(filename, model, nodesNum, edgesNum, vulnerableNodes, vulnerableNum, demandNodes, nodeIDs, pipeStartNodes, pipeEndNodes, adjGraph, incGraph, x)
-h = view(biograph(adjGraph));
+b = biograph(adjGraph);
+%for i=1:size(adjGraph,1)
+%    b.nodes(i).Shape = 'circle';
+%end
+h = view(b);
+set(0, 'ShowHiddenHandles', 'on')
+bgfig = gcf
+c = get(bgfig, 'Children');
+%hold on;
 for i=1:size(adjGraph,1)
     xcoorID(i) = h.nodes(i).Position(1);
     ycoorID(i) = h.nodes(i).Position(2);
@@ -8,27 +16,27 @@ end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 floatTolerance = 1/NUMBER_BIGGER_THAN_NETWORK;
 count = 1;
-sensorNodes = find(abs(x(1:nodesNum) -1) < floatTolerance)
+%sensorNodes = find(abs(x(1:nodesNum) -1) < floatTolerance)
 % Order of pipeIDs
-actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTolerance);
-partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
-partitionSource=setdiff(1:nodesNum,partitionDemand);
+%actuatorPipes = find(abs(x((nodesNum*2+1):(nodesNum*2+edgesNum)) -1) < floatTolerance);
+%partitionDemand=find(abs(x(nodesNum+1:nodesNum*2) -1) < floatTolerance)';
+%partitionSource=setdiff(1:nodesNum,partitionDemand);
 
 r = 6; % Radius of drawn nodes
 figure;
 axes;
 hold on;
 lines = unique(adjGraph(adjGraph>0));
-for il = 1:length(lines)
-    h = findall(gca, 'type', 'line');
-    a=findobj(gcf);
-    allaxes=findall(a,'Type','axes');
-    alllines=findall(a,'Type','line');
-    alltext=findall(a,'Type','text');
+%for il = 1:length(lines)
+%    h = findall(gca, 'type', 'line');
+%    a=findobj(gcf);
+%    allaxes=findall(a,'Type','axes');
+%    alllines=findall(a,'Type','line');
+%    alltext=findall(a,'Type','text');
     %gplot(adjGraph == lines(il), [xcoorID' ycoorID']);
     %hnew = setdiff(findall(gca, 'type', 'line'), h);
     %set(hnew, 'linewidth', 1, 'color', 'black');
-end
+%end
 theta = linspace(0, 2*pi, 500)';
 %s = warning('error', 'ARROW:Permission');
 %warning('error', 'MATLAB:DELETE:FileNotFound');
@@ -36,20 +44,20 @@ for ii=1:size(adjGraph,1)
     jj=find(adjGraph(ii,:));
     for kk=1:length(jj)
         %try %TODO check usefulness and effect
-         arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)),ycoorID(jj(kk))],'Baseangle',45,'Tipangle',15 ,'Width',1,'Length',6);
+         arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)),ycoorID(jj(kk))],'Baseangle',80,'Tipangle',20,'Width',1,'Length',10);
          %catch
       %       arrow fixlimits;
        %  end
     end
 end
 for k=1:length(partitionSource)
-    xc = bsxfun(@plus, r .* cos(theta), xcoorID(partitionSource(k)));
-    yc = bsxfun(@plus, r .* sin(theta), ycoorID(partitionSource(k)));
+    xc = bsxfun(@plus, 0.75*r .* cos(theta), xcoorID(partitionSource(k)));
+    yc = bsxfun(@plus, 0.75*r .* sin(theta), ycoorID(partitionSource(k)));
     patch(xc, yc, 'r');
 end
 for m=1:length(partitionDemand)
-    xc = bsxfun(@plus, r .* cos(theta), xcoorID(partitionDemand(m)));
-    yc = bsxfun(@plus, r .* sin(theta), ycoorID(partitionDemand(m)));
+    xc = bsxfun(@plus, 0.75*r .* cos(theta), xcoorID(partitionDemand(m)));
+    yc = bsxfun(@plus, 0.75*r .* sin(theta), ycoorID(partitionDemand(m)));
     patch(xc, yc, 'g');
 end
 for m=1:length(sensorNodes)
