@@ -1,4 +1,7 @@
-###2060508
+###20160728
+* Started on implementing a sequential placement study to compare running times.
+
+###20160508
 * Added images and updated results table.
 
 ###20160506
