@@ -21,7 +21,7 @@
 %Models and Approximate Dynamic Programming}
 % AUTHORS
 \author[iitm]{Suhas Gundimeda}
-%\author[iitm]{ \corref{cor1}}
+\author[iitm]{Venkata Reddy Palleti}
 \author[iitm]{Shankar Narasimhan}
 
 % ADDRESSES
@@ -56,7 +56,7 @@ Water distribution networks, observable sensor network, actuator network, contam
 Water Distribution Networks (WDNs) are networks of pipes, tanks, pumps,
 valves, and other components that are used to distribute water from
 sources, like reservoirs, to consumers. These networks are identified
-to be vulnerable to contamination\cite{Kessler1998,Ostfeld2008}. Suggested detection
+to be vulnerable to contamination \cite{Kessler1998,Ostfeld2008}. Suggested detection
 and response methods are varied, and one such is the placing of online
 sensors and actuators (valves) for detection and containment of contaminants.
 The sensors detect the contaminant, and the actuators shut down the
@@ -64,11 +64,16 @@ network, preventing further spread. The task then becomes the computing
 of optimal sensor and actuator placement strategies. 
 
 \subsection{Previous work}
-Sensor placement using the principle that there must exist a unique non-zero set of sensors for each of the vulnerable nodes that can be affected was done by V. Palleti et all[1]. The work also augmented the graph abstraction with vulnerable nodes representing multiple real nodes and used sets of affected nodes to implement identifiable sensor placement. 
+Sensor placement algorithm using the principle that there must exist a unique non-zero set
+of sensors for each of the vulnerable nodes was developed by V. Palleti et all[1].%TODO make proper citation
+The work augmented the graph abstraction of water distribution networks with vulnerable nodes representing
+multiple real nodes and used sets of affected nodes to find a viable sensor placement.
 
-Given sensor network, minimal actuator placement on edges to achieve shut down of network to contain contaminant was performed in [2]. The current work combines these methods in a multi-objective optimization formulation.
+Given the sensor network, a linear optimization model for placement of minimal number
+of actuators on edges to
+achieve shut-down of network to contain contaminant was performed in [2]. The current work combines these methods in a multi-objective optimization formulation.
 
-The approach in [4] attempts to optimize different objectives: maximizing detection likelihood and minimizing expected time to detection and solves it using genetic algorithms. The current work assumes both of these objectives are binary, i.e. no time delay in detection and accurate sensing.
+An approach in [4] attempts to optimize different objectives: maximizing detection likelihood and minimizing expected time to detection and solves it using genetic algorithms. The current work assumes both of these objectives are binary, i.e. no time delay in detection and accurate sensing.
 
 %TODO Do a review of the review papers cited
 
