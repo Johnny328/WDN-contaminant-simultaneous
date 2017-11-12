@@ -185,13 +185,13 @@ Where $\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
 $i^{th}$node, 0 otherwise.
 
 $\mathbf{y}\equiv[y_{i}]$ is 1 if $i^{th}$node is in the demands
-side of the actuators, 0 otherwise. 
+side of the actuators, 0 otherwise.
 
 $\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
 0 otherwise.
 
 Hence the vector $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & y & z\end{array}}\right]$ is of length $2*N+E$.
+\mathbf{x} & \mathbf{y} & \mathbf{z}\end{array}}\right]$ is of length $2*N+E$.
 
 $A=\left[\begin{array}{cc}
 A_{1} & \mathbf{0}\\
@@ -211,6 +211,11 @@ $A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
 $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
 in graph.
 
+$A_{2}=\left[\begin{array}{cc}
+
+J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix.
+
+
 $b_{1}=\left[\begin{array}{c}
 .\\
 .\\
@@ -219,15 +224,13 @@ $b_{1}=\left[\begin{array}{c}
 .\\
 .\\
 .
-\end{array}\right]$
+\end{array}\right]$,
+$b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
+$\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
+
 
 $A_{eq1}=b_{eq1}=\mathbf{O}$
 
-$A_{2}=\left[\begin{array}{cc}
-J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix. 
-
-$b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
-$\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
 to reality, i.e. the demand nodes being in the second partition and
@@ -237,7 +240,7 @@ the vulnerable nodes being in the first.
 \subsubsection*{Small network example}
 
 Consider the graph represented by Figure 1, with demand node 6 and
-vulnerable nodes 1 and 2. 
+vulnerable nodes 1 and 2.
 
 \begin{figure}[h]
 \includegraphics[scale=0.75]{images/testGraph}\caption{The example graph with 6 nodes and 9 edges}
@@ -277,26 +280,33 @@ b_{2}
 \end{array}\right]$, $b_{eq}=\left[\begin{array}{c}
 b_{eq1}\\
 b_{eq2}
-\end{array}\right]$.
+\end{array}\right]$.\\
 
-$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
-$A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
-in graph.
+$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node in graph.\\
 
+
+\scalebox{0.8}{
 $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
 -1 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
 \end{array}\right]$
+}\\
+
 
 $b_{1}=\left[\begin{array}{c}
 -1\\
 -1
-\end{array}\right]$
+\end{array}\right]$\\
 
-$A_{eq1}=b_{eq1}=\mathbf{O}$
+
+
+$A_{eq1}=b_{eq1}=\mathbf{O}$\\
 
 The following maps the actuator placement problem to one of classification
 into source or demand partition.
+
+
+	\scalebox{0.8}{
 
 $A_{2}=\left[\begin{array}{cc}
 J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
@@ -309,7 +319,9 @@ J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
 0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0\\
 0 & 0 & 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0\\
 0 & 0 & 0 & 0 & -1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1
-\end{array}\right]$ where $J$ is the incidence matrix.
+\end{array}\right]$ }\\
+
+ where $J$ is the incidence matrix.
 
 $b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
 $\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
@@ -317,8 +329,7 @@ An edge between two different partitions causes the cost function
 to assume the presence of an edge.
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
-to reality, i.e. the demand nodes being in the second partition and
-the vulnerable nodes being in the first. 
+to reality, i.e. the demand nodes being in the second partition and the vulnerable nodes being in the first. \\
 
 $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -328,7 +339,7 @@ $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 0\\
 0\\
 1
-\end{array}\right]$
+\end{array}\right]$\\
 
 
 \subsubsection*{Results and verification}
@@ -341,28 +352,28 @@ $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 \begin{table}[h]
 \centering{}%
 \begin{tabular}{|c|c|}
-\hline 
+\hline
 Vulnerable Nodes & Sensor Nodes\tabularnewline
-\hline 
-\hline 
+\hline
+\hline
 1 & 41, 70, 85\tabularnewline
-\hline 
+\hline
 2 & 41, 85\tabularnewline
-\hline 
+\hline
 3 & 70\tabularnewline
-\hline 
+\hline
 19 & 41\tabularnewline
-\hline 
+\hline
 32 & 70\tabularnewline
-\hline 
+\hline
 37 & 41\tabularnewline
-\hline 
+\hline
 39 & 41\tabularnewline
-\hline 
+\hline
 53 & 85\tabularnewline
-\hline 
+\hline
 66 & 70\tabularnewline
-\hline 
+\hline
 \end{tabular}\caption{Vulnerable nodes and their corresponding sensor nodes}
 \end{table}
 
@@ -423,7 +434,7 @@ Where $\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
 $i^{th}$node, 0 otherwise.
 
 $\mathbf{y}\equiv[y_{i}]$ is 1 if $i^{th}$node is in the demands
-side of the actuators, 0 otherwise. 
+side of the actuators, 0 otherwise.
 
 $\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
 0 otherwise.
@@ -432,7 +443,7 @@ $a$ is a decision variable which stores the maximum distance the
 set of sensors are to the set of vulnerable nodes.
 
 $\mathbf{w}\equiv[w_{i}]$ is 1 if $i^{th}$node is in the demands
-side of the actuators, a large number($N$) otherwise. 
+side of the actuators, a large number($N$) otherwise.
 
 $M$ is a large number.
 
@@ -455,7 +466,7 @@ b_{3}
 b_{eq1}\\
 b_{eq2}\\
 b_{eq3}
-\end{array}\right]$.
+\end{array}\right]$.\\
 
 $A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
 $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
@@ -474,7 +485,7 @@ $b_{1}=\left[\begin{array}{c}
 $A_{eq1}=b_{eq1}=\mathbf{\left[O\right]}$
 
 $A_{2}=\left[\begin{array}{cc}
-J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix. 
+J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix.
 
 $b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
 $\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
@@ -511,7 +522,7 @@ Consider the same network in Figure 1, with the two vulnerable nodes
 (1, 2) and one demand node (6).
 
 The additional constraints introduced in this case are $\mathbf{S}_{i}\mathbf{x}_{i}-a\leq0$
-for each node $i$. This becomes 
+for each node $i$. This becomes
 \begin{eqnarray*}
 \left[\begin{array}{cccccc}
 0 & 0 & 0 & 0 & 0 & 0\\
@@ -536,7 +547,9 @@ a
 0
 \end{array}\right]\\
 \end{eqnarray*}
- The constraints for ensuring desired partitioning are: 
+ The constraints for ensuring desired partitioning are:
+
+
 \[
 \left[\begin{array}{cccccc}
 -(M) & 0 & 0 & 0 & 0 & 0\\
@@ -563,9 +576,7 @@ a+\frac{a}{M}
 \end{array}\end{array}\right]
 \]
 
-
-This ensures that $\mathbf{S}_{i}$ is greater than $a$ for all nodes
-$i$.
+This ensures that $\mathbf{S}_{i}$ is greater than $a$ for all nodes $i$.
 
 
 \subsubsection*{Results and verification}
@@ -579,16 +590,16 @@ The distance to detection in this design is $0$ units.
 
 \begin{table}[h]
 \begin{tabular}{|c|c|c|c|}
-\hline 
+\hline
 Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
-\hline 
-\hline 
+\hline
+\hline
     1,2,3,19,32,37,39,53,66 & 0 & 19,39,53,66 & \begin{tabular}[c]{@{}c@{}}1,13,27,30,38,39,40,44,\\51,52,68,72,80,87,90,103,150,149\end{tabular}\tabularnewline
-\hline 
+\hline
 1,2,3 & 0 & 1,2,3 & 1,4,68\tabularnewline
-\hline 
+\hline
 131,20 & 0 & 131 & 27, 30, 37\tabularnewline
-\hline 
+\hline
 \end{tabular}\caption{The distance to detection for different sets of vulnerable nodes}
 \end{table}
 
@@ -596,7 +607,7 @@ Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
 In the previous work \cite{PalletiActuator}, the number of actuators suggested
 was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
 79, 89, 108, 110, 127 with 3 sensors (at nodes 40, 54, 67) and the
-same 9 vulnerable nodes. 
+same 9 vulnerable nodes.
 
 \begin{figure}[h]
 \includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V}\caption{Case where all possible vulnerable nodes are always attacked simultaneously\protect \\
@@ -643,7 +654,7 @@ components are 1 if there exists a sensor at $i^{th}$node, 0 otherwise.
 
 $\mathbf{y}\equiv[y_{i}]$ is a decision variable vector whose components
 are 1 if $i^{th}$node is in the demands side of the actuators(demand
-partition), 0 otherwise (source partition). 
+partition), 0 otherwise (source partition).
 
 $\mathbf{z}\equiv[z_{i}]$ is a decision variable vector whose components
 are 1 if there exists an actuator at $i^{th}$edge, 0 otherwise.
@@ -653,11 +664,11 @@ store $M-$the ``distance to detection'' for a particular vulnerable
 node.
 
 $\mathbf{w}\equiv[w_{i}]$ is 1 if $i^{th}$node is in the demand
-partition, a large number ($M$) otherwise. 
+partition, a large number ($M$) otherwise.
 
 $\mathbf{v}\equiv[v_{ji}]$ is 1 if the $j^{th}$ vulnerable node's
 distance to detection is inequal to the distance to the $i^{th}$
-(sensor\ref{v-inequality-at-sensor-nodes}) node. 
+(sensor\ref{v-inequality-at-sensor-nodes}) node.
 
 $M$ is a large number greater in order than the distances in the
 network.
@@ -704,7 +715,7 @@ To link the partitioning variables $\mathbf{y}$ to the variables
 in the cost function, $\mathbf{z}$:
 
 $A_{2}=\left[\begin{array}{cc}
-J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix. 
+J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix.
 
 $b_{2}=\left[\mathbf{O}\right]$. The presence of an edge from source
 to demand forces the corresponding $\mathbf{z}_{i}$ to switch to
@@ -723,14 +734,14 @@ matrix be $\mathbf{D}$. The first set of constraints of $A_{3}$
 is one for each entry in $\begin{array}{c}
 M-\mathbf{D}\end{array}$ matrix, each of which is multiplied with $\mathbf{x}$. Each constraint
 is balanced by $-d_{j}$, where $j$ is the vulnerable node under
-consideration in that constraint. $b_{3}=\left[\mathbf{O}\right].$ 
+consideration in that constraint. $b_{3}=\left[\mathbf{O}\right].$
 
 Now, $d_{j}$ is greater than or equal to $M-D$$_{ij}$. We add constraints
 to force equality to the distance to the closest sensor: $D_{ij}+d_{j}-Mv_{ij}\leq M$
 for all sensors. \label{v-inequality-at-sensor-nodes}More constraints
 for making sure non-sensor nodes don't use positive $v_{ij}$: $-x_{i}+v_{i}\leq0$.
 For ensuring at least one equality of $D{}_{ij}$ and $d_{j}$, per
-$j$: $A_{1j}\mathbf{x}-A_{j}\mathbf{v}_{j}\leq-1$. 
+$j$: $A_{1j}\mathbf{x}-A_{j}\mathbf{v}_{j}\leq-1$.
 
 The actuators need to be at least $M-d_{j}$ distance away from the
 each of the vulnerable nodes. This can be implemented in two ways:
@@ -748,7 +759,7 @@ the $i^{th}$node as follows: $\left[\begin{array}{ccccc}
 -2*M\end{array}\right]$. This ensures that when $\mathbf{w}_{i}$ is $1$, the constraint
 is activated and only satisfied if the corresponding $\mathbf{D_{ij}>d_{j}}$.
 When $\mathbf{w}_{i}$ is $M$, the constraint is always satisfied
-as $M^{2}$is several orders of magnitude greater than $2*M$. 
+as $M^{2}$is several orders of magnitude greater than $2*M$.
 
 
 \subsubsection*{Small network example}
@@ -805,7 +816,7 @@ d_{2}
 \end{eqnarray*}
 This gets us variables storing $M-d_{i}$, the value after subtracting
 the minimum distance to sensor from the large number for each vulnerable
-node. 
+node.
 
 Constraints for ensuring the conditions around $d_{j}$'s:
 
@@ -916,7 +927,8 @@ d_{1}
 -2M\\
 -2M\\
 -2M
-\end{array}\end{array}\right]&&\\
+\end{array}\end{array}\right]
+&&\\
 -1\times\left[\begin{array}{cccccc}
 M+M-1 & 0 & 0 & 0 & 0 & 0\\
 0 & M+0-1 & 0 & 0 & 0 & 0\\
@@ -952,16 +964,16 @@ the distance to the first actuators.
 
 \begin{table}[h]
 \begin{tabular}{|c|c|c|c|}
-\hline 
+\hline
 Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
-\hline 
-\hline 
+\hline
+\hline
     1 2 3 19 32 37 39 53 66 & 0 0 0 0 0 0 0 0 0 &\begin{tabular}[c]{@{}c@{}} 1 2 3 19 32\\37 39 53 66 \end{tabular} &\begin{tabular}[c]{@{}c@{}} 1 4 40 48 51 52 68 \\150 151 152 153 149\end{tabular}\tabularnewline
-\hline 
+\hline
 1 2 3 & 0 0 0 & 1,2,3 & 1,4,68\tabularnewline
-\hline 
+\hline
     1 2 3 19 32 37 39 53 66\footnote{all nodes 1 distance downstream are considered source partition} & 0 4 1 0 1 0 0 1 0 &\begin{tabular}[c]{@{}c@{}}  1 7 19 33 \\37 39 54 57 66 \end{tabular} &\begin{tabular}[c]{@{}c@{}} 2 8 12 30 38 40 48 \\51 52 67 69 77 78 89 103 108 110\end{tabular}\tabularnewline
-\hline 
+\hline
 \end{tabular}\caption{The distance to detection for different sets of vulnerable nodes}
 \end{table}
 
@@ -1011,7 +1023,7 @@ placement strategy. This sensor and actuator network design is useful
 for water authorities to detect contaminants and isolate the contaminated
 area in the event of an attack on the WDN. We proposed a multi-objective
 linear programming formulation that gives the optimal sensor and actuator
-cardinality. 
+cardinality.
 
 The formulation can reproduce the results of \cite{PalletiActuator} after relaxing
 the full requirements to partial, viz. to prevent further contamination
