@@ -50,91 +50,119 @@ Water distribution networks, observable sensor network, actuator network, contam
 % *********************************************
 \section{Introduction}
 
+% These networks are identified
+% to be vulnerable to contamination \cite{Kessler1998,}.
+
+
 Water Distribution Networks (WDNs) are networks of pipes, tanks, pumps,
 valves, and other components that are used to distribute water from
-sources, like reservoirs, to consumers. These networks are identified
-to be vulnerable to contamination \cite{Kessler1998,Ostfeld2008}. Suggested detection
-and response methods are varied, and one such is the placing of online
-sensors and actuators (valves) for detection and containment of contaminants.
-The sensors detect the contaminant, and the actuators shut down the
-network, preventing further spread. The task then becomes the computing
-of optimal sensor and actuator placement strategies. 
+sources, like reservoirs, to consumers. The  topology of the network, number of consumer nodes, loading conditions, hydraulic elements etc make the control of a water distribution system a difficult task and makes it highly vulnerable to contamination \citep{Kessler}.  WDNs are often susceptible to either accidental or  intentional contamination. Accidental contamination occurs due to  system deficiencies (e.g, cross connections, pipeline breakage) and intentional contamination occurs as a result of deliberate acts of chemical or biological intrusions. Introduction of  chemical or biological agents in WDN can damage public health. After  9/11 attacks in United States, the concern over  possible terrorist attacks on WDN has increased and can be considered as the most serious threat to WDNs \citep{BWSN}. Hence, it is very important to detect such kinds of attacks as quickly as possible  and it is also necessary to take appropriate actions to mitigate the effects of a contamination event. Suggested detection and response methods are varied, and one such is the placing of online sensors and actuators (or shut-off valves) for detection and containment of   contaminants. The sensors can be used to detect the contaminants, and the actuators are useful to shut down the network to  prevent further spread of contaminants. Therefore, in this paper we propose a methodology to obtain an  optimal sensor and actuator placement  for contaminant detection and mitigation of the contamination effects.
 
-\subsection{Previous work}
-Sensor placement algorithm using the principle that there must exist a unique non-zero set
-of sensors for each of the vulnerable nodes was developed by V. Palleti et all[1].%TODO make proper citation
-The work augmented the graph abstraction of water distribution networks with vulnerable nodes representing
+
+The problems of contaminant detection in WDNs and appropriate response to a contamination event have been addressed in literature. Numerous procedures are available in the literature for the contamination detection problem. However, very few studies are available with respect to the problem of response to  contamination events. Several optimization algorithms have been proposed for the problem of sensor placement for contamination detection in WDNs. Single objective optimization problems\citep{Kessler, LEE, BERRY_FLEISCHER,  kumar} are solved by considering  objectives for maximizing the demand coverage,  maximizing the likelihood detection and minimizing the elapsed time between the injection and detection of contaminants. Further, multi-objective optimization problems \citep{BWSN, rico2007water,  Preis2008-Multiobjective, Watson04} have been solved by considering  objectives for minimizing the time of detection, minimizing the contaminated volume consumed prior to detection, population at risk etc. The problem of contamination source identification based on deployed sensor measurements have been reported \citep{mann2012real,Laird}. Sensor placement algorithm using the principle that there must exist a unique non-zero set
+of sensors for each of the vulnerable nodes was developed by \cite{Palleti2016246}. In this paper,  the graph abstraction of water distribution networks with vulnerable nodes representing
 multiple real nodes and used sets of affected nodes to find a viable sensor placement.
 
-Given the sensor network, a linear optimization model for placement of minimal number
-of actuators on edges to
-achieve shut-down of network to contain contaminant was performed in [2]. The current work combines these methods in a multi-objective optimization formulation.
+%Recently, the problem of sensor placement, which ensures observability and identifiability conditions has also been studied by .
 
-An approach in [4] attempts to optimize different objectives: maximizing detection likelihood and minimizing expected time to detection and solves it using genetic algorithms. The current work assumes both of these objectives are binary, i.e. no time delay in detection and accurate sensing.
+Although, design of a sensor network to detect and identify intentional contamination of a WDN is important, it is also necessary to consider the potential action that one can take to mitigate the effect of the contaminant. Once the sensor network detects the presence of  a contaminant, U.S. Environmental Protection Agency's (USEPA) response protocol toolbox \citep{USEPA2004a} provides recommendations for implementation of specific responses to minimize the effect of contamination event. This protocol includes the detection, source identification followed by consequence management strategies. Various researchers have developed  methodologies related to the detection and source identification problems as described earlier. Once a contaminant has been detected, water utilities must evaluate the response to the contamination so that potential impact to the public can be minimized.  These consequence management strategies may include: (1) public notification, (2) isolation and containment of a contaminant through valve operations \citep{USEPA2004a}, (3) flushing the contamination system, and (4) combinations of isolation, notification, and flushing \citep{USEPA2004b}. Very few studies are available  with respect to the  mitigating actions that would be taken after detecting the presence of contaminant in the WDN \citep{Poulin2008-heuristic, Poulin-2010, Preis2008-Multiobjective,  Guidorzi2009-Amultiobjective, Alfonso2010-MultiobjectiveOptimization} . Heuristic  procedures are proposed   for isolating a contaminated area through the simultaneous closure of a number of valves in the system, assuming an unlimited number of response teams and subsequent removal of the contaminant by unidirectional
+flushing \cite{Poulin2008-heuristic, Poulin-2010} . \cite{Preis2008-Multiobjective} proposed a multi-objective approach with the aim of minimizing the number of operations to be performed and to reduce the consumption of contaminated water by consumers for a given  specific contamination event. Such an approach is  useful only when complete knowledge of the contaminant history is known (in terms of intrusion location,  duration and quantity of contaminant injected). Similarly,   multi-objective procedures were proposed  to identify the minimum number of operations that minimize the contaminated water consumption \citep{Guidorzi2009-Amultiobjective, Alfonso2010-MultiobjectiveOptimization}.  These approaches \citep{Guidorzi2009-Amultiobjective, Alfonso2010-MultiobjectiveOptimization}  have not considered the characteristics of the contamination event (i.e, location, duration and quantity of contaminant introduced). Later,  the problem of optimal scheduling of device activation in order to minimize the consumption of contaminated water after the detection of a contaminant has been studied by \cite{Alvisi345-Nearoptimal}.
 
-%TODO Do a review of the review papers cited
-
-We hypothesize that simultaneous sensor and actuator planning can be achieved and is more efficient than iterative non-linear optimization sequentially solving the two placement problems, %Check the appropriateness of the following.
+The previous studies focused on operational strategies to be implemented in the event of a contaminant detection assuming that valves are already present in the network. The design problem of optimal valve placement to minimize  the effects of  contamination events has not been reported in the literature. But recently, \cite{PALLETI_Actuator} proposed a methodology for design of actuator network for a given sensor network to mitigate contamination effects in WDNs. In their work, shut-off valves are placed on optimal number of pipes so that it is possible to shutdown the network to prevent the uncontaminated part of the network from the contaminated network.  Further, they design the actuator network assuming that the sensor network design has already been carried out and locations of sensors are known a priori. It means that the sensor and actuator network designs are carried out independently and they are decoupled.  In contrast to this work, in this paper, we obtain a sensor and actuator placement simultaneously for detection and mitigation of contamination effects.  Therefore, in this work we propose a multi-objective mixed integer linear optimization formulation is proposed to determine the simultaneous optimal sensor and actuator network. Also, we hypothesize that simultaneous sensor and actuator planning can be achieved and is more efficient than iterative non-linear optimization sequentially solving the two placement problems, %Check the appropriateness of the following.
 i.e. these are not independent problems, and these can be formulated as an integer linear program and solved.
 
-We first develop a formulation and algorithm for each case, implement a simulation in MATLAB, and compare with test case results from previous works to check veracity and improvement.
+
+%\subsection{Previous work}
+%.
+%
+%Given the sensor network, a linear optimization model for placement of minimal number
+%of actuators on edges to
+%achieve shut-down of network to contain contaminant was performed in [2]. The current work combines these methods in a multi-objective optimization formulation.
+%
+%An approach in [4] attempts to optimize different objectives: maximizing detection likelihood and minimizing expected time to detection and solves it using genetic algorithms. The current work assumes both of these objectives are binary, i.e. no time delay in detection and accurate sensing.
+%
+%%TODO Do a review of the review papers cited
+%
+%
+%We first develop a formulation and algorithm for each case, implement a simulation in MATLAB, and compare with test case results from previous works to check veracity and improvement.
+%\section{Problem Description}
+
+
+
 \section{Problem Description}
-Specifications of the water distribution network are provided as vulnerable nodes, demand nodes, and the sparse adjacency matrix. The demand nodes are the nodes we want to prevent the contamination of. Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy of sensing, identification of which vulnerable node was affected, etc. can be added onto this work easily, and are not considered here.
+
+%\textcolor{red}{Suhas: Can you write  the problem description}
+% TODO, commented out is the old problem Description
+%Specifications of the water distribution network
+% are provided as vulnerable nodes, demand nodes, and the sparse adjacency matrix.
+% The demand nodes are the nodes we want to prevent the contamination of.
+% Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy of sensing,
+% identification of which vulnerable node was affected, etc.
+% can be added onto this work easily, and are not considered here.
+The water distribution network is represented as a deterministic weighted directed graph.
+We are given complete information about the network - (sparse) adjacency matrix,
+list of nodes vulnerable to contamination,
+list of nodes which shouldn't be contaminated (demand nodes).
+All of the vulnerable nodes are infected (not necessarily at the same time), this is covered as Case 1.
+A subset of vulnerable nodes are contaminated - this required a modified solution - Case 2.
+There is no time delay in sensing, actuation, communication.
 
 \subsection{Requirements to be satisfied}
-
 To find distribution of sensors on nodes and actuators on edges such
-that an attack can be identified and the network shutdown, preventing
-the contaminant from reaching the demand nodes.
+that an attack on a subset of vulnerable nodes can be identified and
+the network shut down, preventing the contaminant
+from reaching the demand nodes.
 
-Partial requirement (same as in \cite{PalletiActuator}): A sensor and actuator
-placement strategy that might allow for initial contamination of some
-demand nodes, but will stop any further contamination to all demand
-nodes.
-
-
-
-
-\subsection{Case study network}
-The algorithms were tested on a benchmark abstraction of an urban WDN; of Bangalore city, India.
-\begin{figure}[h]
-    \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
-the six others shown are pumps}
-\end{figure}
- It has 3 reservoirs and 6 pumps, which are considered vulnerable
-nodes. 24 demand nodes are presented in the network. The network consists
-of 116 pipes, 29 control valves, 3 on-off valves and 7 pumps. The
-primary purpose of the network is to supply the water to all demand
-nodes.
+Secondary requirement %(same as in \cite{PalletiActuator}):
+A sensor and actuator placement strategy that might allow for initial
+contamination of some demand nodes, but will stop any further contamination
+to all demand nodes.
 
 
 
-The network is assumed to be static, and the hydraulic results at
-00:00 hours after EPANET simulation are considered for this work.
-All of the results are produced using no more hydraulic information
-then directed connectivity results. All pipes are assumed to be of
-length 1.
+
+%\subsection{Case study network}
+%\textcolor{red}{This has to move to the end: No case study in the procedure}
+%
+%The algorithms were tested on a benchmark abstraction of an urban WDN; of Bangalore city, India.
+%\begin{figure}[h]
+%    \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
+%the six others shown are pumps}
+%\end{figure}
+% It has 3 reservoirs and 6 pumps, which are considered vulnerable
+%nodes. 24 demand nodes are presented in the network. The network consists
+%of 116 pipes, 29 control valves, 3 on-off valves and 7 pumps. The
+%primary purpose of the network is to supply the water to all demand
+%nodes.
+%
+%
+%
+%The network is assumed to be static, and the hydraulic results at
+%00:00 hours after EPANET simulation are considered for this work.
+%All of the results are produced using no more hydraulic information
+%then directed connectivity results. All pipes are assumed to be of
+%length 1.
 
 
-\section{Scenarios}
+%\section{Scenarios}
+%
+%
+%\subsection*{Case 1: Shutting down the network effectively stops the contaminant
+%beyond the actuator as well.}
+%
+%In this simpler case, there are no additional constraints on the actuator
+%placement problem beyond that of actuator edges being a min-cut of
+%the entire graph. The sensor and actuator placement problems are independent.
+%As long as the sensor network can detect the contaminant before it
+%reaches the demands and the actuation can happen immediately, the
+%full requirements are satisfied. Without additional constraints, the
+%formulation presented here deals with the case where detection is
+%not enforced before any demand node is compromised, viz. the partial
+%requirements.
 
 
-\subsection*{Case 1: Shutting down the network effectively stops the contaminant
-beyond the actuator as well.}
-
-In this simpler case, there are no additional constraints on the actuator
-placement problem beyond that of actuator edges being a min-cut of
-the entire graph. The sensor and actuator placement problems are independent.
-As long as the sensor network can detect the contaminant before it
-reaches the demands and the actuation can happen immediately, the
-full requirements are satisfied. Without additional constraints, the
-formulation presented here deals with the case where detection is
-not enforced before any demand node is compromised, viz. the partial
-requirements.
-
-
-\subsubsection*{Formulation}
-
+\subsubsection*{Formulating the problem as  Mixed Integer Linear Program (MILP)}
+\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. }
 A binary integer optimization problem is presented:
 
 \begin{eqnarray*}
