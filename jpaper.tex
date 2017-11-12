@@ -103,8 +103,8 @@ The water distribution network is represented as a deterministic weighted direct
 We are given complete information about the network - (sparse) adjacency matrix,
 list of nodes vulnerable to contamination,
 list of nodes which shouldn't be contaminated (demand nodes).
-All of the vulnerable nodes are infected (not necessarily at the same time), this is covered as Case 1.
-A subset of vulnerable nodes are contaminated - this required a modified solution - Case 2.
+All of the vulnerable nodes are infected (not necessarily at the same time) - case 1.
+A subset of vulnerable nodes are contaminated - this required a modified solution - case 2.
 There is no time delay in sensing, actuation, communication.
 
 \subsection{Requirements to be satisfied}
@@ -122,6 +122,7 @@ to all demand nodes.
 
 
 %\subsection{Case study network}
+% TODO
 %\textcolor{red}{This has to move to the end: No case study in the procedure}
 %
 %The algorithms were tested on a benchmark abstraction of an urban WDN; of Bangalore city, India.
@@ -162,26 +163,35 @@ to all demand nodes.
 
 
 \subsubsection*{Formulating the problem as  Mixed Integer Linear Program (MILP)}
-\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. }
+%\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. }
 A binary integer optimization problem is presented:
 
-\begin{eqnarray*}
-min & (\sum x_{i}+\sum z_{i})\\
-sub\\
-\mathbf{A}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & \leq & \mathbf{b}\\
-\mathbf{A_{eq}}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & = & \mathbf{b_{eq}}
-\end{eqnarray*}
+\begin{eqnarray}
+\begin{aligned}
+\text{PROBLEM I:}~~ min & (\sum x_{i}+\sum z_{i})\\
+\text{s.t.}~& \mathbf{A}
+p
+ \leq \mathbf{b}\\
+& \mathbf{A_{eq}}p =  \mathbf{b_{eq}}
+\end{aligned}
+\end{eqnarray}
+
+%\begin{eqnarray}
+%\begin{aligned} \text{PROBLEM II:}~~~ & \underset{x, y}{\text{min}}& & \sum_{k=1}^{m}y_{k} \\
+%& \text{s.t.} & &(J^Tx)_k \leq y_k\\
+%& & &-(J^Tx)_k \leq y_k\\
+%& & & x_i = 0, ~~\forall i \in S \\
+%& & &  x_j = 1, ~~ \forall j \in D  \\
+%& & &  x_i\in\{0,1\}, \ y_k \in\{0,1\} \\
+%\label{formulation}
+%\end{aligned}
+%\end{eqnarray}
 
 
-Where $\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
+Where, $  p=\begin{bmatrix}
+ \mathbf{x} & \mathbf{y} & \mathbf{z} \end{bmatrix}^{T}$
+
+$\mathbf{x}\equiv[x_{i}]$ is 1 if there exists a sensor at
 $i^{th}$node, 0 otherwise.
 
 $\mathbf{y}\equiv[y_{i}]$ is 1 if $i^{th}$node is in the demands
@@ -1042,8 +1052,9 @@ open-source toolboxes for sensor and actuator placement is a possible
 future action, which makes the techniques presented here much more
 accessible.
 
-\section*{References}
+\section{REFERENCES}
+%\begin{thebibliography}{00}
 \bibliographystyle{elsarticle-harv}
-\bibliography{jpaper.bib}
+\bibliography{jpaper}
 
 \end{document}
