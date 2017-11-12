@@ -1,8 +1,12 @@
-\documentclass[authoryear,preprint,review,11pt]{elsarticle}
+\documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
 
 \usepackage{amsmath,amssymb}
 % Natbib package is auto-loaded by elsarticle.cls
-
+\usepackage{color}
 % Remark and argmin
 \newtheorem{remark}{Remark}
 \DeclareMathOperator*{\argmin}{argmin}
@@ -16,7 +20,7 @@
 \begin{frontmatter}
 
 % TITLE
-\title{Simultaneous sensor and actuator placement for contaminant containment in water distribution networks}
+\title{Simultaneous Sensor and Actuator Placement for Contaminant Detection and Mitigation in Water Distribution Networks}
 %\title{Control of Hyperbolic PDE systems using Reduced Order
 %Models and Approximate Dynamic Programming}
 % AUTHORS
@@ -31,20 +35,13 @@
 
 % ABSTRACT
 \begin{abstract}
-Water distribution networks are acknowledged to be vulnerable to contamination, 
-and there are multiple proposed ways of handling the hazard, as reviewed in \cite{Hart2010,RATHI2014181}.
-A multi-objective mixed integer linear optimization formulation for
-simultaneously finding sensor and actuator placement strategies for
-detection and containment in water distribution networks is presented.
-This work assumes perfect, instant, digital sensors and actuators.
-The goal is to ensure observability of contaminants and prevent them
-from reaching consumption nodes. 
-The formulation involves tracking the minimum time to detection for each vulnerable node and placing actuators beyond the compromised nodes at that time. Agreement with \cite{PalletiActuator} results is seen. 
+Water Distribution Networks (WDNs) are considered to be part of the critical infrastructure of any city. WDNs are often exposed to either  accidental or intentional  contamination. Therefore, it is very important to protect the public form such kinds of incidents. These contaminants can be detected by deploying sensors in the work. Once the sensors detects the presence of a contamination, it is also necessary to take appropriate actions in order to mitigate the effects of contaminations. Therefore, in this paper, we propose an optimal simultaneous sensor and actuator  placement for contamination detection and mitigation in WDNs. A multi-objective mixed integer linear optimization formulation is proposed to obtain the optimal sensor and actuator placement. The proposed method is demonstrated on the real urban water distribution system.
+
 \end{abstract}
 
 % KEYWORDS
 \begin{keyword}
-Water distribution networks, observable sensor network, actuator network, contamination detection
+Water distribution networks, observable sensor network, actuator network, contamination detection and mitigation.
 \end{keyword}
 
 \end{frontmatter}
