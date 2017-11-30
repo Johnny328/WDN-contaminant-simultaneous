@@ -99,7 +99,20 @@ i.e. these are not independent problems, and these can be formulated as an integ
 % Time-delay in sensors of contaminant sensing, lengths of pipes, accuracy of sensing,
 % identification of which vulnerable node was affected, etc.
 % can be added onto this work easily, and are not considered here.
-The water distribution network is represented as a deterministic weighted directed graph.
+The water distribution network is represented as a deterministic weighted directed graph, 
+$G(V,E)$, where $E$ represents the edges or connections, and $V$ represents the vertices or 
+nodes.
+Nodes are used to represent sources, such as reservoirs or tanks from where water is supplied, 
+as well as demand points where water is consumed and taken out of the network. 
+All the junctions of pipes, such as those from pipes dividing or combining are also regarded as nodes.
+Pipes, valves, pumps, and other connections are represented as edges in the graph. 
+A typical city's WDN has several hundred nodes and edges.
+Intentional contamination generally only occurs at sources - tanks, reservoirs, fire hydrants. 
+Unintentional contamination can typically occur at any point in the WDN. 
+In this work, we develop techniques that can be used for the general case, where any set of nodes in the network can be contaminated.
+These potential sites of intrusion are referred to as vulnerable nodes.
+%The following simplifying assumptions are made in designing a sensor and actuator placement strategy for mitigation of contamination:
+
 We are given complete information about the network - (sparse) adjacency matrix,
 list of nodes vulnerable to contamination,
 list of nodes which shouldn't be contaminated (demand nodes).
