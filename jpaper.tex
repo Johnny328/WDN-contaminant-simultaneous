@@ -113,9 +113,15 @@ In this work, we develop techniques that can be used for the general case, where
 These potential sites of intrusion are referred to as vulnerable nodes.
 %The following simplifying assumptions are made in designing a sensor and actuator placement strategy for mitigation of contamination:
 
-We are given complete information about the network - (sparse) adjacency matrix,
-list of nodes vulnerable to contamination,
-list of nodes which shouldn't be contaminated (demand nodes).
+\subsection{Assumptions}
+\begin{itemize}
+\item We are given complete information about the network - (sparse) adjacency matrix,
+set of nodes vulnerable to contamination,
+set of nodes which should be prevented from contamination (demand nodes).
+\item Each affected node and sensor satisfies all conditions for sensors to identify
+the presence of contaminant, such as concentration of contaminants, flow rate, sensitivity of sensor, etc.\\
+\item This identification of contaminant is instant, binary and without error - neither false positives or false negatives.
+\end{itemize}
 All of the vulnerable nodes are infected (not necessarily at the same time) - case 1.
 A subset of vulnerable nodes are contaminated - this required a modified solution - case 2.
 There is no time delay in sensing, actuation, communication.
