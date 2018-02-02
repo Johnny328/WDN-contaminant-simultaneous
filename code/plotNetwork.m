@@ -67,7 +67,7 @@ end
 for k=1:length(demandNodes)
     xc = bsxfun(@plus, r .* cos(theta), xcoorID(demandNodes(k)));
     yc = bsxfun(@plus, r .* sin(theta), ycoorID(demandNodes(k)));
-    patch(xc+1*r, yc+1*r, 'white');
+    patch(xc+1*r, yc+1*r, 'blue');
 end
 polygonX = [-1 1 -1 1];
 polygonY = [1 -1 -1 1];
@@ -87,3 +87,12 @@ end
 axis equal;
 axis off;
 hold off;
+
+% Generating legend
+types = {'r', 'g', 'y', 'black', 'blue', 'm'};
+label = {'Source partition', 'Demand partition', 'Sensor nodes', 'Vulnerable nodes', 'Demand nodes', 'Actuator edges'};
+hold on;
+for il = 1:length(label)
+    hgroup(il) = patch(NaN, NaN, types{il});
+end
+legend(hgroup,label, 'Location', 'southeast');
