@@ -14,6 +14,7 @@
 \journal{Computers and Chemical Engineering}
 
 \begin{document}
+\scrollmode
 
 % *** FRONT MATTER: TITLE, AUTHORS, ABSTRACT ***
 % **********************************************
@@ -145,7 +146,7 @@ to all demand nodes.
 %\textcolor{red}{This has to move to the end: No case study in the procedure}
 %
 %The algorithms were tested on a benchmark abstraction of an urban WDN; of Bangalore city, India.
-%\begin{figure}[h]
+%\begin{figure}[ht]
 %    \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
 %the six others shown are pumps}
 %\end{figure}
@@ -271,7 +272,7 @@ the vulnerable nodes being in the first.
 Consider the graph represented by Figure 1, with demand node 6 and
 vulnerable nodes 1 and 2.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[scale=0.75]{images/testGraph}\caption{The example graph with 6 nodes and 9 edges}
 \end{figure}
 
@@ -373,12 +374,12 @@ $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 
 \subsubsection*{Results and verification}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[scale=0.4]{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
 \end{figure}
 
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering{}%
 \begin{tabular}{|c|c|}
 \hline
@@ -414,7 +415,7 @@ This is the same as \cite{Palleti2016246}.
 The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
 39, 47, 49, 50, 64, 81, 149, 154.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{centering}
 \includegraphics[width=\linewidth]{images/multiobj_indep}\caption{Results of independent placement case}
 
@@ -617,7 +618,7 @@ after removing edges.
 
 The distance to detection in this design is $0$ units.
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{tabular}{|c|c|c|c|}
 \hline
 Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
@@ -638,7 +639,7 @@ was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
 79, 89, 108, 110, 127 with 3 sensors (at nodes 40, 54, 67) and the
 same 9 vulnerable nodes.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V}\caption{Case where all possible vulnerable nodes are always attacked simultaneously\protect \\
 Green -- Demand partition\protect \\
 Red -- Vulnerable partition\protect \\
@@ -991,7 +992,7 @@ The network is verified to have no paths from vulnerable to demand
 after removing edges. The distance to detection is always lesser than
 the distance to the first actuators.
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{tabular}{|c|c|c|c|}
 \hline
 Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
@@ -1016,7 +1017,7 @@ Here for task 4, we get a solution with 26 cardinality: 17 actuators,
 9 sensors. The previous work does not require that no demand node
 be compromised though.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/zoneContainment_9sources}\caption{Sensor and actuator placement strategy for 9 vulnerable nodes\protect \\
 Green -- Demand partition\protect \\
 Red -- Vulnerable partition\protect \\
@@ -1024,7 +1025,7 @@ Black -- Vulnerable nodes\protect \\
 White -- Demand nodes\protect \\
 Yellow -- sensor nodes}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/containment_9sources_1downstreamSourceEach}\caption{Sensor and actuator placement strategy for 9 vulnerable nodes and
 instant downstream contamination\protect \\
 Green -- Demand partition\protect \\
@@ -1037,7 +1038,7 @@ Yellow -- sensor nodes}
 
 
 \section*{
-\begin{figure}[h]
+\begin{figure}[!hptb]
 \protect\includegraphics[width=\linewidth]{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{palleti_actuator_2018}, case of allowing demand nodes to be compromised
 \protect \\
 The cardinality is 21, the same as presented in the earlier work.}
@@ -1076,4 +1077,5 @@ accessible.
 \bibliographystyle{elsarticle-harv}
 \bibliography{jpaper}
 
+\batchmode
 \end{document}
