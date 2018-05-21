@@ -68,7 +68,7 @@ multiple real nodes and used sets of affected nodes to find a viable sensor plac
 Although, design of a sensor network to detect and identify intentional contamination of a WDN is important, it is also necessary to consider the potential action that one can take to mitigate the effect of the contaminant. Once the sensor network detects the presence of  a contaminant, U.S. Environmental Protection Agency's (USEPA) response protocol toolbox \citep{USEPA2004a} provides recommendations for implementation of specific responses to minimize the effect of contamination event. This protocol includes the detection, source identification followed by consequence management strategies. Various researchers have developed  methodologies related to the detection and source identification problems as described earlier. Once a contaminant has been detected, water utilities must evaluate the response to the contamination so that potential impact to the public can be minimized.  These consequence management strategies may include: (1) public notification, (2) isolation and containment of a contaminant through valve operations \citep{USEPA2004a}, (3) flushing the contamination system, and (4) combinations of isolation, notification, and flushing \citep{USEPA2004b}. Very few studies are available  with respect to the  mitigating actions that would be taken after detecting the presence of contaminant in the WDN \citep{Poulin2008-heuristic, Poulin-2010, Preis2008-Multiobjective,  Guidorzi2009-Amultiobjective, Alfonso2010-MultiobjectiveOptimization} . Heuristic  procedures are proposed   for isolating a contaminated area through the simultaneous closure of a number of valves in the system, assuming an unlimited number of response teams and subsequent removal of the contaminant by unidirectional
 flushing \cite{Poulin2008-heuristic, Poulin-2010} . \cite{Preis2008-Multiobjective} proposed a multi-objective approach with the aim of minimizing the number of operations to be performed and to reduce the consumption of contaminated water by consumers for a given  specific contamination event. Such an approach is  useful only when complete knowledge of the contaminant history is known (in terms of intrusion location,  duration and quantity of contaminant injected). Similarly,   multi-objective procedures were proposed  to identify the minimum number of operations that minimize the contaminated water consumption \citep{Guidorzi2009-Amultiobjective, Alfonso2010-MultiobjectiveOptimization}.  These approaches \citep{Guidorzi2009-Amultiobjective, Alfonso2010-MultiobjectiveOptimization}  have not considered the characteristics of the contamination event (i.e, location, duration and quantity of contaminant introduced). Later,  the problem of optimal scheduling of device activation in order to minimize the consumption of contaminated water after the detection of a contaminant has been studied by \cite{Alvisi345-Nearoptimal}.
 
-The previous studies focused on operational strategies to be implemented in the event of a contaminant detection assuming that valves are already present in the network. The design problem of optimal valve placement to minimize  the effects of  contamination events has not been reported in the literature. But recently, \cite{PALLETI_Actuator} proposed a methodology for design of actuator network for a given sensor network to mitigate contamination effects in WDNs. In their work, shut-off valves are placed on optimal number of pipes so that it is possible to shutdown the network to prevent the uncontaminated part of the network from the contaminated network.  Further, they design the actuator network assuming that the sensor network design has already been carried out and locations of sensors are known a priori. It means that the sensor and actuator network designs are carried out independently and they are decoupled.  In contrast to this work, in this paper, we obtain a sensor and actuator placement simultaneously for detection and mitigation of contamination effects.  Therefore, in this work we propose a multi-objective mixed integer linear optimization formulation is proposed to determine the simultaneous optimal sensor and actuator network. Also, we hypothesize that simultaneous sensor and actuator planning can be achieved and is more efficient than iterative non-linear optimization sequentially solving the two placement problems, %Check the appropriateness of the following.
+The previous studies focused on operational strategies to be implemented in the event of a contaminant detection assuming that valves are already present in the network. The design problem of optimal valve placement to minimize  the effects of  contamination events has not been reported in the literature. But recently, \cite{palleti_actuator_2018} proposed a methodology for design of actuator network for a given sensor network to mitigate contamination effects in WDNs. In their work, shut-off valves are placed on optimal number of pipes so that it is possible to shutdown the network to prevent the uncontaminated part of the network from the contaminated network.  Further, they design the actuator network assuming that the sensor network design has already been carried out and locations of sensors are known a priori. It means that the sensor and actuator network designs are carried out independently and they are decoupled.  In contrast to this work, in this paper, we obtain a sensor and actuator placement simultaneously for detection and mitigation of contamination effects.  Therefore, in this work we propose a multi-objective mixed integer linear optimization formulation is proposed to determine the simultaneous optimal sensor and actuator network. Also, we hypothesize that simultaneous sensor and actuator planning can be achieved and is more efficient than iterative non-linear optimization sequentially solving the two placement problems, %Check the appropriateness of the following.
 i.e. these are not independent problems, and these can be formulated as an integer linear program and solved.
 
 
@@ -132,7 +132,7 @@ that an attack on a subset of vulnerable nodes can be identified and
 the network shut down, preventing the contaminant
 from reaching the demand nodes.
 
-Secondary requirement %(same as in \cite{PalletiActuator}):
+Secondary requirement %(same as in \cite{palleti_actuator_2018}):
 A sensor and actuator placement strategy that might allow for initial
 contamination of some demand nodes, but will stop any further contamination
 to all demand nodes.
@@ -633,7 +633,7 @@ Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
 \end{table}
 
 
-In the previous work \cite{PalletiActuator}, the number of actuators suggested
+In the previous work \cite{palleti_actuator_2018}, the number of actuators suggested
 was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
 79, 89, 108, 110, 127 with 3 sensors (at nodes 40, 54, 67) and the
 same 9 vulnerable nodes.
@@ -754,7 +754,7 @@ $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
 to reality, viz. the demand nodes necessarily being in the demand
 partition and the vulnerable nodes being in the source. We might also
 include constraints to consider a few steps after vulnerable node
-to be necessarily in the source partition, as done in \cite{PalletiActuator}.
+to be necessarily in the source partition, as done in \cite{palleti_actuator_2018}.
 
 We use the shortest distances from each of the vulnerable nodes to
 all other nodes in the graph to model time to contamination. We're
@@ -1007,7 +1007,7 @@ Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
 \end{table}
 
 
-In the previous work \cite{PalletiActuator}, the similar task was partial shutdown
+In the previous work \cite{palleti_actuator_2018}, the similar task was partial shutdown
 of WDN. The number of actuators suggested was 20 viz. 2, 12, 16, 24,
 30, 38, 40, 48, 51, 52, 67, 71, 76, 86, 79, 89, 108, 110, 127, 112
 with 3 sensors (at nodes 40, 54, 67) and the same 9 vulnerable nodes.
@@ -1038,7 +1038,7 @@ Yellow -- sensor nodes}
 
 \section*{
 \begin{figure}[h]
-\protect\includegraphics[width=\linewidth]{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{PalletiActuator}, case of allowing demand nodes to be compromised
+\protect\includegraphics[width=\linewidth]{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{palleti_actuator_2018}, case of allowing demand nodes to be compromised
 \protect \\
 The cardinality is 21, the same as presented in the earlier work.}
 \end{figure}
@@ -1054,7 +1054,7 @@ area in the event of an attack on the WDN. We proposed a multi-objective
 linear programming formulation that gives the optimal sensor and actuator
 cardinality.
 
-The formulation can reproduce the results of \cite{PalletiActuator} after relaxing
+The formulation can reproduce the results of \cite{palleti_actuator_2018} after relaxing
 the full requirements to partial, viz. to prevent further contamination
 of demand nodes.
 
