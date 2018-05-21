@@ -182,7 +182,7 @@ to all demand nodes.
 %requirements.
 
 
-\subsubsection*{Formulating the problem as  Mixed Integer Linear Program (MILP)}
+\subsubsection{Formulating the problem as  Mixed Integer Linear Program (MILP)}
 %\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. }
 A binary integer optimization problem is presented:
 
@@ -267,7 +267,7 @@ to reality, i.e. the demand nodes being in the second partition and
 the vulnerable nodes being in the first.
 
 
-\subsubsection*{Small network example}
+\subsubsection{Small network example}
 
 Consider the graph represented by Figure 1, with demand node 6 and
 vulnerable nodes 1 and 2.
@@ -372,7 +372,7 @@ $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 \end{array}\right]$\\
 
 
-\subsubsection*{Results and verification}
+\subsubsection{Results and verification}
 
 \begin{figure}[ht]
 \includegraphics[scale=0.4]{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
@@ -429,14 +429,14 @@ The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
 
 
 
-\subsection*{Case 2: The contaminant must be contained in the vulnerable side
+\subsection{Case 2: The contaminant must be contained in the vulnerable side
 of actuator network; attacks occur on all vulnerable nodes at once}
 
 This case is not trivial as the positions of the sensors must be used
 as input, i.e. they must be on the vulnerable side of actuators.
 
 
-\subsubsection*{Formulation}
+\subsubsection{Formulation}
 
 Formulating as binary integer optimization problem:
 
@@ -546,7 +546,7 @@ as follows: $\left[\begin{array}{ccccc}
 -M\end{array}\right]$. This completes the formulation.
 
 
-\subsubsection*{Small network example}
+\subsubsection{Small network example}
 
 Consider the same network in Figure 1, with the two vulnerable nodes
 (1, 2) and one demand node (6).
@@ -609,7 +609,7 @@ a+\frac{a}{M}
 This ensures that $\mathbf{S}_{i}$ is greater than $a$ for all nodes $i$.
 
 
-\subsubsection*{Results and verification}
+\subsubsection{Results and verification}
 
 
 
@@ -649,11 +649,11 @@ White -- Demand nodes}
 
 
 
-\subsection*{\label{sub:Case-3:-Vulnerable}Case 3: Vulnerable nodes may be attacked
+\subsection{\label{sub:Case-3:-Vulnerable}Case 3: Vulnerable nodes may be attacked
 individually}
 
 
-\subsubsection*{Solution formulation}
+\subsubsection{Solution formulation}
 
 Formulating as mixed integer linear optimization problem:
 
@@ -792,7 +792,7 @@ When $\mathbf{w}_{i}$ is $M$, the constraint is always satisfied
 as $M^{2}$is several orders of magnitude greater than $2*M$.
 
 
-\subsubsection*{Small network example}
+\subsubsection{Small network example}
 
 Consider the same network in Figure 1, with the two vulnerable nodes
 (1, 2) and one demand node (6).
@@ -986,7 +986,7 @@ d_{2}
 
 
 
-\subsubsection*{Results and verification}
+\subsubsection{Results and verification}
 
 The network is verified to have no paths from vulnerable to demand
 after removing edges. The distance to detection is always lesser than
@@ -1037,13 +1037,13 @@ Yellow -- sensor nodes}
 
 
 
-\section*{
+\section{Validation of \cite{palleti_actuator_2018}}
 \begin{figure}[!hptb]
 \protect\includegraphics[width=\linewidth]{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{palleti_actuator_2018}, case of allowing demand nodes to be compromised
 \protect \\
 The cardinality is 21, the same as presented in the earlier work.}
 \end{figure}
-}
+
 
 
 \section{Conclusions and future work}
