@@ -7,6 +7,8 @@
 \usepackage{amsmath,amssymb}
 % Natbib package is auto-loaded by elsarticle.cls
 \usepackage{color}
+% Hyperref for hyperlinked cross references
+\usepackage{hyperref}
 % Remark and argmin
 \newtheorem{remark}{Remark}
 \DeclareMathOperator*{\argmin}{argmin}
@@ -1024,6 +1026,7 @@ Red -- Vulnerable partition\protect \\
 Black -- Vulnerable nodes\protect \\
 White -- Demand nodes\protect \\
 Yellow -- sensor nodes}
+    \label{fig:zoneContainment_9sources}
 \end{figure}
 \begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/containment_9sources_1downstreamSourceEach}\caption{Sensor and actuator placement strategy for 9 vulnerable nodes and
@@ -1033,15 +1036,19 @@ Red -- Vulnerable partition\protect \\
 Black -- Vulnerable nodes\protect \\
 White -- Demand nodes\protect \\
 Yellow -- sensor nodes}
+    \label{fig:containment_9sources_1downstreamSourceEach}
 \end{figure}
 
 
 
 \section{Validation of \cite{palleti_actuator_2018}}
+The results of the scenario explored in \cite{palleti_actuator_2018} are presented in \autoref{fig:cardinality21-Venkat-results-reproduced}
 \begin{figure}[!hptb]
 \protect\includegraphics[width=\linewidth]{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{palleti_actuator_2018}, case of allowing demand nodes to be compromised
 \protect \\
 The cardinality is 21, the same as presented in the earlier work.}
+
+    \label{fig:cardinality21-Venkat-results-reproduced}
 \end{figure}
 
 
