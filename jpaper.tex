@@ -166,13 +166,17 @@ A subset of vulnerable nodes are contaminated - this required a modified solutio
 \subsection{Requirements of a solution} % TODO
 A distribution of sensors on nodes and actuators on edges such
 that an attack on a subset of vulnerable nodes can be identified and
-the network shut down, preventing the contaminant
-from reaching the demand nodes.
+the network shut down.
 
-Secondary requirement %(same as in \cite{palleti_actuator_2018}): % TODO verify that we should not cite
-A sensor and actuator placement strategy that might allow for initial
-contamination of some demand nodes, but will stop any further contamination
-to all demand nodes.
+Three \hyperref[sec:Scenarios]{scenarios} with different and progressive requirements
+of a solution are explored in this work, with the differences in formalism illustrated
+with an example network.
+
+
+%Secondary requirement %(same as in \cite{palleti_actuator_2018}): % TODO verify that we should not cite
+%A sensor and actuator placement strategy that might allow for initial
+%contamination of some demand nodes, but will stop any further contamination
+%to all demand nodes.
 
 
 
@@ -471,7 +475,7 @@ The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
 of actuator network; attacks occur on all vulnerable nodes at once}
 
 This case is not trivial as the positions of the sensors must be used
-as input, i.e. they must be on the vulnerable side of actuators.
+as input, i.e. time-dependent spread of each contaminant must be on the contained on one side of actuation.
 
 
 \subsubsection{Formulation}
