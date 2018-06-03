@@ -201,21 +201,23 @@ to all demand nodes.
 %length 1.
 
 
-%\section{Scenarios}
-%
-%
-%\subsection*{Case 1: Shutting down the network effectively stops the contaminant
-%beyond the actuator as well.}
-%
-%In this simpler case, there are no additional constraints on the actuator
-%placement problem beyond that of actuator edges being a min-cut of
-%the entire graph. The sensor and actuator placement problems are independent.
-%As long as the sensor network can detect the contaminant before it
-%reaches the demands and the actuation can happen immediately, the
-%full requirements are satisfied. Without additional constraints, the
-%formulation presented here deals with the case where detection is
-%not enforced before any demand node is compromised, viz. the partial
-%requirements.
+\section{Scenarios \label{sec:Scenarios}}
+
+
+\subsection{Case 1: Shutting down the network effectively stops the contaminant
+beyond the actuator as well.} % TODO possible move this to a key assumption/description subsection
+
+In this simpler case, there are no additional constraints on the actuator
+placement problem beyond that of actuator edges being a min-cut of
+the entire graph. That is, the removal of the set of actuator edges must partition the
+network into two - one with all the vulnerable nodes, and one with all the demand nodes.
+We assert that the sensor and actuator placement problems are independent. % TODO Proof?
+As long as the sensor network can detect the contaminant before it
+reaches the demand nodes and the actuation can happen immediately, the
+full requirements are satisfied. Without additional constraints, the
+formulation presented here deals with the case where detection is
+not enforced before any demand node is compromised, viz. the partial
+requirements. % TODO this is partial requirements. Change that in entire paragraph
 
 
 \subsubsection{Formulating the problem as  Mixed Integer Linear Program (MILP)}
