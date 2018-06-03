@@ -208,8 +208,8 @@ with an example network.
 \section{Scenarios \label{sec:Scenarios}}
 
 
-\subsection{Case 1: Shutting down the network effectively stops the contaminant
-beyond the actuator as well.} % TODO possible move this to a key assumption/description subsection
+\subsection{Scenario 1: Shutting down the network effectively stops the contaminant
+beyond the actuator as well. \label{sub:Scenario-1:vacuum}} % TODO possible move this to a key assumption/description subsection
 
 In this simpler case, there are no additional constraints on the actuator
 placement problem beyond that of actuator edges being a min-cut of
@@ -472,8 +472,8 @@ The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
 
 
 
-\subsection{Case 2: The contaminant must be contained in the vulnerable side
-of actuator network; attacks occur on all vulnerable nodes at once}
+\subsection{Scenario 2: The contaminant must be contained in the vulnerable side
+of actuator network; attacks occur on all vulnerable nodes at once \label{sub:Scenario-2:containment}}
 
 This case is not trivial as the positions of the sensors must be used
 as input, i.e. time-dependent spread of each contaminant must be on the contained on one side of actuation.
@@ -683,7 +683,7 @@ was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
 same 9 vulnerable nodes.
 
 \begin{figure}[ht]
-\includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V}\caption{Case where all possible vulnerable nodes are always attacked simultaneously\protect \\
+\includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V}\caption{Scenario where all possible vulnerable nodes are always attacked simultaneously\protect \\
 Green -- Demand partition\protect \\
 Red -- Vulnerable partition\protect \\
 Black -- Vulnerable nodes\protect \\
@@ -692,7 +692,7 @@ White -- Demand nodes}
 
 
 
-\subsection{\label{sub:Case-3:-Vulnerable}Case 3: Vulnerable nodes may be attacked
+\subsection{\label{sub:Scenario-3:independent-vulnerable}Scenario 3: Vulnerable nodes may be attacked
 individually}
 
 
