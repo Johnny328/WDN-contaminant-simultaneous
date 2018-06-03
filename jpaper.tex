@@ -74,7 +74,7 @@ The problems of contaminant detection in WDNs and appropriate response to a cont
 of sensors for each of the vulnerable nodes was developed by \cite{Palleti2016246}. In this paper,  the graph abstraction of water distribution networks with vulnerable nodes representing
 multiple real nodes and used sets of affected nodes to find a viable sensor placement.
 
-%Recently, the problem of sensor placement, which ensures observability and identifiability conditions has also been studied by .
+%Recently, the problem of sensor placement, which ensures observability and identifiability conditions has also been studied by . % TODO
 
 Although, design of a sensor network to detect and identify intentional contamination of a WDN is important, it is also necessary to consider the potential action that one can take to mitigate
 the effect of the contaminant. Once the sensor network detects the presence of  a contaminant, U.S. Environmental Protection Agency's (USEPA) response protocol toolbox \citep{USEPA2004a} provides recommendations for implementation of specific responses to minimize the effect of contamination event. This protocol includes the detection, source identification followed by consequence management strategies. Various researchers have developed  methodologies related to the detection and source
@@ -163,13 +163,13 @@ These potential sites of intrusion are referred to as vulnerable nodes.
 All of the vulnerable nodes are infected (not necessarily at the same time) - case 1.
 A subset of vulnerable nodes are contaminated - this required a modified solution - case 2.
 
-\subsection{Requirements of a solution}
+\subsection{Requirements of a solution} % TODO
 A distribution of sensors on nodes and actuators on edges such
 that an attack on a subset of vulnerable nodes can be identified and
 the network shut down, preventing the contaminant
 from reaching the demand nodes.
 
-Secondary requirement %(same as in \cite{palleti_actuator_2018}):
+Secondary requirement %(same as in \cite{palleti_actuator_2018}): % TODO verify that we should not cite
 A sensor and actuator placement strategy that might allow for initial
 contamination of some demand nodes, but will stop any further contamination
 to all demand nodes.
@@ -219,7 +219,7 @@ to all demand nodes.
 
 
 \subsubsection{Formulating the problem as  Mixed Integer Linear Program (MILP)}
-%\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. }
+%\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. } % TODO
 A binary integer optimization problem is presented:
 
 \begin{eqnarray}
@@ -257,7 +257,7 @@ $\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
 0 otherwise.
 
 Hence the vector $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & \mathbf{y} & \mathbf{z}\end{array}}\right]$ is of length $2*N+E$.
+\mathbf{x} & \mathbf{y} & \mathbf{z}\end{array}}\right]$ is of length $2*N+E$. % TODO define N and E
 
 $A=\left[\begin{array}{cc}
 A_{1} & \mathbf{0}\\
@@ -273,7 +273,7 @@ b_{eq1}\\
 b_{eq2}
 \end{array}\right]$.
 
-$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with
+$A_{1}$ is a matrix of vulnerable nodes versus affected nodes, with
 $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
 in graph.
 
@@ -310,7 +310,7 @@ vulnerable nodes 1 and 2.
 
 \begin{figure}[ht]
 \includegraphics[scale=0.75]{images/testGraph}\caption{The example graph with 6 nodes and 9 edges}
-\end{figure}
+\end{figure} % TODO change to venkat's example network
 
 
 Formulating as binary integer optimization problem:
@@ -348,7 +348,7 @@ b_{eq1}\\
 b_{eq2}
 \end{array}\right]$.\\
 
-$A_{1}$ is a matrix of vulnerable nodes vs. affected nodes, with $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node in graph.\\
+$A_{1}$ is a matrix of vulnerable nodes versus affected nodes, with $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node in graph.\\ % TODO ask about using 'vs.' and 'versus'
 
 
 \scalebox{0.8}{
