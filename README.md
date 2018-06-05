@@ -18,7 +18,9 @@ testMultiObj.m
 
 
 ## TODO
-multiobj_indep generation missing, legend.
-containment_attackAtOnce_9V genration missing, legend.
-zoneContainment_9sources - check antialiasing for the generated file in final PDF
-containment_9sources_1downstreamSourceEach - verify, check anti aliasing
+
+### Done
+containment_attackAtOnce_9V genration missing, legend. Done, same as testContainment 2nd test
+zoneContainment_9sources - check antialiasing for the generated file in final PDF. Done, no anti-aliasing in PDF.
+containment_9sources_1downstreamSourceEach - verify, check anti aliasing. Done, Generated zoneContainment_1downstreameach_legend
+multiobj_indep generation missing, legend. Done, generated exact graph with legend
