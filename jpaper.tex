@@ -207,8 +207,13 @@ with an example network.
 \section{Scenarios \label{sec:Scenarios}}
 
 
-\subsection{Scenario 1: Shutting down the network effectively stops the contaminant
-beyond the actuator as well. \label{sub:Scenario-1:vacuum}} % TODO possible move this to a key assumption/description subsection
+\subsection{Scenario of vacuum pipes \label{sub:Scenario-1:vacuum}}
+\subsubsection{Key assumptions} % TODO maybe 'scenario description' is better?
+\begin{itemize}
+    \item Shutting down the network effectively stops the contaminant
+beyond the actuator as well.
+    \item Finite amount of contaminant is allowed reach the demand nodes} % TODO Look into separate scenario for this
+\end{itemize}
 
 In this simpler case, there are no additional constraints on the actuator
 placement problem beyond that of actuator edges being a min-cut of
@@ -471,9 +476,13 @@ The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
 
 
 
-\subsection{Scenario 2: The contaminant must be contained in the vulnerable side
-of actuator network; attacks occur on all vulnerable nodes at once \label{sub:Scenario-2:containment}}
-
+\subsection{Scenario of simultaneous attack \label{sub:Scenario-2:containment}}
+\subsubsection{Key assumptions}
+\begin{itemize}
+    \item  The contaminant must be contained in the vulnerable side
+    of actuator network.
+    \item Contamination attacks occur on all vulnerable nodes at once.
+\end{itemize}
 This case is not trivial as the positions of the sensors must be used
 as input, i.e. time-dependent spread of each contaminant must be on the contained on one side of actuation.
 
@@ -691,8 +700,11 @@ White -- Demand nodes}
 
 
 
-\subsection{\label{sub:Scenario-3:independent-vulnerable}Scenario 3: Vulnerable nodes may be attacked
-individually}
+\subsection{\label{sub:Scenario-3:independent-vulnerable}Scenario of independent attacks}
+\subsubsection{Key assumptions}
+\begin{itemize}
+    \item  Vulnerable nodes may be attacked independently, at different time points or not at all.
+\end{itemize}
 
 
 \subsubsection{Solution formulation}
