@@ -215,18 +215,17 @@ beyond the actuator as well.
     \item Finite amount of contaminant is allowed reach the demand nodes} % TODO Look into separate scenario for this
 \end{itemize}
 
-In this simpler case, there are no additional constraints on the actuator
+In this simpler scenario, there are no additional constraints on the actuator
 placement problem beyond that of actuator edges being a min-cut of
-the entire graph. That is, the removal of the set of actuator edges must partition the
+the entire graph. That is, the removal of the pipes in the water distribution
+network corresponding to the set of actuator edges must partition the
 network into two - one with all the vulnerable nodes, and one with all the demand nodes.
 We assert that the sensor and actuator placement problems are independent. % TODO Proof?
-As long as the sensor network can detect the contaminant before it
-reaches the demand nodes and the actuation can happen immediately, the
-full requirements are satisfied. Without additional constraints, the
-formulation presented here deals with the case where detection is
-not enforced before any demand node is compromised, viz. the partial
-requirements. % TODO this is partial requirements. Change that in entire paragraph
-
+As long as the sensor network detects the contaminant before it
+reaches the demand nodes and the actuation happens immediately, no demand node is compromised.
+But without additional constraints, this is not guaranteed viz. the
+formulation presented here minimizes the number of sensor nodes even at the
+cost of late (post-compromise) detection.
 
 \subsubsection{Formulating the problem as  Mixed Integer Linear Program (MILP)}
 \textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. Venkat, yes, but this is just the simplest scenario.} % TODO
@@ -484,7 +483,7 @@ The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
     \item Contamination attacks occur on all vulnerable nodes at once.
 \end{itemize}
 This case is not trivial as the positions of the sensors must be used
-as input, i.e. time-dependent spread of each contaminant must be on the contained on one side of actuation.
+as input, i.e. time-dependent total spread of each contaminant must be on the contained at time of actuation.
 
 
 \subsubsection{Formulation}
