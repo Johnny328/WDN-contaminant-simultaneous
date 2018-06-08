@@ -179,31 +179,6 @@ with an example network.
 
 
 
-
-%\subsection{Case study network}
-% TODO
-%\textcolor{red}{This has to move to the end: No case study in the procedure}
-%
-%The algorithms were tested on a benchmark abstraction of an urban WDN; of Bangalore city, India.
-%\begin{figure}[ht]
-%    \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
-%the six others shown are pumps}
-%\end{figure}
-% It has 3 reservoirs and 6 pumps, which are considered vulnerable
-%nodes. 24 demand nodes are presented in the network. The network consists
-%of 116 pipes, 29 control valves, 3 on-off valves and 7 pumps. The
-%primary purpose of the network is to supply the water to all demand
-%nodes.
-%
-%
-%
-%The network is assumed to be static, and the hydraulic results at
-%00:00 hours after EPANET simulation are considered for this work.
-%All of the results are produced using no more hydraulic information
-%then directed connectivity results. All pipes are assumed to be of
-%length 1.
-
-
 \section{Scenarios \label{sec:Scenarios}}
 
 
@@ -419,59 +394,7 @@ $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 
 
 \subsubsection{Results and verification}
-
-\begin{figure}[ht]
-\includegraphics[scale=0.4]{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
-\end{figure}
-
-
-\begin{table}[ht]
-\centering{}%
-\begin{tabular}{|c|c|}
-\hline
-Vulnerable Nodes & Sensor Nodes\tabularnewline
-\hline
-\hline
-1 & 41, 70, 85\tabularnewline
-\hline
-2 & 41, 85\tabularnewline
-\hline
-3 & 70\tabularnewline
-\hline
-19 & 41\tabularnewline
-\hline
-32 & 70\tabularnewline
-\hline
-37 & 41\tabularnewline
-\hline
-39 & 41\tabularnewline
-\hline
-53 & 85\tabularnewline
-\hline
-66 & 70\tabularnewline
-\hline
-\end{tabular}\caption{Vulnerable nodes and their corresponding sensor nodes}
-\end{table}
-
-
-It takes three sensors to detect contaminant with no other requirements.
-
-This is the same as \cite{Palleti2016246}.
-
-The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
-39, 47, 49, 50, 64, 81, 149, 154.
-
-\begin{figure}[ht]
-\begin{centering}
-\includegraphics[width=\linewidth]{images/multiobj_indep}\caption{Results of independent placement case}
-
-\par\end{centering}
-
-\end{figure}
-
-
-
-
+Actuator edges are verified to be a min-cut of the network. Sensor edges are verified to exist downstream of evrey vulnerable node.
 
 
 
@@ -660,42 +583,9 @@ This ensures that $\mathbf{S}_{i}$ is greater than $a$ for all nodes $i$.
 
 
 \subsubsection{Results and verification}
-
-
-
 The network is verified to have no paths from vulnerable to demand
 after removing edges.
-
 The distance to detection in this design is $0$ units.
-
-\begin{table}[ht]
-\begin{tabular}{|c|c|c|c|}
-\hline
-Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
-\hline
-\hline
-    1,2,3,19,32,37,39,53,66 & 0 & 19,39,53,66 & \begin{tabular}[c]{@{}c@{}}1,13,27,30,38,39,40,44,\\51,52,68,72,80,87,90,103,150,149\end{tabular}\tabularnewline
-\hline
-1,2,3 & 0 & 1,2,3 & 1,4,68\tabularnewline
-\hline
-131,20 & 0 & 131 & 27, 30, 37\tabularnewline
-\hline
-\end{tabular}\caption{The distance to detection for different sets of vulnerable nodes}
-\end{table}
-
-
-In the previous work \cite{palleti_actuator_2018}, the number of actuators suggested
-was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
-79, 89, 108, 110, 127 with 3 sensors (at nodes 40, 54, 67) and the
-same 9 vulnerable nodes.
-
-\begin{figure}[ht]
-\includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V}\caption{Scenario where all possible vulnerable nodes are always attacked simultaneously\protect \\
-Green -- Demand partition\protect \\
-Red -- Vulnerable partition\protect \\
-Black -- Vulnerable nodes\protect \\
-White -- Demand nodes}
-\end{figure}
 
 
 
@@ -1045,6 +935,113 @@ The network is verified to have no paths from vulnerable to demand
 after removing edges. The distance to detection is always lesser than
 the distance to the first actuators.
 
+
+
+
+\section{Case study network}
+
+The algorithms for each scenario were tested on a benchmark abstraction of an urban WDN - one based on Bangalore city, India.
+\begin{figure}[ht]
+   \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
+the six others shown are pumps}
+\end{figure}
+It has 3 reservoirs and 6 pumps, all of which are considered vulnerable
+nodes. 24 demand nodes are presented in the network. The network consists
+of 116 pipes, 29 control valves, 3 on-off valves and 7 pumps. The
+primary purpose of the network is to supply the water to all demand
+nodes. % TODO Cite the source paper for the network
+
+The network is assumed to be static, and the hydraulic results at
+00:00 hours after EPANET simulation are considered for this work.
+All of the results are produced using no more data than the directed
+connectivity results. All pipes are assumed to be of length $1$.
+
+\subsection{Results}
+\subsubsection{Scenario of vacuum pipes}
+\begin{figure}[ht]
+    \includegraphics[scale=0.4]{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
+\end{figure}
+
+
+\begin{table}[ht]
+\centering{}%
+\begin{tabular}{|c|c|}
+\hline
+Vulnerable Nodes & Sensor Nodes\tabularnewline
+\hline
+\hline
+1 & 41, 70, 85\tabularnewline
+\hline
+2 & 41, 85\tabularnewline
+\hline
+3 & 70\tabularnewline
+\hline
+19 & 41\tabularnewline
+\hline
+32 & 70\tabularnewline
+\hline
+37 & 41\tabularnewline
+\hline
+39 & 41\tabularnewline
+\hline
+53 & 85\tabularnewline
+\hline
+66 & 70\tabularnewline
+\hline
+\end{tabular}\caption{Vulnerable nodes and their corresponding sensor nodes}
+\end{table}
+
+
+It takes three sensors to detect contaminant with no other requirements.
+
+This is the same as \cite{Palleti2016246}.
+
+The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
+39, 47, 49, 50, 64, 81, 149, 154.
+
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=\linewidth]{images/multiobj_indep}\caption{Results of independent placement case}
+
+\par\end{centering}
+
+\end{figure}
+
+
+
+\subsubsection{Scenario of simultaneous attack}
+\begin{table}[ht]
+\begin{tabular}{|c|c|c|c|}
+\hline
+Vulnerable Nodes & Time to sense & Sensor nodes & Actuator edges\tabularnewline
+\hline
+\hline
+    1,2,3,19,32,37,39,53,66 & 0 & 19,39,53,66 & \begin{tabular}[c]{@{}c@{}}1,13,27,30,38,39,40,44,\\51,52,68,72,80,87,90,103,150,149\end{tabular}\tabularnewline
+\hline
+1,2,3 & 0 & 1,2,3 & 1,4,68\tabularnewline
+\hline
+131,20 & 0 & 131 & 27, 30, 37\tabularnewline
+\hline
+\end{tabular}\caption{The distance to detection for different sets of vulnerable nodes}
+\end{table}
+
+
+In the previous work \cite{palleti_actuator_2018}, the number of actuators suggested
+was 19 viz. 2, 12, 16, 24, 30, 38, 40, 48, 51, 52, 67, 71, 76, 86,
+79, 89, 108, 110, 127 with 3 sensors (at nodes 40, 54, 67) and the
+same 9 vulnerable nodes.
+
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V}\caption{Scenario where all possible vulnerable nodes are always attacked simultaneously\protect \\
+Green -- Demand partition\protect \\
+Red -- Vulnerable partition\protect \\
+Black -- Vulnerable nodes\protect \\
+White -- Demand nodes}
+\end{figure}
+
+
+
+\subsubsection{Scenario of independent attacks}
 \begin{table}[ht]
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -1089,6 +1086,7 @@ White -- Demand nodes\protect \\
 Yellow -- sensor nodes}
     \label{fig:containment_9sources_1downstreamSourceEach}
 \end{figure}
+
 
 
 
