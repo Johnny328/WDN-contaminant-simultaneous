@@ -177,33 +177,7 @@ with an example network.
 %contamination of some demand nodes, but will stop any further contamination
 %to all demand nodes.
 
-
-
-\section{Scenarios \label{sec:Scenarios}}
-
-
-\subsection{Scenario of vacuum pipes \label{sub:Scenario-1:vacuum}}
-\subsubsection{Key assumptions} % TODO maybe 'scenario description' is better?
-\begin{itemize}
-    \item Shutting down the network effectively stops the contaminant
-beyond the actuator as well.
-    \item Finite amount of contaminant is allowed reach the demand nodes} % TODO Look into separate scenario for this
-\end{itemize}
-
-In this simpler scenario, there are no additional constraints on the actuator
-placement problem beyond that of actuator edges being a min-cut of
-the entire graph. That is, the removal of the pipes in the water distribution
-network corresponding to the set of actuator edges must partition the
-network into two - one with all the vulnerable nodes, and one with all the demand nodes.
-We assert that the sensor and actuator placement problems are independent. % TODO Proof?
-As long as the sensor network detects the contaminant before it
-reaches the demand nodes and the actuation happens immediately, no demand node is compromised.
-But without additional constraints, this is not guaranteed viz. the
-formulation presented here minimizes the number of sensor nodes even at the
-cost of late (post-compromise) detection.
-
-\subsubsection{Formulating the problem as  Mixed Integer Linear Program (MILP)}
-\textcolor{red}{Suhas:what is the base problem . I am guessing that the following is the base problem for all the cases. Venkat, yes, but this is just the simplest scenario.} % TODO
+\section{Formulating the problem as  Mixed Integer Linear Program (MILP)}
 A binary integer optimization problem is presented:
 
 \begin{eqnarray}
@@ -283,11 +257,37 @@ $A_{eq1}=b_{eq1}=\mathbf{O}$
 
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
-to reality, i.e. the demand nodes being in the second partition and
-the vulnerable nodes being in the first.
+to the constraints of the specific scenario, for example, that the
+demand nodes should be in the second partition and that the vulnerable nodes
+should be in the first.
 
 
-\subsubsection{Small network example}
+
+\section{Scenarios \label{sec:Scenarios}}
+
+
+\subsection{Scenario of vacuum pipes \label{sub:Scenario-1:vacuum}}
+\subsubsection{Key assumptions} % TODO maybe 'scenario description' is better?
+\begin{itemize}
+    \item Shutting down the network effectively stops the contaminant
+beyond the actuator as well.
+    \item Finite amount of contaminant is allowed reach the demand nodes} % TODO Look into separate scenario for this
+\end{itemize}
+
+In this simpler scenario, there are no additional constraints on the actuator
+placement problem beyond that of actuator edges being a min-cut of
+the entire graph. That is, the removal of the pipes in the water distribution
+network corresponding to the set of actuator edges must partition the
+network into two - one with all the vulnerable nodes, and one with all the demand nodes.
+We assert that the sensor and actuator placement problems are independent. % TODO Proof?
+As long as the sensor network detects the contaminant before it
+reaches the demand nodes and the actuation happens immediately, no demand node is compromised.
+But without additional constraints, this is not guaranteed viz. the
+formulation presented here minimizes the number of sensor nodes even at the
+cost of late (post-compromise) detection.
+
+
+\subsubsection{Illustrative artificial network example}
 
 Consider the graph represented by \ref{fig:small_network}, with demand node 6 and
 vulnerable nodes 1 and 2.
@@ -519,7 +519,7 @@ as follows: $\left[\begin{array}{ccccc}
 -M\end{array}\right]$. This completes the formulation.
 
 
-\subsubsection{Small network example}
+\subsubsection{Illustrative artificial network example}
 
 Consider the same network in Figure 1, with the two vulnerable nodes
 (1, 2) and one demand node (6).
@@ -735,7 +735,7 @@ When $\mathbf{w}_{i}$ is $M$, the constraint is always satisfied
 as $M^{2}$is several orders of magnitude greater than $2*M$.
 
 
-\subsubsection{Small network example}
+\subsubsection{Illustrative artificial network example}
 
 Consider the same network in Figure 1, with the two vulnerable nodes
 (1, 2) and one demand node (6).
