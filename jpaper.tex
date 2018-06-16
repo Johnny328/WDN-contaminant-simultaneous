@@ -177,7 +177,7 @@ with an example network.
 %contamination of some demand nodes, but will stop any further contamination
 %to all demand nodes.
 
-\section{Formulating the problem as  Mixed Integer Linear Program (MILP)}
+\section{Base problem: Formulating as Mixed Integer Linear Program (MILP)}
 A binary integer optimization problem is presented:
 
 \begin{eqnarray}
@@ -220,7 +220,7 @@ Hence the vector $\left[\mathbf{\begin{array}{ccc}
 $A=\left[\begin{array}{cc}
 A_{1} & \mathbf{0}\\
 \mathbf{0} & A_{2}
-\end{array}\right]$, $A=\left[\begin{array}{cc}
+\end{array}\right]$, $A_{eq}=\left[\begin{array}{cc}
 A_{eq1} & \mathbf{0}\\
 \mathbf{0} & A_{eq2}
 \end{array}\right]$, $b=\left[\begin{array}{c}
@@ -293,11 +293,11 @@ Consider the graph represented by \ref{fig:small_network}, with demand node 6 an
 vulnerable nodes 1 and 2.
 
 \begin{figure}[ht]
-\includegraphics[scale=0.75]{images/testGraph}\caption{The example graph with 6 nodes and 9 edges}
+\includegraphics[scale=0.75]{images/testGraph}\caption{A graph with 6 nodes and 9 edges}
     \label{fig:small_network}
 \end{figure} % TODO change to venkat's example network
 
-
+This scenario is the same as the base case.
 Formulating as binary integer optimization problem:
 
 \begin{eqnarray*}
@@ -333,7 +333,9 @@ b_{eq1}\\
 b_{eq2}
 \end{array}\right]$.\\
 
-$A_{1}$ is a matrix of vulnerable nodes versus affected nodes, with $A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node in graph.\\ % TODO ask about using 'vs.' and 'versus'
+$A_{1}$ is a matrix of vulnerable nodes versus affected nodes, with
+$A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
+in graph.\\ % Must use versus
 
 
 \scalebox{0.8}{
@@ -377,10 +379,12 @@ J & I_{E\times E}\end{array}\right]=\left[\begin{array}{ccccccccccccccc}
 $b_{2}=\left[\mathbf{O}\right]$. This links the partitioning variables
 $\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
 An edge between two different partitions causes the cost function
-to assume the presence of an edge.
+to assume the presence of an edge as well, that is, increase the
+corresponding binary variable to 1. This increases cost function by 1.
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
 to reality, i.e. the demand nodes being in the second partition and the vulnerable nodes being in the first. \\
+This is the same as the base case, no other constraints are enforced.
 
 $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -394,7 +398,7 @@ $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 
 
 \subsubsection{Results and verification}
-Actuator edges are verified to be a min-cut of the network. Sensor edges are verified to exist downstream of evrey vulnerable node.
+Actuator edges are verified to be a min-cut of the network. At least one sensor node is verified to exist downstream of every vulnerable node.
 
 
 
