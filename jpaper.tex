@@ -299,45 +299,7 @@ vulnerable nodes 1 and 2.
 \end{figure} % TODO change to venkat's example network
 
 This scenario is the same as the base case.
-Formulating as binary integer optimization problem:
-
-\begin{eqnarray*}
-min & (\sum x_{i}+\sum z_{i})\\
-sub\\
-\mathbf{A}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & \leq & \mathbf{b}\\
-\mathbf{A_{eq}}\left[\begin{array}{c}
-\mathbf{x}\\
-\mathbf{y}\\
-\mathbf{z}
-\end{array}\right] & = & \mathbf{b_{eq}}
-\end{eqnarray*}
-
-
-Hence the vector $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & y & z\end{array}}\right]$ is of length $2*N+E=21$.
-
-$A=\left[\begin{array}{cc}
-A_{1} & \mathbf{0}\\
-\mathbf{0} & A_{2}
-\end{array}\right]$, $A=\left[\begin{array}{cc}
-A_{eq1} & \mathbf{0}\\
-\mathbf{0} & A_{eq2}
-\end{array}\right]$, $b=\left[\begin{array}{c}
-b_{1}\\
-b_{2}
-\end{array}\right]$, $b_{eq}=\left[\begin{array}{c}
-b_{eq1}\\
-b_{eq2}
-\end{array}\right]$.\\
-
-$A_{1}$ is a matrix of vulnerable nodes versus affected nodes, with
-$A_{1ij}=-1$ if $i^{th}$ vulnerable node affects the $j^{th}$ node
-in graph.\\ % Must use versus
-
+The specific matrix defining this example are as follows. \\ % TODO labels and crossref
 
 \scalebox{0.8}{
 $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
@@ -383,9 +345,8 @@ An edge between two different partitions causes the cost function
 to assume the presence of an edge as well, that is, increase the
 corresponding binary variable to 1. This increases cost function by 1.
 
-$A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
-to reality, i.e. the demand nodes being in the second partition and the vulnerable nodes being in the first. \\
-This is the same as the base case, no other constraints are enforced.
+Now, we make sure that the vulnerable node is the vulnerable partition
+and the demand node is in the demand partition, using $A_{eq2}$ and $b_{eq2}$.
 
 $A_{eq2}=\left[\begin{array}{ccccccccccccccc}
 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
