@@ -464,11 +464,14 @@ $\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
 to reality, viz. the demand nodes being in the second partition and
-the vulnerable nodes being in the first.
+the vulnerable nodes being in the first. This is same as base case
+and \ref{sub:Scenario-1:vacuum}.
 
-We use shortest path lengths from all the vulnerable nodes (simulating
-an attack on all of them) to all the nodes in the graph to model ``farther
-away in time''. Let this vector be $\mathbf{S}$. The first set of
+To implment our requirement of actuation to contain all the contaminant, we use
+$A_3$, $b_3$, $A_{eq3}$, $b_{eq3}$.
+The shortest path lengths from all the vulnerable nodes (simulating
+an attack on all of them) to all the nodes in the graph is used to model "farther
+away in time". Let this vector be $\mathbf{S}$. The first set of
 constraints of $A_{3}$ is this vector of shortest paths multiplied
 with each column of $\mathbf{I\times x}$, storing the maximum distance
 of that particular sensor configuration in $a$. The actuators need
