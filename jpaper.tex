@@ -379,7 +379,8 @@ must be on the contained at time of actuation.
 
 \subsubsection{Formulation}
 
-Formulating as binary integer optimization problem:
+Here, we add decision variable $a$ and vector of decision variables $w$
+to the base formulation:\\
 
 \begin{eqnarray*}
 min & (\sum x_{i}+\sum z_{i})\\
@@ -490,10 +491,9 @@ as follows: $\left[\begin{array}{ccccc}
 \subsubsection{Illustrative artificial network example}
 
 Consider the same network in Figure 1, with the two vulnerable nodes
-(1, 2) and one demand node (6).
-
-The additional constraints introduced in this case are $\mathbf{S}_{i}\mathbf{x}_{i}-a\leq0$
-for each node $i$. This becomes
+(1, 2) and one demand node (6). The additional constraints introduced
+in this case are $\mathbf{S}_{i}\mathbf{x}_{i}-a\leq0$ for each node $i$.
+This becomes
 \begin{eqnarray*}
 \left[\begin{array}{cccccc}
 0 & 0 & 0 & 0 & 0 & 0\\
@@ -601,7 +601,7 @@ $\mathbf{z}\equiv[z_{i}]$ is a decision variable vector whose components
 are 1 if there exists an actuator at $i^{th}$edge, 0 otherwise.
 
 $\mathbf{d}\equiv[d_{i}]$ is a decision variable vector whose components
-store $M-$the ``distance to detection'' for a particular vulnerable
+store $M- (distance\ to\ detection)$ for a particular vulnerable
 node.
 
 $\mathbf{w}\equiv[w_{i}]$ is 1 if $i^{th}$node is in the demand
@@ -700,7 +700,7 @@ the $i^{th}$node as follows: $\left[\begin{array}{ccccc}
 -2*M\end{array}\right]$. This ensures that when $\mathbf{w}_{i}$ is $1$, the constraint
 is activated and only satisfied if the corresponding $\mathbf{D_{ij}>d_{j}}$.
 When $\mathbf{w}_{i}$ is $M$, the constraint is always satisfied
-as $M^{2}$is several orders of magnitude greater than $2*M$.
+as $M^{2}$ is several orders of magnitude greater than $2*M$.
 
 
 \subsubsection{Illustrative artificial network example}
