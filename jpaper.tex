@@ -182,7 +182,8 @@ A binary integer optimization problem is presented:
 
 \begin{eqnarray}
 \begin{aligned}
-\text{PROBLEM I:}~~ min & (\sum x_{i}+\sum z_{i})\\
+%\text{PROBLEM I:}~~
+min & (\sum x_{i}+\sum z_{i})\\
 \text{s.t.}~& \mathbf{A}
 p
  \leq \mathbf{b}\\
@@ -190,7 +191,7 @@ p
 \end{aligned}
 \end{eqnarray}
 
-%\begin{eqnarray}
+%\begin{eqnarray} % TODO use in other scenarios or here?
 %\begin{aligned} \text{PROBLEM II:}~~~ & \underset{x, y}{\text{min}}& & \sum_{k=1}^{m}y_{k} \\
 %& \text{s.t.} & &(J^Tx)_k \leq y_k\\
 %& & &-(J^Tx)_k \leq y_k\\
