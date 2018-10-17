@@ -1,7 +1,7 @@
-\documentclass[authoryear,preprint,review,12pt]{elsarticle}
+\documentclass[authoryear,preprint,review,12pt,3p]{elsarticle}
 
 
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+%\usepackage[a4paper, total={6in, 8in}]{geometry}
 
 
 \usepackage{amsmath,amssymb}
@@ -12,7 +12,9 @@
 % Remark and argmin
 \newtheorem{remark}{Remark}
 \DeclareMathOperator*{\argmin}{argmin}
-
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{float}
 \journal{Computers and Chemical Engineering}
 
 \begin{document}
@@ -24,17 +26,18 @@
 
 % TITLE
 \title{Simultaneous Sensor and Actuator Placement for Contaminant Detection and Mitigation in Water Distribution Networks}
-%\title{Control of Hyperbolic PDE systems using Reduced Order
-%Models and Approximate Dynamic Programming}
+
 % AUTHORS
-\author[iitm]{Suhas Gundimeda}
-\author[iitm]{Venkata Reddy Palleti}
-\author[iitm]{Shankar Narasimhan}
+\author{Suhas Gundimeda}
+\author{Venkata Reddy Palleti}
+\author{Shankar Narasimhan \corref{cor1}}
+\author{Raghunathan Rengasamy}
+\ead{naras@iitm.ac.in}
 
 % ADDRESSES
-\address[iitm]{Department of Chemical Engineering, Indian Institute of Technology Madras, Chennai 600036, India}
-%\fntext[abb]{Currently at: ABB Corporate Research Center, Bhoruka Tech Park, Whitefield Main Road, Bangalore 560048, India}
-%\cortext[cor1]{Corresponding author; Email: sridharkrn@iitm.ac.in; Phone: [+91] (44) 22574177}
+\cortext[cor1]{I am corresponding author}
+\address{Indian Institute of Technology, Madras, Chennai-600036.}
+
 
 % ABSTRACT
 \begin{abstract}
@@ -99,13 +102,14 @@ sensors are known a priori. It means that the sensor and actuator network design
 are carried out independently and they are decoupled.  In contrast to this work,
 in this paper, we obtain a sensor and actuator placement simultaneously for detection and
 mitigation of contamination effects.  Therefore, in this work we propose a multi-
-objective mixed integer linear optimization formulation is proposed to determine the simultaneous
+objective mixed integer linear optimization formulation to determine the simultaneous
 optimal sensor and actuator network. Also, we hypothesize that simultaneous sensor
 and actuator planning can be achieved and is more efficient than
 iterative non-linear optimization sequentially solving the two placement problems,
 %Check the appropriateness of the following. TODO
 i.e. these are not independent problems, and these can be formulated as an integer
-linear program and solved.
+linear program and solved. The current work assumes both of these objectives are binary, i.e. no time delay in detection and accurate sensing.
+%
 
 
 %\subsection{Previous work}
@@ -116,8 +120,7 @@ linear program and solved.
 %achieve shut-down of network to contain contaminant was performed in [2]. The current work combines these methods in a multi-objective optimization formulation.
 %
 %An approach in [4] attempts to optimize different objectives: maximizing detection likelihood and minimizing expected time to detection and solves it using genetic algorithms.
- The current work assumes both of these objectives are binary, i.e. no time delay in detection and accurate sensing.
-%
+ 
 %%TODO Do a review of the review papers cited
 %
 %
@@ -146,18 +149,23 @@ A typical city's WDN has several hundred nodes and edges.
 Intentional contamination generally only occurs at sources - tanks, reservoirs, fire hydrants.
 Unintentional contamination can typically occur at any point in the WDN.
 In this work, we develop techniques that can be used for the general case, where any set of nodes in the network can be contaminated.
-These potential sites of intrusion are referred to as vulnerable nodes.
-%The following simplifying assumptions are made in designing a sensor and actuator placement strategy for mitigation of contamination:
+These potential sites of intrusion are referred to as vulnerable nodes. Our goal is to prevent the contamination of a given set of nodes called demand nodes. \\
+In achieving this goal, we must detect when demand nodes are under threat of being compromised, and then prevent their contamination by physically stopping further flow of contaminant. For this task, we have two tools at our disposal: sensors - which can be placed at nodes, and actuators, which can be placed on edges. Each of these have associated costs of deployment, and thus it is beneficial to have a minimum number of each in optimal places such that they still perform their function and satisfy our requirements. A set of positions of the placed sensors is a "sensor placement strategy" and a set of positions of actuators is an "actuator placement strategy". While previous work has produced algorithms for generating sensor placement, and use that result as input to produce an optimal actuator placement, the central claim of this work is that a combined sensor and actuator placement problem can produce strategies which wouldn't be produced by a one-by-one approach.
+
+\textcolor{red}{Suhas: this is ok.}
+%\textcolor{blue} {I suggest moving the use of solving simultaneously to another section. Please review how it sounds when in the same section.}
+
+
+
+The following simplifying assumptions are made in designing a sensor and actuator placement strategy for mitigation of contamination:
+\textcolor{blue}{Is the above statement out-of-place here? Not parsimonious? Should I just remove it, going directly to assumptions?}
 
 \subsection{Assumptions}
 \begin{itemize}
-    \item We are given complete information about the network - (sparse) adjacency matrix,
-        set of nodes vulnerable to contamination,
-        set of nodes which should be prevented from contamination (demand nodes).
-    \item Each affected node and sensor satisfies all conditions for sensors to identify
-        the presence of contaminant, such as concentration of contaminants, flow rate, sensitivity of sensor, etc.\\
-    \item This identification of contaminant is instant, binary and without error - neither false positives or false negatives.
-    \item There is no time delay in communication, processing and actuation to stop spread.
+    \item It is assumed that the  complete information about the network - (sparse) adjacency matrix, set of nodes vulnerable to contamination,  set of nodes which should be prevented from contamination (demand nodes).
+    \item Each affected node and sensor satisfies all conditions for sensors to identify       the presence of contaminant, such as concentration of contaminants, flow rate, sensitivity of sensor, etc.
+    \item The detection of contaminant is instant, binary and without error - neither false positives or false negatives.
+    \item It is assumed that the there is no time delay in communication, processing and actuation to stop spread.
 \end{itemize}
 All of the vulnerable nodes are infected (not necessarily at the same time) - case 1.
 A subset of vulnerable nodes are contaminated - this required a modified solution - case 2.
@@ -177,9 +185,15 @@ with an example network.
 %contamination of some demand nodes, but will stop any further contamination
 %to all demand nodes.
 
-\section{Base problem: Formulating as Mixed Integer Linear Program (MILP)}
-A binary integer optimization problem is presented:
+\subsection{Formulating as Mixed Integer Linear Program (MILP)}
+The objective of the present study is to minimize the sensor and actuator placement cost simultaneously. Here the sensor  placement should be in such a way that the  observability can be  guaranteed. It implies that in the event of any attack on any one of the vulnerable nodes, there will be at least one sensor which detects the attack. Similarly,  actuator placement is the optimal placement of shut-off valves to be placed in the network so that they can prevent the spread of contamination further to uncontaminated parts of the network. Therefore, we need to optimize two objectives such that our constraints of functional placement is satisfied. In this work, we formulate the simultaneous sensor and actuator placement problem as an MILP. We name this formation as a base case. Under different contamination scenarios and demand resilience to contamination, we will modify the constraints suitably to obtain the simultaneous sensor and actuator placement design.
 
+\textcolor{blue}{Perhaps better to move definition of observability and controllability in our context in problem description?}
+
+\textcolor{red}{suhas: i think here also needed}
+
+
+Base case formulation :
 \begin{eqnarray}
 \begin{aligned}
 %\text{PROBLEM I:}~~
@@ -215,8 +229,8 @@ side of the actuators, 0 otherwise.
 $\mathbf{z}\equiv[z_{i}]$ is 1 if there exists an actuator at $i^{th}$edge,
 0 otherwise.
 
-Hence the vector $\left[\mathbf{\begin{array}{ccc}
-\mathbf{x} & \mathbf{y} & \mathbf{z}\end{array}}\right]$ is of length $2*N+E$. % TODO define N and E
+Hence the column vector $\left[\mathbf{\begin{array}{ccc}
+\mathbf{x} & \mathbf{y} & \mathbf{z}\end{array}}\right]^T$ is of length $2*N+E$. % TODO define N and E
 
 $A=\left[\begin{array}{cc}
 A_{1} & \mathbf{0}\\
@@ -240,16 +254,17 @@ $A_{2}=\left[\begin{array}{cc}
 
 J & I_{E\times E}\end{array}\right]$ where $J$ is the incidence matrix.
 
-
-$b_{1}=\left[\begin{array}{c}
-.\\
-.\\
-.\\
--1\\
-.\\
-.\\
-.
-\end{array}\right]$,
+$b_{1}=\left[\mathbf{\begin{array}{ccccccc}
+.& .& .& -1& .& .& . \end{array}}\right]^T$
+% $b_{1}=\left[\begin{array}{c}
+% .\\
+% .\\
+% .\\
+% -1\\
+% .\\
+% .\\
+% .
+% \end{array}\right]$,
 $b_{2}=\left[\mathbf{O}\right]$. \\ % TODO Posibly make this a named equation to refer to later
 This links the partitioning variables
 $\mathbf{y}$ to the variables in the cost function, $\mathbf{z}$.
@@ -260,23 +275,36 @@ $A_{eq1}=b_{eq1}=\mathbf{O}$
 
 $A_{eq2}$, $b_{eq2}$ provide bounds to force the decision variables
 to the constraints of the specific scenario, for example, that the
-demand nodes should be in the second partition and that the vulnerable nodes
-should be in the first.
+demand nodes should be placed after the position of the contaminant in the worst case of the latest detection by any sensor. The next section uses an example network to show what these constraints look like.
 
 
+\textcolor{red}{Suhas: Can you please explain about the objective function and constraints significance }
+\textcolor{blue}{Venkat: I do explain a bit about how it's used, like in the preceding paragraph I talk about what it's used for. What is missing?}
+\textcolor{red}{Suhas: It is the first time that the formulation appearing in the paper. So I feel that it is appropriate to explain about the constraints etc.}
+\textcolor{blue}{Venkat: I modified the text to be more concrete, is this enough? I just feel like we'd need numbers and several lines of text to explain this, and in that case this would essentially turn out same as the one discussing the contraints in the context of the first scenario, or whatever exampel we choose.}
 
-\section{Scenarios \label{sec:Scenarios}}
+\section{Sensor and Actuator Network Design under Different Contamination Scenarios \label{sec:Scenarios}}
 
 
 \subsection{Scenario of vacuum pipes \label{sub:Scenario-1:vacuum}}
-\subsubsection{Key assumptions} % TODO maybe 'scenario description' is better?
+\subsubsection{Key assumptions} 
+\textcolor{red}{Suhas: yes  please elaborate on this}
+\textcolor{blue}{Venkat: Please review for sufficient explanation}
+% TODO maybe 'scenario description' is better?
 \begin{itemize}
-    \item Shutting down the network effectively stops the contaminant
+    \item Actuation in a pipe effectively stops the contaminant
 beyond the actuator as well.
-    \item Finite amount of contaminant is allowed reach the demand nodes} % TODO Look into separate scenario for this
+    \item Finite amount of contaminant is allowed reach the demand nodes
+    % TODO Look into separate scenario for this
 \end{itemize}
 
-In this simpler scenario, there are no additional constraints on the actuator
+In the case of persistent background vacuum in the pipes, 
+the closing of a valve - in our case via a remote actuator - 
+would stop all flow of material both upstream and downstream. This effect can also be achieved with
+relatively high pressure at outlets or demand nodes. This achieves network shutdown, preventing future
+contamination. But contamination before detection is not enforced in this scenario. \\
+
+To find the optimal placement for this scenario, there are no additional constraints on the actuator
 placement problem beyond that of actuator edges being a min-cut of
 the entire graph. That is, the removal of the pipes in the water distribution
 network corresponding to the set of actuator edges must partition the
@@ -286,38 +314,37 @@ As long as the sensor network detects the contaminant before it
 reaches the demand nodes and the actuation happens immediately, no demand node is compromised.
 But without additional constraints, this is not guaranteed viz. the
 formulation presented here minimizes the number of sensor nodes even at the
-cost of late (post-compromise) detection.
+cost of late (post-compromise of some demand nodes) detection.
 
 
-\subsubsection{Illustrative artificial network example}
+\subsubsection{Illustrative network example}
 
-Consider the graph represented by \ref{fig:small_network}, with demand node 6 and
-vulnerable nodes 1 and 2.
+Consider the graph represented by \ref{fig:small_network}, with a demand node at $6$ and
+vulnerable nodes at $1$ and $2$.
 
-\begin{figure}[ht]
-\includegraphics[scale=0.75]{images/testGraph}\caption{A graph with 6 nodes and 9 edges}
+\begin{figure}[h!]
+\includegraphics[scale=0.75]{images/testGraph.png}
+\caption{A graph with 6 nodes and 9 edges}
     \label{fig:small_network}
-\end{figure} % TODO change to venkat's example network
+\end{figure} 
+
+\textcolor{red}{Suhas: TODO. Please do it.}% TODO change to venkat's example network
 
 This scenario is the same as the base case.
-The specific matrix defining this example are as follows. \\ % TODO labels and crossref
+The specific matrix defining this example are as follows. 
+% TODO labels and crossref
 
 \scalebox{0.8}{
 $A_{1}=\left[\begin{array}{ccccccccccccccccccccc}
 -1 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & -1 & -1 & -1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
 \end{array}\right]$
-}\\
+}
 
-
-$b_{1}=\left[\begin{array}{c}
--1\\
--1
-\end{array}\right]$\\
-
-
-
-$A_{eq1}=b_{eq1}=\mathbf{O}$\\
+$b_{1}=\left[\begin{array}{cc}
+-1 &-1
+\end{array}\right]^T$
+$A_{eq1}=b_{eq1}=\mathbf{O}$
 
 The following maps the actuator placement problem to one of classification
 into source or demand partition.
@@ -366,6 +393,11 @@ Actuator edges are verified to be a min-cut of the network. At least one sensor 
 
 
 \subsection{Scenario of simultaneous attack \label{sub:Scenario-2:containment}}
+
+\textcolor{red}{Suhas: discuss more about this scenarion}
+\textcolor{blue}{Venkat: Please review this for sufficiency}\\
+\textcolor{red}{Sunah: More explanation is needed}\\
+In this scenario, our contamination is restricted to occur at all vulnerable nodes - a proper subset of them will not be attacked. No compromise of demand nodes is allowed. 
 \subsubsection{Key assumptions}
 \begin{itemize}
     \item  The contaminant must be contained in the vulnerable side
@@ -373,14 +405,14 @@ Actuator edges are verified to be a min-cut of the network. At least one sensor 
     \item Contamination attacks occur on all vulnerable nodes at once.
 \end{itemize}
 This case is not trivial as the positions of the sensors must be used
-as input, that is, the time-dependent total spread of each contaminant
-must be on the contained at time of actuation.
+as input, that is, the time-dependent total spread of contaminant from each attack
+must be tracked and contained at time of actuation.
 
 
 \subsubsection{Formulation}
 
 Here, we add decision variable $a$ and vector of decision variables $w$
-to the base formulation:\\
+to the base formulation, to track our spread of contaminant: \\
 
 \begin{eqnarray*}
 min & (\sum x_{i}+\sum z_{i})\\
@@ -419,7 +451,7 @@ side of the actuators, a large number($M$) otherwise.
 
 $M$ is a large number.
 
-Hence the vector $\left[\mathbf{\begin{array}{ccccc}
+Hence the column vector $\left[\mathbf{\begin{array}{ccccc}
 \mathbf{x} & y & z & a & w\end{array}}\right]$ is of length $3*N+E+1$.
 
 $A=\left[\begin{array}{ccc}
@@ -491,7 +523,7 @@ as follows: $\left[\begin{array}{ccccc}
 -M\end{array}\right]$. This completes the formulation.
 
 
-\subsubsection{Illustrative artificial network example}
+\subsubsection{Illustrative artificial network example} \textcolor{red}{Suhas: No need to write separate section every time when you describe each scenario. Say that consider the same example from fig 1}
 
 Consider the same network in Figure 1, with the two vulnerable nodes
 (1, 2) and one demand node (6). The additional constraints introduced
@@ -557,20 +589,23 @@ This ensures that $\mathbf{S}_{i}$ is greater than $a$ for all nodes $i$.
 The network is verified to have no paths from vulnerable to demand
 after removing edges.
 The distance to detection in this design is $0$ units.
-
+\textcolor{red}{what does this Results and verification mean for every scenario. Do you have any results for the test case. If so please include them }
+\textcolor{blue}{Venkat: The figures which show the resulting, optimized placement design for the illustrative example network should be here.}
 
 
 \subsection{\label{sub:Scenario-3:independent-vulnerable}Scenario of independent attacks}
+This is the most general case that we provide a formulation for. All the restrictions of the previous scenarios are removed - any subset of vulnerable nodes can be attacked multiple times, and design which might allow casualties of demand nodes are not allowed.
+\textcolor{red}{Suhas: For every case give the detailed description and how the base case is modified with key assumptions. Lets do these things first}
+\textcolor{blue}{Venkat: There's more explanation now, do we need more?}
 \subsubsection{Key assumptions}
 \begin{itemize}
     \item  Vulnerable nodes may be attacked independently, at different time points or not at all.
+    \item No demand node may be compromised.
 \end{itemize}
 
 
 \subsubsection{Solution formulation}
-
-Formulating as mixed integer linear optimization problem:
-
+The additional requirements to track each vulnerability, its lag to detection, and the forcing of partitions add three sets of variables to our constraints, as below:
 \begin{eqnarray*}
 min & (\sum x_{i}+\sum z_{i})\\
 sub\\
@@ -611,7 +646,7 @@ $\mathbf{w}\equiv[w_{i}]$ is 1 if $i^{th}$node is in the demand
 partition, a large number ($M$) otherwise.
 
 $\mathbf{v}\equiv[v_{ji}]$ is 1 if the $j^{th}$ vulnerable node's
-distance to detection is inequal to the distance to the $i^{th}$
+distance to detection is unequal to the distance to the $i^{th}$
 (sensor\ref{v-inequality-at-sensor-nodes}) node.
 
 $M$ is a large number greater in order than the distances in the
@@ -912,10 +947,13 @@ the distance to the first actuators.
 \section{Case study network}
 
 The algorithms for each scenario were tested on a benchmark abstraction of an urban WDN - one based on Bangalore city, India.
-\begin{figure}[ht]
-   \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat}\caption{Layout of bangalore network, where nodes 1, 2, 3 are reservoirs and
+
+\begin{figure}[h!]
+   \includegraphics[width=\linewidth]{images/bangalore_vuln_venkat.png}
+   \caption{Layout of Bangalore network, where nodes 1, 2, 3 are reservoirs and
 the six others shown are pumps}
 \end{figure}
+
 It has 3 reservoirs and 6 pumps, all of which are considered vulnerable
 nodes. 24 demand nodes are presented in the network. The network consists
 of 116 pipes, 29 control valves, 3 on-off valves and 7 pumps. The
@@ -930,7 +968,7 @@ connectivity results. All pipes are assumed to be of length $1$.
 \subsection{Results}
 \subsubsection{Scenario of vacuum pipes}
 \begin{figure}[ht]
-    \includegraphics[scale=0.4]{images/netowrkSensorsOnly}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
+    \includegraphics[scale=0.4]{images/netowrkSensorsOnly.png}\caption{Graph abstraction with vulnerable nodes in red and sensors in blue.}
 % TODO legend version
 \end{figure}
 
@@ -971,12 +1009,11 @@ This is the same as \cite{Palleti2016246}.
 The closing of network requires 12 actuators: on edges 1, 4, 30, 37,
 39, 47, 49, 50, 64, 81, 149, 154.
 
-\begin{figure}[ht]
+\begin{figure}[h!]
 \begin{centering}
-\includegraphics[width=\linewidth]{images/multiobj_indep_9V_legend}\caption{Results of independent placement case}
-
-\par\end{centering}
-
+\includegraphics[scale=0.9]{images/multiobj_indep_9V_legend}
+\caption{Results of independent placement case}
+\end{centering}
 \end{figure}
 
 
@@ -1005,7 +1042,7 @@ same 9 vulnerable nodes.
 
 \begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/containment_attackAtOnce_9V_legend}
-\caption{Scenario where all possible vulnerable nodes are always attacked simultaneously\protect} \\
+\caption{Scenario where all possible vulnerable nodes are always attacked simultaneously\protect} 
 \end{figure}
 
 
@@ -1038,21 +1075,21 @@ be compromised though.
 
 \begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/zoneContainment_9sources_legend}
-\caption{Sensor and actuator placement strategy for 9 vulnerable nodes\protect} \\
+\caption{Sensor and actuator placement strategy for 9 vulnerable nodes\protect} 
     \label{fig:zoneContainment_9sources}
 \end{figure}
 \begin{figure}[ht]
 \includegraphics[width=\linewidth]{images/containment_9sources_1downstreamSourceEach_legend}\caption{Sensor and actuator placement strategy for 9 vulnerable nodes and
-instant downstream contamination\protect} \\
+instant downstream contamination\protect} 
     \label{fig:containment_9sources_1downstreamSourceEach}
 \end{figure}
 
 
 
 
-\section{Validation of \cite{palleti_actuator_2018}}
-The results of the scenario explored in \cite{palleti_actuator_2018} are presented in \autoref{fig:cardinality21-Venkat-results-reproduced}
-\begin{figure}[!hptb]
+\section{Validation of of previous work}
+The results of the scenario explored in \cite{palleti_actuator_2018} were reproduced using our methods. The final placement strategy is showed in \autoref{fig:cardinality21-Venkat-results-reproduced}.
+\begin{figure}[h!]
 \protect\includegraphics[width=\linewidth]{images/cardinality21_Venkat_results_reproduced}\protect\caption{Validation of \cite{palleti_actuator_2018}, case of allowing demand nodes to be compromised
 % TODO legend version of this
 \protect \\
