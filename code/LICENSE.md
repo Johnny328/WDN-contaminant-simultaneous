@@ -1,4 +1,4 @@
-Unless otherwise stated for an object, the following license applies to this directory and all subdirectories.
+Unless otherwise stated for an object, the following license applies to this directory and all subdirectories. Notable the arrow and epanet extractor aren't under this license.
 
 Copyright (c) 2015, snugghash
 
