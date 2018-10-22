@@ -39,7 +39,7 @@ beq1 = [];
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
-% Inequality constraint 
+% Inequality constraint
 % TODO This does not account for zero flows or demand to source transitions
 % when flow is opposite.
 A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights;
@@ -84,10 +84,10 @@ intcon3 = (nodesNum*2+edgesNum+1):(nodesNum*2+edgesNum + vulnerableNum + nodesNu
 lowerBound = [zeros(1,nodesNum*2+edgesNum + vulnerableNum) ones(1,nodesNum)];
 upperBound = [ones(1,nodesNum*2+edgesNum) NUMBER_BIGGER_THAN_NETWORK.*ones(1,vulnerableNum + nodesNum)];
 
-A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1)); 
+A = [A1 zeros(size(A1,1),size(f2,1)+size(f3,1));
 zeros(size(A2,1),size(f1,1)) A2 zeros(size(A2,1),size(f3,1))];
 b = [b1;b2];
-Aeq = [zeros(size(Aeq1,1),size(f1,1)+size(f2,1)+size(f3,1)); 
+Aeq = [zeros(size(Aeq1,1),size(f1,1)+size(f2,1)+size(f3,1));
 zeros(size(Aeq2,1),size(f1,1)) Aeq2 zeros(size(Aeq2,1),size(f3,1))];
 beq = [beq1;beq2];
 f = [f1;f2;f3];
@@ -115,16 +115,16 @@ b = [b; zeros(nodesNum*vulnerableNum,1)];
 %end
 
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
-% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize. 
+% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize.
 for i=1:nodesNum
     index = size(A,1)+1;
     A(index,nodesNum+i) = -NUMBER_BIGGER_THAN_NETWORK;
     A(index,nodesNum*2+edgesNum+vulnerableNum+i) = -1;
-    b(index) = -NUMBER_BIGGER_THAN_NETWORK; 
+    b(index) = -NUMBER_BIGGER_THAN_NETWORK;
     index = size(A,1)+1;
     A(index,nodesNum+i) = (NUMBER_BIGGER_THAN_NETWORK-1);
     A(index,nodesNum*2+edgesNum+vulnerableNum+i) = 1;
-    b(index) = NUMBER_BIGGER_THAN_NETWORK; 
+    b(index) = NUMBER_BIGGER_THAN_NETWORK;
 end
 
 % Force all partitioning to happen after the stored minimum distance ot each vulnerable node.
@@ -146,7 +146,7 @@ b = [b; (-2*NUMBER_BIGGER_THAN_NETWORK-1)*ones(nodesNum*vulnerableNum,1)];
 % for i=1:edgesNum
 %    index = size(A,1)+1;
 %    A(index,nodesNum*2+i) = -distanceEdgesFromVulnerableNodes(i);
-%    A(index,nodesNum*2+edgesNum+j) = 1; 
+%    A(index,nodesNum*2+edgesNum+j) = 1;
 % end
 % end
 % b = [b; zeros(edgesNum*vulnerableNum,1)];
@@ -171,7 +171,7 @@ distanceVulnerableToSensors = allDistances(:,sensorNodes)
 plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
 
 % Testing the partitioned network
-% Remove actuator edges 
+% Remove actuator edges
 adjGraphContained = adjGraph;
 adjGraphContained(pipeStartNodes(actuatorPipes),pipeEndNodes(actuatorPipes)) = 0;
 adjGraphContained(pipeEndNodes(actuatorPipes),pipeStartNodes(actuatorPipes)) = 0;

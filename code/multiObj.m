@@ -89,8 +89,8 @@ beq = [beq1;beq2];
 f = [f1;f2];
 intcon = [intcon1 intcon2];
 [x,fval,exitflag,info] = intlinprog(f,intcon,A,b,Aeq,beq,lowerBound,upperBound);
-sensorNodes = find(x(1:nodesNum));
-actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
+sensorNodes = find(x(1:nodesNum))
+actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)))
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 

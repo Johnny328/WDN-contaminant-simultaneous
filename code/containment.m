@@ -65,10 +65,10 @@ beq1 = [];
 %Objective
 f2 = [zeros(1,size(incGraph,2)), ones(1,size(incGraph,1))]';
 
-% Inequality constraint 
+% Inequality constraint
 % TODO This does not account for zero flows or demand to source transitions
 % when flow is opposite.
-A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights
+A2 = [-incGraph -eye(size(incGraph,1))*edgeWeights;
     incGraph -eye(size(incGraph,1))*edgeWeights]; % TODO edgeWeights must be in the order of incGraph (1:size(incGraph,1) === pipeIDs)
 b2 = zeros(size(incGraph,1)*2,1);
 
@@ -95,7 +95,7 @@ shortestPathsFromVulnerableNodes = min(allDistances);
 tmp3 = sort(shortestPathsFromVulnerableNodes);
 maxDistance = tmp3(end-1);
 shortestPathsFromVulnerableNodes(shortestPathsFromVulnerableNodes==Inf) = NUMBER_BIGGER_THAN_NETWORK;
-distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes); 
+distanceEdgesFromVulnerableNodes = shortestPathsFromVulnerableNodes(pipeStartNodes);
 
 allDistances(allDistances==Inf) = -1;
 longestPossiblePathFromVulnerableNode = max(allDistances);
@@ -137,22 +137,22 @@ A(size(A,1)+1,1+nodesNum*2+edgesNum) = 1;
 b(size(b,1)+1) = maxDistanceToDetection;
 
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
-% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize. 
+% Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize.
 for i=1:nodesNum
     index = size(A,1)+1;
     A(index,i+nodesNum) = -NUMBER_BIGGER_THAN_NETWORK;
     A(index,1+nodesNum*2+edgesNum+i) = -1;
-    b(index) = -NUMBER_BIGGER_THAN_NETWORK; 
+    b(index) = -NUMBER_BIGGER_THAN_NETWORK;
     index = size(A,1)+1;
     A(index,i+nodesNum) = (NUMBER_BIGGER_THAN_NETWORK-1);
     A(index,1+nodesNum*2+edgesNum+i) = 1;
-    b(index) = NUMBER_BIGGER_THAN_NETWORK; 
+    b(index) = NUMBER_BIGGER_THAN_NETWORK;
 end
 
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
    index = size(A,1)+1;
-   A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK; 
+   A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK;
    A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
 b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
@@ -165,7 +165,7 @@ b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
 % for i=1:edgesNum
 %    index = size(A,1)+1;
 %    A(index,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);
-%    A(index,1+nodesNum*2+edgesNum) = 1; 
+%    A(index,1+nodesNum*2+edgesNum) = 1;
 % end
 % b = [b; zeros(edgesNum,1)];
 
@@ -190,7 +190,7 @@ else
 end
 
 % Testing the partitioned network
-% Remove actuator edges 
+% Remove actuator edges
 adjGraphContained = adjGraph;
 adjGraphContained(pipeStartNodes(actuatorPipes),pipeEndNodes(actuatorPipes)) = 0;
 adjGraphContained(pipeEndNodes(actuatorPipes),pipeStartNodes(actuatorPipes)) = 0;

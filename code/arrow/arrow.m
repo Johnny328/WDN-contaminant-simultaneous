@@ -123,7 +123,7 @@ function [h,yy,zz] = arrow(varargin)
 %       empty) the values specified as default; or use a cell containing
 %       an empty matrix for a default value
 %  - add functionality of GET to retrieve current values of ARROW properties
-% 
+%
 % New list of things to be done:
 %  - rewrite as a graphics or class object that updates itself in real time
 %    (but have a 'Static' or 'DoNotUpdate' property to avoid updating)
@@ -1322,19 +1322,19 @@ function out = arrow_demo
 	[x,y,z] = peaks;
 	[ddd,out.iii]=max(z(:));
 	out.axlim = [min(x(:)) max(x(:)) min(y(:)) max(y(:)) min(z(:)) max(z(:))];
-	
+
 	% modify it by inserting some NaN's
 	[m,n] = size(z);
 	m = floor(m/2);
 	n = floor(n/2);
 	z(1:m,1:n) = NaN*ones(m,n);
-	
+
 	% graph it
 	clf('reset');
 	out.hs=surf(x,y,z);
 	out.x=x; out.y=y; out.z=z;
 	xlabel('x'); ylabel('y');
-			
+
 function h = arrow_demo3(in)
 	% set the view
 	axlim = in.axlim;
@@ -1343,58 +1343,58 @@ function h = arrow_demo3(in)
 	%set(in.hs,'FaceColor','interp');
 	view(3); % view(viewmtx(-37.5,30,20));
 	title(['Demo of the capabilities of the ARROW function in 3-D']);
-	
+
 	% Normal blue arrow
 	h1 = feval(mfilename,[axlim(1) axlim(4) 4],[-.8 1.2 4], ...
 	           'EdgeColor','b','FaceColor','b');
-	
+
 	% Normal white arrow, clipped by the surface
 	h2 = feval(mfilename,axlim([1 4 6]),[0 2 4]);
 	t=text(-2.4,2.7,7.7,'arrow clipped by surf');
-	
+
 	% Baseangle<90
 	h3 = feval(mfilename,[3 .125 3.5],[1.375 0.125 3.5],30,50);
 	t2=text(3.1,.125,3.5,'local maximum');
-	
+
 	% Baseangle<90, fill and edge colors different
 	h4 = feval(mfilename,axlim(1:2:5)*.5,[0 0 0],36,60,25, ...
 	           'EdgeColor','b','FaceColor','c');
 	t3=text(axlim(1)*.5,axlim(3)*.5,axlim(5)*.5-.75,'origin');
 	set(t3,'HorizontalAlignment','center');
-	
+
 	% Baseangle>90, black fill
 	h5 = feval(mfilename,[-2.9 2.9 3],[-1.3 .4 3.2],30,120,[],6, ...
 	           'EdgeColor','r','FaceColor','k','LineWidth',2);
-	
+
 	% Baseangle>90, no fill
 	h6 = feval(mfilename,[-2.9 2.9 1.3],[-1.3 .4 1.5],30,120,[],6, ...
 	           'EdgeColor','r','FaceColor','none','LineWidth',2);
-	
+
 	% Stick arrow
 	h7 = feval(mfilename,[-1.6 -1.65 -6.5],[0 -1.65 -6.5],[],16,16);
 	t4=text(-1.5,-1.65,-7.25,'global mininum');
 	set(t4,'HorizontalAlignment','center');
-	
+
 	% Normal, black fill
 	h8 = feval(mfilename,[-1.4 0 -7.2],[-1.4 0 -3],'FaceColor','k');
 	t5=text(-1.5,0,-7.75,'local minimum');
 	set(t5,'HorizontalAlignment','center');
-	
+
 	% Gray fill, crossdir specified, 'LineStyle' --
 	h9 = feval(mfilename,[-3 2.2 -6],[-3 2.2 -.05],36,[],27,6,[],[0 -1 0], ...
 	           'EdgeColor','k','FaceColor',.75*[1 1 1],'LineStyle','--');
-	
+
 	% a series of normal arrows, linearly spaced, crossdir specified
 	h10y=(0:4)'/3;
 	h10 = feval(mfilename,[-3*ones(size(h10y)) h10y -6.5*ones(size(h10y))], ...
 	            [-3*ones(size(h10y)) h10y -.05*ones(size(h10y))], ...
 	            12,[],[],[],[],[0 -1 0]);
-	
+
 	% a series of normal arrows, linearly spaced
 	h11x=(1:.33:2.8)';
 	h11 = feval(mfilename,[h11x -3*ones(size(h11x)) 6.5*ones(size(h11x))], ...
 	            [h11x -3*ones(size(h11x)) -.05*ones(size(h11x))]);
-	
+
 	% series of magenta arrows, radially oriented, crossdir specified
 	h12x=2; h12y=-3; h12z=axlim(5)/2; h12xr=1; h12zr=h12z; ir=.15;or=.81;
 	h12t=(0:11)'/6*pi;
@@ -1405,20 +1405,20 @@ function h = arrow_demo3(in)
 	            10,[],[],[],[],                                      ...
 	            [-h12xr*sin(h12t) zeros(size(h12t)) h12zr*cos(h12t)],...
 	            'FaceColor','none','EdgeColor','m');
-	
+
 	% series of normal arrows, tangentially oriented, crossdir specified
 	or13=.91; h13t=(0:.5:12)'/6*pi;
 	locs = [h12x+h12xr*cos(h13t)*or13 h12y*ones(size(h13t)) h12z+h12zr*sin(h13t)*or13];
 	h13 = feval(mfilename,locs(1:end-1,:),locs(2:end,:),6);
-	
+
 	% arrow with no line ==> oriented downwards
 	h14 = feval(mfilename,[3 3 .100001],[3 3 .1],30);
 	t6=text(3,3,3.6,'no line'); set(t6,'HorizontalAlignment','center');
-	
+
 	% arrow with arrowheads at both ends
 	h15 = feval(mfilename,[-.5 -3 -3],[1 -3 -3],'Ends','both','FaceColor','g', ...
 	            'Length',20,'Width',3,'CrossDir',[0 0 1],'TipAngle',25);
-	
+
 	h=[h1;h2;h3;h4;h5;h6;h7;h8;h9;h10;h11;h12;h13;h14;h15];
 
 function h = arrow_demo2(in)
@@ -1435,13 +1435,13 @@ function h = arrow_demo2(in)
 	end;
 	if (dolog), axis([axlim(1:2) 10.^axlim(3:4)]); set(gca,'YScale','log');
 	else,       axis(axlim(1:4)); end;
-	
+
 	% Normal blue arrow
 	start = [axlim(1) axlim(4) axlim(6)+2];
 	stop  = [in.x(in.iii) in.y(in.iii) axlim(6)+2];
 	if (dolog), start(:,2)=10.^start(:,2); stop(:,2)=10.^stop(:,2); end;
 	h1 = feval(mfilename,start,stop,'EdgeColor','b','FaceColor','b');
-	
+
 	% three arrows with varying fill, width, and baseangle
 	start = [-3   -3   10; -3   -1.5 10; -1.5 -3   10];
 	stop  = [-.03 -.03 10; -.03 -1.5 10; -1.5 -.03 10];

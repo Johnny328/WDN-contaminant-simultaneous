@@ -61,15 +61,15 @@ demandN = [81 9 83 82 21 80 17 41 79 76 74 78 77 75 73 72 61 63 31 29 85 86 84 7
 tolerance = 10^-4;
 % Some extra nodes. Shouldn't cause infeasibilty. Addition of 67 causes infeasibility.
 % 78 is demand, can't be in source too.
-%vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 78 127 129] 
-vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 127 129] 
+%vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 78 127 129]
+vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 127 129]
 zoneContainment
 
 %% Vulnerable nodes only at the infeasibility causing nodes 3-127-129 thingy
 clear all
 demandN = [81 9 83 82 21 80 17 41 79 76 74 78 77 75 73 72 61 63 31 29 85 86 84 70 68];
 tolerance = 10^-4;
-%vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 78 127 129] 
+%vulnerableN = [1 2 3 19 32 37 39 53 66 4 20 33 34 40 47 54 57 67 78 127 129]
 vulnerableN = [3 32 37 39 53 33 34 40 47 54 57 67 127 129]
 zoneContainment
 
@@ -80,7 +80,7 @@ clear all
 demandN = [81 9 83 82 21 80 17 41 79 76 74 78 77 75 73 72 61 63 31 29 85 86 84 70 68];
 tolerance = 10^-4;
 % Some extra nodes. Shouldn't cause infeasibilty. 78 is demand, don't include.
-% nodesNextToVulnerableNodes= [4 20 33 34 40 47 54 57 67 78 127 129] 
+% nodesNextToVulnerableNodes= [4 20 33 34 40 47 54 57 67 78 127 129]
 vulnerableN = [1 2 3 19 32 37 39 53 66]
 nodesNextToVulnerableNodes = [4 20 33 34 40 47 54 57 67 127 129]
 zoneContainment
