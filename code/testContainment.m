@@ -14,7 +14,6 @@ containment
 clear all
 adjGraph = sparse([1 2 2 3 4 5 7 6 8 8 11],[2 3 4 5 5 6 6 8 9 10 10],[1 1 1 1 1 1 1 1 1 1 1], 11, 11);
 vulnerableNodes = [1,7,11]
-vulnerableNodes
 demandNodes = [3,4,8,9];
 sourceNodes = [1,7,11];
 %Weights/lengths of pipes

@@ -2,17 +2,11 @@ if(exist('WdnPath'))
     % Get data from .inp file
     [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData(WdnPath);
 elseif(exist('adjGraph'))
-    %% Given adjacency matrix
-    %adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[1 1 1 1 1 1 1 1 1 1],7,7);
+    %% Given adjacency matrix, figure out everything else
     incGraph = adj2inc(adjGraph,0);
     % Total number of nodes
     nodesNum = size(adjGraph,1);
     edgesNum = size(incGraph,1);
-    % Vulnerable nodes
-    %vulnerableNodes = [1,2,4,5];%Test failed, this should've lead to sensor at 6 and actuator after it. Something wrong with shortestPathsFromVulnerableNodes code.
-    %demandNodes = [7];
-    %Weights/lengths of pipes
-    edgeWeights = eye(edgesNum);
     for i=1:size(incGraph,1)
         pipeStartNodes(i) = find(incGraph(i,:)>0);
         pipeEndNodes(i) = find(incGraph(i,:)<0);
