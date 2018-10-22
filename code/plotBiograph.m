@@ -5,14 +5,15 @@ b = biograph(adjGraph);
 %    b.nodes(i).Shape = 'circle';
 %end
 h = view(b);
-set(0, 'ShowHiddenHandles', 'on')
-bgfig = gcf
+set(0, 'ShowHiddenHandles', 'on');
+bgfig = gcf;
 c = get(bgfig, 'Children');
 %hold on;
 for i=1:size(adjGraph,1)
     xcoorID(i) = h.nodes(i).Position(1);
     ycoorID(i) = h.nodes(i).Position(2);
 end
+set(gcf,'visible','off');
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 floatTolerance = 1/NUMBER_BIGGER_THAN_NETWORK;
 count = 1;
