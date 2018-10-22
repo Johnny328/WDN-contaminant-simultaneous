@@ -18,6 +18,7 @@ elseif(exist('adjGraph'))
         pipeEndNodes(i) = find(incGraph(i,:)<0);
     end
     pipeIDs = 1:size(incGraph,1);
+    vulnerableNum = size(vulnerableNodes,2);
 else
     % Get data from .inp file
     [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');

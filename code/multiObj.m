@@ -1,5 +1,30 @@
-% Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+% Note that this isn't really multi objective optimization. I have no idea why I named it thus, even in hindsight. Possibly just didn't relate multiobjective => solution requires a pareto front
+
+if(exist('WdnPath'))
+    % Get data from .inp file
+    [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData(WdnPath);
+elseif(exist('adjGraph'))
+    %% Given adjacency matrix
+    %adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[1 1 1 1 1 1 1 1 1 1],7,7);
+    incGraph = adj2inc(adjGraph,0);
+    % Total number of nodes
+    nodesNum = size(adjGraph,1);
+    edgesNum = size(incGraph,1);
+    % Vulnerable nodes
+    %vulnerableNodes = [1,2,4,5];%Test failed, this should've lead to sensor at 6 and actuator after it. Something wrong with shortestPathsFromVulnerableNodes code.
+    %demandNodes = [7];
+    %Weights/lengths of pipes
+    edgeWeights = eye(edgesNum);
+    for i=1:size(incGraph,1)
+        pipeStartNodes(i) = find(incGraph(i,:)>0);
+        pipeEndNodes(i) = find(incGraph(i,:)<0);
+    end
+    pipeIDs = 1:size(incGraph,1);
+    vulnerableNum = size(vulnerableNodes,2);
+else
+    % Get data from .inp file
+    [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+end
 if(exist('vulnerableN'))
     vulnerableNodes = vulnerableN;
     vulnerableNum = length(vulnerableNodes);
@@ -69,4 +94,9 @@ actuatorEdges = find(x((nodesNum*2+1):(nodesNum*2+edgesNum)));
 partitionDemand=find(x(nodesNum+1:nodesNum*2))';
 partitionSource=setdiff(1:nodesNum,partitionDemand);
 
-plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+if(exist('model'))
+    plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+else
+    actuatorPipes = actuatorEdges
+    plotBiograph
+end

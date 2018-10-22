@@ -1,8 +1,34 @@
-% Get data from .inp file
-[model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+if(exist('WdnPath'))
+    % Get data from .inp file
+    [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData(WdnPath);
+elseif(exist('adjGraph'))
+    %% Given adjacency matrix
+    %adjGraph = sparse([1 1 2 2 2 3 3 4 5 6],[2 3 4 5 3 4 5 6 6 7],[1 1 1 1 1 1 1 1 1 1],7,7);
+    incGraph = adj2inc(adjGraph,0);
+    % Total number of nodes
+    nodesNum = size(adjGraph,1);
+    edgesNum = size(incGraph,1);
+    % Vulnerable nodes
+    %vulnerableNodes = [1,2,4,5];%Test failed, this should've lead to sensor at 6 and actuator after it. Something wrong with shortestPathsFromVulnerableNodes code.
+    %demandNodes = [7];
+    %Weights/lengths of pipes
+    edgeWeights = eye(edgesNum);
+    for i=1:size(incGraph,1)
+        pipeStartNodes(i) = find(incGraph(i,:)>0);
+        pipeEndNodes(i) = find(incGraph(i,:)<0);
+    end
+    pipeIDs = 1:size(incGraph,1);
+    vulnerableNum = size(vulnerableNodes,2);
+else
+    % Get data from .inp file
+    [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
+end
 if(exist('vulnerableN'))
     vulnerableNodes = vulnerableN;
     vulnerableNum = length(vulnerableNodes);
+end
+if(exist('demandN'))
+    demandNodes = demandN;
 end
 NUMBER_BIGGER_THAN_NETWORK = 10000;
 maxDistanceToDetection = NUMBER_BIGGER_THAN_NETWORK;
@@ -157,7 +183,11 @@ partitionSource=setdiff(1:nodesNum,partitionDemand);
 distanceToDetection = x(nodesNum*2+edgesNum+1)
 distanceVulnerableToSensors = allDistances(:,sensorNodes)
 
-plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+if(exist('model'))
+    plotNetwork('bangalore_expanded221.inp',model,nodesNum,edgesNum,vulnerableNodes,vulnerableNum,demandNodes,nodeIDs,pipeStartNodes,pipeEndNodes,adjGraph,incGraph,x);
+else
+    plotBiograph;
+end
 
 % Testing the partitioned network
 % Remove actuator edges 
