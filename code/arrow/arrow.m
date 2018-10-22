@@ -1025,7 +1025,7 @@ if (nargout<=1),
 		% store them for possible restoring
 		mask = any(oldaxlims~=lims,1); ARROW_AX=ax(mask); ARROW_AXLIMITS=oldaxlims(:,mask);
 		if any(mask),
-			warning(arrow_warnlimits(ARROW_AX,narrows));
+			%warning(arrow_warnlimits(ARROW_AX,narrows));
 		end;
 	end;
 else,
