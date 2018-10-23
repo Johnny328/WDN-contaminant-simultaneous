@@ -27,3 +27,12 @@ edgeWeights = eye(11);
 %edgeWeights = [10 5 11 6 8 5 5 15 10 5 20]; % Unused
 tolerance = 10^-4;
 multiObj
+
+%% 6 node example network
+clear all
+adjGraph = sparse([1 1 2 2 2 3 3 4 5], [2 3 4 5 3 4 5 6 6], [2 2 1 1 1 1 1 2 2], 6, 6);
+vulnerableNodes = [1,2];
+demandNodes = [6];
+sourceNodes = [1 2];
+edgeWeights = eye(9);
+multiObj
