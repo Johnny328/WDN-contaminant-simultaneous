@@ -44,11 +44,16 @@ theta = linspace(0, 2*pi, 500)';
 for ii=1:size(adjGraph,1)
     jj=find(adjGraph(ii,:));
     for kk=1:length(jj)
-        %try %TODO check usefulness and effect
-         arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)),ycoorID(jj(kk))],'Baseangle',80,'Tipangle',20,'Width',1,'Length',10);
-         %catch
-      %       arrow fixlimits;
-       %  end
+        try %TODO check usefulness and effect
+        %[xcoorID(ii) ycoorID(ii) 0]
+        %[xcoorID(jj(kk)) ycoorID(jj(kk)) 0]
+        % TODO arrowheads are skewedand only appear at th ebottom of figure. Rest of params seem fine. CrossDir also seems to work.
+        % Providing 3rd dimension in xrood and ycoord makes arrows transpareant, looks ugly
+        % Need 10000 length for the first arrow to show up in good scaling
+        arrow([xcoorID(ii) ycoorID(ii)],[xcoorID(jj(kk)) ycoorID(jj(kk))],'Length',30);
+        catch
+            arrow fixlimits;
+        end
     end
 end
 for k=1:length(partitionSource)
