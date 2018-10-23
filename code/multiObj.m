@@ -46,6 +46,14 @@ intcon1 = 1:nodesNum;
 %Equality constraints
 Aeq1 = zeros(0,size(f1,1));
 beq1 = [];
+if(exist('forcedSensors'))
+    Aeq1i = 0;
+    for i=forcedSensors
+        Aeq1i = Aeq1i + 1;
+        Aeq1(Aeq1i,i) = 1;
+    end
+    beq1 = ones(size(forcedSensors,1),1);
+end
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective

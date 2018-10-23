@@ -47,13 +47,14 @@ intcon1 = 1:nodesNum;
 Aeq1 = zeros(0,size(f1,1));
 beq1 = [];
 % Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
-% Aeq1i = 0;
-% Aeq1 = zeros(0,size(f1,1));
-% for i=[41,70,85]
-%     Aeq1i = Aeq1i + 1;
-%     Aeq1(Aeq1i,i) = 1;
-% end
-% beq1 = ones(3,1);
+if(exist('forcedSensors'))
+    Aeq1i = 0;
+    for i=forcedSensors
+        Aeq1i = Aeq1i + 1;
+        Aeq1(Aeq1i,i) = 1;
+    end
+    beq1 = ones(size(forcedSensors,1),1);
+end
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
