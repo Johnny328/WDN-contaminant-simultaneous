@@ -44,7 +44,7 @@ b1 = -1.*ones(size(A1,1),1);
 %Integer variables
 intcon1 = 1:nodesNum;
 %Equality constraints
-Aeq1 = [];
+Aeq1 = zeros(0,size(f1,1));
 beq1 = [];
 % Forcing sensors at these point to see obj. fun. value. As it turns out, not feasible.
 % Aeq1i = 0;
