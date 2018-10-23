@@ -94,3 +94,12 @@ end
 axis equal;
 axis off;
 hold off;
+
+% Generating legend
+types = {'r', 'g', 'y', 'black', 'blue', 'm'};
+label = {'Source partition', 'Demand partition', 'Sensor nodes', 'Vulnerable nodes', 'Demand nodes', 'Actuator edges'};
+hold on;
+for il = 1:length(label)
+    hgroup(il) = patch(NaN, NaN, types{il});
+end
+legend(hgroup,label, 'Location', 'southeast');
