@@ -1,26 +1,26 @@
 Research files and code dealing with simultaneous sensor and actuator placement for contaminant detection, part of my undergrad thesis
 
-*.inp are genrally best viewed with a local EPANET installation, here is a web version: http://epanet.de/js/index.html
+\*.inp are genrally best viewed with a local EPANET installation, here is a web version: http://epanet.de/js/index.html
 
 ### License
 CC-BY 4.0 license, unless otherwise overridden.
 
 ## Execution
-Entry points for various problem descriptions:
-compromisedContainment.m
+Implementations for various problem descriptions (scenarios 1,2,3):
+multiobj.m
+containment.m
 zoneContainment.m
-multiObj.m
 
-Generating files for reproducing results:
-testZoneContainment.m
-testContainment.m
+Entry points for generating images, reproducing results (scenarios 1,2,3):
 testMultiObj.m
+testContainment.m
+testZoneContainment.m
 
+## Description of scenarios implemented
 
-## TODO
+### Notes
+compromisedContainment.m was built after containment. Solves similar scenario that zone containment does. My best guess in retrospect is that 'compromised' refers to a bad algorithm.
+Solved: git logs say its sole purpose is to reproduce/validate Palleti 2017's results
 
-### Done
-containment_attackAtOnce_9V genration missing, legend. Done, same as testContainment 2nd test
-zoneContainment_9sources - check antialiasing for the generated file in final PDF. Done, no anti-aliasing in PDF.
-containment_9sources_1downstreamSourceEach - verify, check anti aliasing. Done, Generated zoneContainment_1downstreameach_legend
-multiobj_indep generation missing, legend. Done, generated exact graph with legend
+bfsDepthReach.m: Implemented reachable nodes with BFS, unused
+BTPtest.m: bintprog solver, only sensor placement

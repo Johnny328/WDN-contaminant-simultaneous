@@ -1,3 +1,5 @@
+%% Reproduce Palleti 2017 results
+
 % Get data from .inp file
 [model, adjGraph, incGraph, nodesNum, edgesNum, edgeWeights, vulnerableNodes, vulnerableNum, demandNodes, pipeIDs, nodeIDs, pipeStartNodes, pipeEndNodes] = getWdnData('bangalore_expanded221.inp');
 if(exist('vulnerableN'))
