@@ -133,9 +133,9 @@ intcon = [intcon1 intcon2 intcon3];
 % Get max sensor distance. This alone --because of the minimization-- changes
 % the solution but the objective value remains same.
 for i=1:nodesNum
-    index = size(A,1)+1;
-    A(index,i) = shortestPathsFromVulnerableNodes(i);
-    A(index,1+nodesNum*2+edgesNum) = -1;
+    newConstraintIndex = size(A,1)+1;
+    A(newConstraintIndex,i) = shortestPathsFromVulnerableNodes(i);
+    A(newConstraintIndex,1+nodesNum*2+edgesNum) = -1;
 end
 b = [b; zeros(nodesNum,1)];
 
@@ -146,21 +146,21 @@ b(size(b,1)+1) = maxDistanceToDetection;
 % Make the partition vector 1 for demand partition and NUMBER_BIGGER_THAN_NETWORK for source.
 % Decision variables bounds [1, NUMBER_BIGGER_THAN_NETWORK]. Don't maximize.
 for i=1:nodesNum
-    index = size(A,1)+1;
-    A(index,i+nodesNum) = -NUMBER_BIGGER_THAN_NETWORK;
-    A(index,1+nodesNum*2+edgesNum+i) = -1;
-    b(index) = -NUMBER_BIGGER_THAN_NETWORK;
-    index = size(A,1)+1;
-    A(index,i+nodesNum) = (NUMBER_BIGGER_THAN_NETWORK-1);
-    A(index,1+nodesNum*2+edgesNum+i) = 1;
-    b(index) = NUMBER_BIGGER_THAN_NETWORK;
+    newConstraintIndex = size(A,1)+1;
+    A(newConstraintIndex,i+nodesNum) = -NUMBER_BIGGER_THAN_NETWORK;
+    A(newConstraintIndex,1+nodesNum*2+edgesNum+i) = -1;
+    b(newConstraintIndex) = -NUMBER_BIGGER_THAN_NETWORK;
+    newConstraintIndex = size(A,1)+1;
+    A(newConstraintIndex,i+nodesNum) = (NUMBER_BIGGER_THAN_NETWORK-1);
+    A(newConstraintIndex,1+nodesNum*2+edgesNum+i) = 1;
+    b(newConstraintIndex) = NUMBER_BIGGER_THAN_NETWORK;
 end
 
 % Force all partitioning to happen after the distance.
 for i=1:nodesNum
-   index = size(A,1)+1;
-   A(index,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK;
-   A(index,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
+   newConstraintIndex = size(A,1)+1;
+   A(newConstraintIndex,1+nodesNum*2+edgesNum+i) = -shortestPathsFromVulnerableNodes(i)-NUMBER_BIGGER_THAN_NETWORK;
+   A(newConstraintIndex,1+nodesNum*2+edgesNum) = 1+1/NUMBER_BIGGER_THAN_NETWORK; %TODO Fix sad implementation using floating point arithmetic if using nodes. But N ~< E so using them is better. MATLAB's tolerance for zero is around 10^-14
 end
 b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
 
@@ -170,9 +170,9 @@ b = [b; -NUMBER_BIGGER_THAN_NETWORK*ones(nodesNum,1)];
 
 % % Implementation using edges
 % for i=1:edgesNum
-%    index = size(A,1)+1;
-%    A(index,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);
-%    A(index,1+nodesNum*2+edgesNum) = 1;
+%    newConstraintIndex = size(A,1)+1;
+%    A(newConstraintIndex,i+nodesNum*2) = -distanceEdgesFromVulnerableNodes(i);
+%    A(newConstraintIndex,1+nodesNum*2+edgesNum) = 1;
 % end
 % b = [b; zeros(edgesNum,1)];
 
