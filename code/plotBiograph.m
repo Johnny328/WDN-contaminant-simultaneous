@@ -60,11 +60,13 @@ for k=1:length(partitionSource)
     xc = bsxfun(@plus, 0.75*r .* cos(theta), xcoorID(partitionSource(k)));
     yc = bsxfun(@plus, 0.75*r .* sin(theta), ycoorID(partitionSource(k)));
     patch(xc, yc, 'r');
+    text(xcoorID(partitionSource(k)) + 10, ycoorID(partitionSource(k)) - 5, num2str(partitionSource(k)))
 end
 for m=1:length(partitionDemand)
     xc = bsxfun(@plus, 0.75*r .* cos(theta), xcoorID(partitionDemand(m)));
     yc = bsxfun(@plus, 0.75*r .* sin(theta), ycoorID(partitionDemand(m)));
     patch(xc, yc, 'g');
+    text(xcoorID(partitionDemand(m)) + 10, ycoorID(partitionDemand(m)) - 5, num2str(partitionDemand(m)))
 end
 for m=1:length(sensorNodes)
     xc = bsxfun(@plus, r .* cos(theta), xcoorID(sensorNodes(m)));
