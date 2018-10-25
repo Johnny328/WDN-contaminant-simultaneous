@@ -29,3 +29,37 @@ demandNodes = [6];
 sourceNodes = [1 2];
 edgeWeights = eye(9);
 containment
+%% Illustrative network, assert weirdness with forced sensors
+clear all
+adjGraph = sparse([1 2 2 3 4 5 7 6 8],[2 3 4 5 5 6 6 8 9],[1 1 1 1 1 1 1 1 1], 9, 9);
+vulnerableNodes = [1,7];
+demandNodes = [2,4,8,9];
+sourceNodes = [1,7];
+nodesNum = size(adjGraph,1);
+edgeWeights = eye(nodesNum);
+containment
+assert(fval = 3)
+
+%% Illustrative network, assert weirdness with forced sensors
+clear all
+adjGraph = sparse([1 2 2 3 4 5 7 6 8],[2 3 4 5 5 6 6 8 9],[1 1 1 1 1 1 1 1 1], 9, 9);
+vulnerableNodes = [1,7];
+demandNodes = [2,4,8,9];
+sourceNodes = [1,7];
+nodesNum = size(adjGraph,1);
+edgeWeights = eye(nodesNum);
+forcedSensors = [6]
+containment
+assert(fval = 3)
+
+%% Illustrative network, assert weirdness with forced sensors
+clear all
+adjGraph = sparse([1 2 2 3 4 5 7 6 8],[2 3 4 5 5 6 6 8 9],[1 1 1 1 1 1 1 1 1], 9, 9);
+vulnerableNodes = [1,7];
+demandNodes = [2,4,8,9];
+sourceNodes = [1,7];
+nodesNum = size(adjGraph,1);
+edgeWeights = eye(nodesNum);
+forcedNoSensors = [7]
+containment
+assert(fval = 3)
