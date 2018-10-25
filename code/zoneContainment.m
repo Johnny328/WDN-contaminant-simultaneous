@@ -68,14 +68,26 @@ Aeq1 = zeros(0,size(f1,1));
 beq1 = [];
 
 % Forcing sensors at these point to see obj. fun. value.
+Aeq1i = 0;
 if(exist('forcedSensors'))
-    Aeq1i = 0;
     for i=forcedSensors
         Aeq1i = Aeq1i + 1;
         Aeq1(Aeq1i,i) = 1;
     end
-    beq1 = ones(Aeq1i,1);
+    beq1 = [beq1; ones(Aeq1i,1)];
 end
+% Forcing lack of sensors
+if(exist('forcedNoSensors'))
+    Aeq1j = 0;
+    for i=forcedNoSensors
+        Aeq1i = Aeq1i + 1;
+        Aeq1j = Aeq1j + 1;
+        Aeq1(Aeq1i,i) = 1;
+    end
+    beq1 = [beq1; zeros(Aeq1j,1)];
+end
+clear('Aeq1i')
+assert(size(Aeq1,1) == size(beq1,1));
 
 %% Actuator placement %Inspired by Venkat Reddy's implementation of partitioning.
 %Objective
