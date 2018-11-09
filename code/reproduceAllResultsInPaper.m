@@ -12,7 +12,6 @@ sensorNodes = [];
 actuatorPipes = [];
 vulnerableNum = 2;
 plotBiograph;
-title("Illustrative network");
 
 %% Illustrative network, scenario 1
 clear all
@@ -25,7 +24,6 @@ edgeWeights = eye(nodesNum);
 % Force a sensor at node 9
 forcedSensors = [9]
 multiObj
-title("Illustrative network: scenario 1");
 
 %% Illustrative network, scenario 2, failure
 clear all
@@ -51,7 +49,6 @@ nodesNum = size(adjGraph,1);
 edgeWeights = eye(nodesNum);
 forcedNoSensors = [1,2,7]
 containment
-title("Illustrative network: scenario 2");
 
 % Illustrative network, scenario 3, failure
 clear all
@@ -75,4 +72,3 @@ sourceNodes = [1,7];
 nodesNum = size(adjGraph,1);
 edgeWeights = eye(nodesNum);
 zoneContainment
-title("Illustrative network: scenario 3");
